@@ -1,8 +1,16 @@
-import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import {defineConfig, loadEnv} from 'vite';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [react(), tsconfigPaths()],
-});
+
+
+export default ({ mode }) => {
+    process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
+
+    return defineConfig({
+        plugins: [react(), tsconfigPaths()],
+        server: {
+            port: Number(process.env.PORT) || 3000,
+        }
+    });
+}
