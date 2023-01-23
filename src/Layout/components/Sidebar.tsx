@@ -41,9 +41,9 @@ const Sidebar = (props: React.PropsWithChildren<BoxProps>) => (
             <NavLink to='habits'>
                 <NavItem icon={Icons.Inbox}>All habits</NavItem>
             </NavLink>
-            <NavLink to='dashboard'>
-                <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>
-            </NavLink>
+            {/*<NavLink to='dashboard'>*/}
+            {/*    <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>*/}
+            {/*</NavLink>*/}
         </Flex>
 
         {/*<Flex*/}
