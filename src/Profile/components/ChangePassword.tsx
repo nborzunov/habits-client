@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
 import FormField, { FieldsConfig } from '~/common/components/FormField';
 import { useForm } from 'react-hook-form';
 import validationRules from '~/common/helpers/validationRules';
+import { useMutation } from '@tanstack/react-query';
+import api from '~/common/helpers/api';
+import useTitle from "~/common/hooks/useTitle";
 
-const ChangePassword = () => {
+interface FormData {
+    currentPassword: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+}
+
+const ChangePassword = ({title}: {title: string}) => {
+    useTitle(title);
+
     const toast = useToast();
+
     const initialState = {
         currentPassword: '',
         newPassword: '',
@@ -16,13 +28,43 @@ const ChangePassword = () => {
         watch,
         formState: { errors, isSubmitting },
         handleSubmit,
+        setError,
     } = useForm({
         mode: 'all',
         defaultValues: initialState,
     });
 
-    const onSubmit = (_data: any) => {
-        alert('TODO');
+    const changePassword = useMutation({
+        mutationFn: (data: { currentPassword: string; newPassword: string }) => {
+            return api
+                .post('/users/me/change-password', data)
+                .then((res) => res.data)
+                .catch((err) => {
+                    if (!err.response?.data?.field) {
+                        toast({
+                            title: 'Error',
+                            description:
+                                err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        return;
+                    }
+                    const { field, message } = err.response.data;
+                    setError(field, {
+                        type: 'custom',
+                        message: message,
+                    });
+                });
+        },
+    });
+
+    const onSubmit = (data: FormData) => {
+        changePassword.mutate({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+        });
     };
 
     const onError = () => {
@@ -33,6 +75,28 @@ const ChangePassword = () => {
             isClosable: true,
         });
     };
+
+    useEffect(() => {
+        const subscription = watch(({ currentPassword, newPassword, newPasswordConfirm }) => {
+            if (newPasswordConfirm !== newPassword) {
+                setError('newPasswordConfirm', {
+                    type: 'custom',
+                    message: 'Passwords do not match',
+                });
+            }
+
+            if (currentPassword == newPassword) {
+                console.log('err');
+                setTimeout(() => {
+                    setError('newPassword', {
+                        type: 'custom',
+                        message: 'New password must be different from current',
+                    });
+                });
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
 
     const fieldsConfig: FieldsConfig<'currentPassword' | 'newPassword' | 'newPasswordConfirm'> = [
         {
@@ -48,10 +112,7 @@ const ChangePassword = () => {
         {
             field: 'newPasswordConfirm',
             label: 'Repeat Password',
-            validationProps: register(
-                'newPasswordConfirm',
-                validationRules.newPasswordConfirm(watch('newPassword')),
-            ),
+            validationProps: register('newPasswordConfirm', validationRules.newPasswordConfirm()),
         },
     ];
 

@@ -8,8 +8,9 @@ import CleanData from '~/Profile/components/CleanData';
 import DeleteAccount from '~/Profile/components/DeleteAccount';
 import ChangeEmail from '~/Profile/components/ChangeEmail';
 import ChangePassword from '~/Profile/components/ChangePassword';
+import ProfileDetails from '~/Profile/components/ProfileDetails';
 
-const ProfilePage = ({ user }: { user: User }) => {
+const ProfilePage = ({ user }: { user: User | null }) => {
     const initialState = useMemo(() => {
         return {
             name: user?.name || '',
@@ -20,11 +21,11 @@ const ProfilePage = ({ user }: { user: User }) => {
         };
     }, [user]);
 
-    // const handleSave = () => {
-    //     onSave({ ...user, firstName, lastName, username });
-    // }
-
     const routes = [
+        {
+            path: '/me/',
+            name: 'View Profile',
+        },
         {
             path: '/me/edit',
             name: 'Edit Profile',
@@ -68,15 +69,7 @@ const ProfilePage = ({ user }: { user: User }) => {
                 <Box width={250} mr={5} p={8}>
                     <Stack spacing={3}>
                         {routes.map((route) => (
-                            <ChakraLink
-                                as={Link}
-                                key={route.path}
-                                to={route.path}
-                                fontWeight={useMatch(route.path) ? 'semibold' : 'normal'}
-                                fontSize={'xl'}
-                            >
-                                {route.name}
-                            </ChakraLink>
+                            <ProfilePageLink key={route.path} route={route} />
                         ))}
                     </Stack>
                 </Box>
@@ -91,20 +84,60 @@ const ProfilePage = ({ user }: { user: User }) => {
                     p={8}
                 >
                     <Routes>
-                        <Route path='/edit' element={<EditProfile initialState={initialState} />} />
-                        <Route path='/notifications' element={<Notifications />} />
-                        <Route path='/change-password' element={<ChangePassword />} />
+                        <Route
+                            path='/'
+                            element={<ProfileDetails title={`${user?.name} ${user?.surname}`} />}
+                        />
+                        <Route
+                            path='/edit'
+                            element={
+                                <EditProfile
+                                    initialState={initialState}
+                                    title={`${user?.name} ${user?.surname} - Edit Profile`}
+                                />
+                            }
+                        />
+                        <Route
+                            path='/notifications'
+                            element={
+                                <Notifications
+                                    title={`${user?.name} ${user?.surname} - Notifications`}
+                                />
+                            }
+                        />
+                        <Route
+                            path='/change-password'
+                            element={
+                                <ChangePassword
+                                    title={`${user?.name} ${user?.surname} - Change Password`}
+                                />
+                            }
+                        />
+
                         <Route
                             path='/change-email'
                             element={
                                 <ChangeEmail
                                     initialState={{ email: initialState.email }}
                                     user={user}
+                                    title={`${user?.name} ${user?.surname} - Change Email`}
                                 />
                             }
                         />
-                        <Route path='/delete-account' element={<DeleteAccount />} />
-                        <Route path='/clean-data' element={<CleanData />} />
+                        <Route
+                            path='/delete-account'
+                            element={
+                                <DeleteAccount
+                                    title={`${user?.name} ${user?.surname} - Delete Account`}
+                                />
+                            }
+                        />
+                        <Route
+                            path='/clean-data'
+                            element={
+                                <CleanData title={`${user?.name} ${user?.surname} - Clean Data`} />
+                            }
+                        />
                         <Route path='*' element={<Navigate to='/me/edit' replace />} />
                     </Routes>
                 </Box>
@@ -113,4 +146,18 @@ const ProfilePage = ({ user }: { user: User }) => {
     );
 };
 
+const ProfilePageLink = ({ route }: { route: { path: string; name: string } }) => {
+    const matchedRoute = useMatch(route.path);
+
+    return (
+        <ChakraLink
+            as={Link}
+            to={route.path}
+            fontWeight={matchedRoute ? 'semibold' : 'normal'}
+            fontSize={'xl'}
+        >
+            {route.name}
+        </ChakraLink>
+    );
+};
 export default ProfilePage;

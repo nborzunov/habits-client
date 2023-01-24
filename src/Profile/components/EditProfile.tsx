@@ -14,13 +14,15 @@ type EditProFileData = Required<Pick<User, EditProfileFields>>;
 
 interface Props {
     initialState: EditProFileData;
+    title: string;
 }
 
-const EditProfile = ({ initialState }: Props) => {
-    const setActiveUser = useSetRecoilState(activeUserState);
+const EditProfile = ({ initialState, title }: Props) => {
+    useTitle(title);
+
     const toast = useToast();
 
-    useTitle(`${initialState.name} ${initialState.surname} - Edit Profile`);
+    const setActiveUser = useSetRecoilState(activeUserState);
 
     const {
         register,

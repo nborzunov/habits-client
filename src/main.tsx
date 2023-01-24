@@ -10,6 +10,11 @@ import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
 import './index.css';
 
+import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
+
+dayjs.extend(relativeTime);
+
 const theme = extendTheme({
     colors: {
         blue: {

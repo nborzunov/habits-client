@@ -14,15 +14,19 @@ import { useForm } from 'react-hook-form';
 import { User } from '~/Profile/types';
 import FormField, { FieldsConfig } from '~/common/components/FormField';
 import validationRules from '~/common/helpers/validationRules';
+import useTitle from '~/common/hooks/useTitle';
 
 type ChangeEmailData = Required<Pick<User, 'email'>>;
 
 interface Props {
     initialState: ChangeEmailData;
-    user: User;
+    user: User | null;
+    title: string;
 }
 
-const ChangeEmail = ({ initialState, user }: Props) => {
+const ChangeEmail = ({ initialState, user, title }: Props) => {
+    useTitle(title);
+
     const toast = useToast();
     const {
         register,
@@ -59,6 +63,10 @@ const ChangeEmail = ({ initialState, user }: Props) => {
     const verifyEmail = () => {
         alert('TODO');
     };
+
+    if (!user) {
+        return null;
+    }
     return (
         <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
             <Heading as='h3' size='md' mb={'6'}>

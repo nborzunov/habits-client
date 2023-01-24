@@ -11,12 +11,12 @@ const validationRules = {
             message: 'Password must contain at least one letter and one number',
         },
     }),
-    newPasswordConfirm: (password: string) => ({
+    newPasswordConfirm: () => ({
         required: { value: true, message: 'Confirm new password is required' },
-        validate: (value: string) => {
-            if (value !== password) {
-                return 'Passwords do not match';
-            }
+        minLength: { value: 8, message: 'Password must be at least 8 characters' },
+        pattern: {
+            value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            message: 'Password must contain at least one letter and one number',
         },
     }),
     text: (minLength: number) => ({
