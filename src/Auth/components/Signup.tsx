@@ -11,6 +11,9 @@ import Back from '~/Layout/components/Back';
 import validationRules from '~/common/helpers/validationRules';
 import { useForm } from 'react-hook-form';
 import FormField, { FieldsConfig } from '~/common/components/FormField';
+import processError from '~/common/helpers/processError';
+
+type Fields = 'name' | 'surname' | 'username' | 'email' | 'password';
 
 const Signup = ({ refetch }: { refetch: () => void }) => {
     useTitle('Sign Up');
@@ -29,22 +32,32 @@ const Signup = ({ refetch }: { refetch: () => void }) => {
                 .then(() =>
                     toast({
                         title: 'Success',
-                        description: 'Successfully created account!',
+                        description: 'Successfully login!',
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
                     }),
                 )
-                .catch((err) =>
-                    toast({
-                        title: 'Error',
-                        description:
-                            err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    }),
-                );
+                .catch((error) => {
+                    processError<Fields>(
+                        error,
+                        (errorMessage) => {
+                            toast({
+                                title: 'Error',
+                                description: errorMessage,
+                                status: 'error',
+                                duration: 3000,
+                                isClosable: true,
+                            });
+                        },
+                        (field, message) => {
+                            setError(field, {
+                                type: 'custom',
+                                message: message,
+                            });
+                        },
+                    );
+                });
         },
     });
 
@@ -53,6 +66,7 @@ const Signup = ({ refetch }: { refetch: () => void }) => {
         watch,
         formState: { errors, isSubmitting },
         handleSubmit,
+        setError,
     } = useForm({
         mode: 'all',
         defaultValues: {

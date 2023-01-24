@@ -17,6 +17,6 @@ const useTitle = (title: string) => {
 
 export const setTitle = (title: string) => {
     if (typeof document !== 'undefined') document.title = title;
-}
+};
 
 export default useTitle;

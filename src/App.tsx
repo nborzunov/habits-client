@@ -33,7 +33,7 @@ function App() {
 
             api.defaults.headers.common['Authorization'] = token as string;
 
-            const user = await api
+            return await api
                 .get<User>('/users/me')
                 .then((res) => res.data)
                 .then((user) => {
@@ -46,8 +46,6 @@ function App() {
                     setLoading(false);
                     return null;
                 });
-
-            return user;
         },
         initialData: null,
     });
@@ -82,7 +80,7 @@ function App() {
 
                         {(!!activeUser || loading) && (
                             <Route path='/' element={<Layout loading={loading} />}>
-                                <Route index path='habits' element={<HabitsPage />} />
+                                <Route path='habits' element={<HabitsPage />} />
                                 <Route path='dashboard' element={<Dashboard />} />
                                 {/*TODO: user profile route*/}
                                 <Route path='me/*' element={<ProfilePage user={activeUser} />} />

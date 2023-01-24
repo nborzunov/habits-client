@@ -60,7 +60,13 @@ const FormField = ({
                         {field !== 'bio' ? (
                             <Input
                                 id={field}
-                                type={field === 'email' ? 'email' : 'text'}
+                                type={
+                                    !showPasswordIcon || showPassword
+                                        ? field === 'email'
+                                            ? 'email'
+                                            : 'text'
+                                        : 'password'
+                                }
                                 focusBorderColor='purple.500'
                                 placeholder={label}
                                 variant={variant}
@@ -95,7 +101,7 @@ const FormField = ({
                                     variant={'ghost'}
                                     onClick={() => setShowPassword((showPassword) => !showPassword)}
                                 >
-                                    {showPassword ? (
+                                    {!showPassword ? (
                                         <Icon as={Icons.Show} />
                                     ) : (
                                         <Icon as={Icons.Hide} />

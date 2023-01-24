@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import validationRules from '~/common/helpers/validationRules';
 import { useMutation } from '@tanstack/react-query';
 import api from '~/common/helpers/api';
-import useTitle from "~/common/hooks/useTitle";
+import useTitle from '~/common/hooks/useTitle';
+import processError from '~/common/helpers/processError';
 
 interface FormData {
     currentPassword: string;
@@ -13,7 +14,9 @@ interface FormData {
     newPasswordConfirm: string;
 }
 
-const ChangePassword = ({title}: {title: string}) => {
+type Fields = keyof FormData;
+
+const ChangePassword = ({ title }: { title: string }) => {
     useTitle(title);
 
     const toast = useToast();
@@ -39,23 +42,25 @@ const ChangePassword = ({title}: {title: string}) => {
             return api
                 .post('/users/me/change-password', data)
                 .then((res) => res.data)
-                .catch((err) => {
-                    if (!err.response?.data?.field) {
-                        toast({
-                            title: 'Error',
-                            description:
-                                err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
-                            status: 'error',
-                            duration: 3000,
-                            isClosable: true,
-                        });
-                        return;
-                    }
-                    const { field, message } = err.response.data;
-                    setError(field, {
-                        type: 'custom',
-                        message: message,
-                    });
+                .catch((error) => {
+                    processError<Fields>(
+                        error,
+                        (errorMessage) => {
+                            toast({
+                                title: 'Error',
+                                description: errorMessage,
+                                status: 'error',
+                                duration: 3000,
+                                isClosable: true,
+                            });
+                        },
+                        (field, message) => {
+                            setError(field, {
+                                type: 'custom',
+                                message: message,
+                            });
+                        },
+                    );
                 });
         },
     });
@@ -96,9 +101,9 @@ const ChangePassword = ({title}: {title: string}) => {
             }
         });
         return () => subscription.unsubscribe();
-    }, [watch]);
+    }, [watch, setError]);
 
-    const fieldsConfig: FieldsConfig<'currentPassword' | 'newPassword' | 'newPasswordConfirm'> = [
+    const fieldsConfig: FieldsConfig<Fields> = [
         {
             field: 'currentPassword',
             label: 'Current Password',
@@ -132,6 +137,7 @@ const ChangePassword = ({title}: {title: string}) => {
                         validationError={errors[field]}
                         validationProps={validationProps}
                         hideResetButton
+                        showPasswordIcon={true}
                     />
                 ))}
 

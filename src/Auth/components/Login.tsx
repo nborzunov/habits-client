@@ -10,6 +10,9 @@ import { NavLink } from 'react-router-dom';
 import validationRules from '~/common/helpers/validationRules';
 import FormField, { FieldsConfig } from '~/common/components/FormField';
 import { useForm } from 'react-hook-form';
+import processError from '~/common/helpers/processError';
+
+type Fields = 'username' | 'password';
 
 const Login = ({ refetch }: { refetch: () => void }) => {
     useTitle('Login');
@@ -33,16 +36,26 @@ const Login = ({ refetch }: { refetch: () => void }) => {
                         isClosable: true,
                     }),
                 )
-                .catch((err) =>
-                    toast({
-                        title: 'Error',
-                        description:
-                            err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    }),
-                );
+                .catch((error) => {
+                    processError<Fields>(
+                        error,
+                        (errorMessage) => {
+                            toast({
+                                title: 'Error',
+                                description: errorMessage,
+                                status: 'error',
+                                duration: 3000,
+                                isClosable: true,
+                            });
+                        },
+                        (field, message) => {
+                            setError(field, {
+                                type: 'custom',
+                                message: message,
+                            });
+                        },
+                    );
+                });
         },
     });
 
@@ -51,6 +64,7 @@ const Login = ({ refetch }: { refetch: () => void }) => {
         watch,
         formState: { errors, isSubmitting },
         handleSubmit,
+        setError,
     } = useForm({
         mode: 'all',
         defaultValues: {
@@ -72,7 +86,7 @@ const Login = ({ refetch }: { refetch: () => void }) => {
         });
     };
 
-    const fieldsConfig: FieldsConfig<'username' | 'password'> = [
+    const fieldsConfig: FieldsConfig<Fields> = [
         {
             field: 'username',
             label: 'Username',
@@ -106,6 +120,7 @@ const Login = ({ refetch }: { refetch: () => void }) => {
                         hideResetButton
                         direction={'column'}
                         variant={'outline'}
+                        showPasswordIcon={field === 'password'}
                     />
                 ))}
                 <Stack spacing={10}>
