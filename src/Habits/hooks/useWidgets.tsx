@@ -70,7 +70,7 @@ const useWidgets = (isEditMode: boolean) => {
     useEffect(() => {
         if (layout) return;
         setLayout(boostrapLayout());
-    }, []);
+    }, [layout, setLayout]);
 
     const boostrapLayout = () => {
         const initial = Object.entries(WIDGET_LAYOUTS).map(([key, values]) => ({
@@ -92,11 +92,11 @@ const useWidgets = (isEditMode: boolean) => {
         setNewLayout(currentWidgetLayout.filter((item) => item.i !== id));
     };
 
-    const save = () => {
+    const saveLayout = () => {
         setLayout(newLayout);
     };
 
-    const reset = () => {
+    const resetLayout = () => {
         boostrapLayout();
     };
 
@@ -107,8 +107,8 @@ const useWidgets = (isEditMode: boolean) => {
     );
 
     return {
-        save,
-        reset,
+        save: saveLayout,
+        reset: resetLayout,
         removeWidget,
         widgets,
         props: {

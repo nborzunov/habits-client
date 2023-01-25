@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
-    Box,
     Button,
     Checkbox,
     FormControl,
@@ -15,16 +14,23 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
     Select,
     Stack,
+    Text,
+    Tooltip,
 } from '@chakra-ui/react';
 import { GoalType, HabitData, Periodicity } from '~/Habits/types';
+import NumericInput from '~/common/components/NumericInput';
 
+const defaultState = {
+    title: '',
+    goal: 1,
+    goalType: GoalType.Times,
+    periodicity: Periodicity.Daily,
+    allowSkip: false,
+    allowPartialCompletion: false,
+    allowOverGoalCompletion: false,
+};
 const EditHabitDialog = ({
     isOpen,
     onClose,
@@ -36,35 +42,39 @@ const EditHabitDialog = ({
     initialState?: HabitData;
     onSubmit: (h: HabitData) => void;
 }) => {
-    const [title, setTitle] = useState(initialState?.title ?? '');
-    const [goal, setGoal] = useState(initialState?.goal ?? 1);
-    const [goalType, setGoalType] = useState<GoalType>(initialState?.goalType ?? GoalType.Times);
-    const [periodicity, setPeriodicity] = useState<Periodicity>(
-        initialState?.periodicity ?? Periodicity.Daily,
-    );
-    const [allowSkip, setAllowSkip] = useState(initialState?.allowSkip ?? false);
+    const [form, setForm] = useState({
+        title: initialState?.title ?? defaultState.title,
+        goal: initialState?.goal ?? defaultState.goal,
+        goalType: initialState?.goalType ?? defaultState.goalType,
+        periodicity: initialState?.periodicity ?? defaultState.periodicity,
+        allowSkip: initialState?.allowSkip ?? defaultState.allowSkip,
+        allowPartialCompletion:
+            initialState?.allowPartialCompletion ?? defaultState.allowPartialCompletion,
+        allowOverGoalCompletion:
+            initialState?.allowOverGoalCompletion ?? defaultState.allowPartialCompletion,
+    });
 
     const handleSubmit = () => {
-        onSubmit({
-            title,
-            goal,
-            goalType,
-            periodicity,
-            allowSkip,
-        });
-        clearForm();
-    };
-    const clearForm = () => {
-        setTitle('');
-        setGoal(1);
-        setGoalType(GoalType.Times);
-        setPeriodicity(Periodicity.Daily);
-        setAllowSkip(false);
+        onSubmit(form);
+        setForm(defaultState);
     };
 
     const handleChangeTitle = (value: string) => {
-        setTitle(value.charAt(0).toUpperCase() + value.slice(1));
+        setValue('title', value.charAt(0).toUpperCase() + value.slice(1));
     };
+
+    const setValue = useCallback((field: string, value: string | boolean | number) => {
+        setForm((form) => ({
+            ...form,
+            [field]: value,
+        }));
+    }, []);
+
+    useEffect(() => {
+        if (form.goal <= 1 && form.allowPartialCompletion) {
+            setValue('allowPartialCompletion', false);
+        }
+    }, [form.goal, form.allowPartialCompletion, setValue]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -80,51 +90,88 @@ const EditHabitDialog = ({
                             <FormLabel>Title</FormLabel>
                             <Input
                                 type='text'
-                                value={title}
+                                value={form.title}
                                 onChange={(e) => handleChangeTitle(e.target.value)}
                             />
                         </FormControl>
 
                         <HStack spacing={3}>
-                            <NumberInput
-                                allowMouseWheel
-                                min={1}
-                                value={goal}
-                                onChange={(e) => setGoal(Number(e))}
-                            >
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                            <Select
-                                value={goalType}
-                                onChange={(e) => setGoalType(e.target.value as GoalType)}
-                            >
-                                <option value={GoalType.Times}>Times</option>
-                                <option value={GoalType.Mins}>Mins</option>
-                            </Select>
-                            <Select
-                                value={periodicity}
-                                onChange={(e) => setPeriodicity(e.target.value as Periodicity)}
-                            >
-                                <option value={Periodicity.Daily}>Per Day</option>
-                                <option value={Periodicity.Weekly}>Per Week</option>
-                                <option value={Periodicity.Monthly}>Per Month</option>
-                                <option value={Periodicity.Custom}>Custom</option>
-                            </Select>
-                        </HStack>
-                        <FormControl>
-                            <FormLabel>Additional</FormLabel>
-                            <Box>
-                                <Checkbox
-                                    isChecked={allowSkip}
-                                    onChange={(e) => setAllowSkip(e.target.checked)}
+                            <Tooltip label={'Daily Goal'} hasArrow>
+                                <NumericInput
+                                    min={form.allowPartialCompletion ? 2 : 1}
+                                    value={form.goal}
+                                    onChange={(e) =>
+                                        setValue('goal', !Number.isNaN(Number(e)) ? Number(e) : 1)
+                                    }
+                                />
+                            </Tooltip>
+
+                            <Tooltip label={'Goal Type'} hasArrow>
+                                <Select
+                                    value={form.goalType}
+                                    onChange={(e) =>
+                                        setValue('goalType', e.target.value as GoalType)
+                                    }
                                 >
-                                    Allow skip specific days
+                                    <option value={GoalType.Times}>Times</option>
+                                    <option value={GoalType.Mins}>Mins</option>
+                                </Select>
+                            </Tooltip>
+
+                            <Tooltip label={'Periodicity'} hasArrow>
+                                <Select
+                                    value={form.periodicity}
+                                    onChange={(e) =>
+                                        setValue('periodicity', e.target.value as Periodicity)
+                                    }
+                                >
+                                    <option value={Periodicity.Daily}>Per Day</option>
+                                    <option value={Periodicity.Weekly}>Per Week</option>
+                                    <option value={Periodicity.Monthly}>Per Month</option>
+                                    <option value={Periodicity.Custom}>Custom</option>
+                                </Select>
+                            </Tooltip>
+                        </HStack>
+
+                        <Text mb={2} fontWeight={'semibold'}>
+                            Additional
+                        </Text>
+
+                        <FormControl>
+                            <Checkbox
+                                isChecked={form.allowOverGoalCompletion}
+                                onChange={(e) =>
+                                    setValue('allowOverGoalCompletion', e.target.checked)
+                                }
+                            >
+                                Allow overgoal completion
+                            </Checkbox>
+                        </FormControl>
+
+                        <Tooltip
+                            label={'Please increase your daily goal'}
+                            isDisabled={form.goal > 1}
+                        >
+                            <FormControl isDisabled={form.goal <= 1}>
+                                <Checkbox
+                                    isChecked={form.allowPartialCompletion}
+                                    onChange={(e) =>
+                                        setValue('allowPartialCompletion', e.target.checked)
+                                    }
+                                >
+                                    Allow partial completion
                                 </Checkbox>
-                            </Box>
+                            </FormControl>
+                        </Tooltip>
+
+                        <FormControl>
+                            <Checkbox
+                                isChecked={form.allowSkip}
+                                onChange={(e) => setValue('allowSkip', e.target.checked)}
+                            >
+                                Allow skip specific days
+                            </Checkbox>
+
                             <FormHelperText>(e.g. if you need some time to rest)</FormHelperText>
                         </FormControl>
                     </Stack>

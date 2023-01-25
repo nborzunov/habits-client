@@ -4,7 +4,7 @@ const processError = <T,>(
     onFormError: (field: T, message: string) => void,
 ): void => {
     if (!err.response?.data?.field) {
-        onServerError(err.response.data?.message || 'Something went wrong');
+        onServerError(err.response?.data?.message || 'Something went wrong');
         return;
     }
 

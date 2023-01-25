@@ -15,23 +15,29 @@ export interface Habit {
     failedTargets: number;
     totalTargets: number;
     allowSkip: boolean;
+    allowPartialCompletion: boolean;
+    allowOverGoalCompletion: boolean;
     targets: Target[];
 }
 
-export interface HabitData {
-    title: string;
-    periodicity: Periodicity;
-    periodicityValue?: string;
-    goal: number;
-    goalType: GoalType;
-    allowSkip: boolean;
-}
+export type HabitData = Pick<
+    Habit,
+    | 'title'
+    | 'periodicity'
+    | 'periodicityValue'
+    | 'goal'
+    | 'goalType'
+    | 'allowSkip'
+    | 'allowPartialCompletion'
+    | 'allowOverGoalCompletion'
+>;
 
 export interface Target {
     id: string;
     date: Date;
     createDate: Date;
     targetType: TargetType;
+    value: number;
 }
 
 export enum Periodicity {

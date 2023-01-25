@@ -14,6 +14,7 @@ import getLoop from '~/common/utils/getLoop';
 import React, { useState } from 'react';
 import Icons from '~/common/helpers/Icons';
 import { Habit, Target, TargetType } from '~/Habits/types';
+import CellTooltipWrapper from '~/Habits/components/TargetCalendar/CellTooltipWrapper';
 
 const MonthlyCalendar = ({
     size,
@@ -26,9 +27,6 @@ const MonthlyCalendar = ({
     habit?: Habit;
     onCellClick?: (targetId: string | null, date: Date, newType: TargetType) => void;
 }) => {
-    if (!habit) {
-        return null;
-    }
     const targetsMap = targets.reduce((acc, target) => {
         acc[dayjs(target.date).format('DD/MM/YYYY')] = target;
         return acc;
@@ -37,6 +35,10 @@ const MonthlyCalendar = ({
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const [monthId, setMonthId] = useState(dayjs().month());
     const [year, setYear] = useState(dayjs().year());
+
+    if (!habit) {
+        return null;
+    }
 
     const daysInMonth = dayjs(`${year}-${monthId + 1}-1`).daysInMonth();
     const date = dayjs(`${year}-${monthId + 1}-1`);
@@ -222,7 +224,7 @@ const Cell = ({
     }
 
     function getDayId(columnId: number, rowId: number, firstDay: number) {
-        let day = columnId * 7 + rowId - firstDay;
+        const day = columnId * 7 + rowId - firstDay;
         if (day > daysInMonth - 1) {
             return day - daysInMonth;
         } else if (day >= 0) {
@@ -241,12 +243,7 @@ const Cell = ({
     const target = targetsMap[day.format('DD/MM/YYYY')];
     return (
         <Box cursor='pointer'>
-            <Tooltip
-                label={
-                    dayjs(`2023-${monthId + 1}-${dayId + 1}`).format('D MMMM YYYY') +
-                    `${target && target?.targetType === TargetType.Skip ? ' (skip)' : ''}`
-                }
-            >
+            <CellTooltipWrapper monthId={monthId} dayId={dayId} target={target} habit={habit}>
                 {target && target.targetType === TargetType.Skip ? (
                     <Box
                         p={2}
@@ -280,7 +277,7 @@ const Cell = ({
                         {day.format('D')}
                     </Box>
                 )}
-            </Tooltip>
+            </CellTooltipWrapper>
         </Box>
     );
 };

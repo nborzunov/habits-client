@@ -23,7 +23,7 @@ const HabitsListHeader = () => {
                 .then(() =>
                     toast({
                         title: 'Success',
-                        description: 'Successfully created account!',
+                        description: 'Successfully created habit!',
                         status: 'success',
                         duration: 1000,
                         isClosable: true,

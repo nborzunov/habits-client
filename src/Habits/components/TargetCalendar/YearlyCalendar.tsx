@@ -1,8 +1,9 @@
-import { Box, Flex, Grid, GridItem, Text, Tooltip, useTheme } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Text, useTheme } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import getLoop from '~/common/utils/getLoop';
 import React, { useContext } from 'react';
 import { Habit, Target, TargetType } from '~/Habits/types';
+import CellTooltipWrapper from '~/Habits/components/TargetCalendar/CellTooltipWrapper';
 
 interface TargetCalendarContext {
     habit?: Habit;
@@ -96,7 +97,7 @@ const Cell = ({
     const sizePx = `${size}px`;
     const theme = useTheme();
 
-    if (dayId < 0 || dayId >= daysInMonth) {
+    if (dayId < 0 || dayId >= daysInMonth || !habit) {
         return <Box key={'empty' + monthId + dayId} width={sizePx} height={sizePx} />;
     }
 
@@ -121,7 +122,7 @@ const Cell = ({
     };
     return (
         <Box key={monthId + dayId} cursor='pointer'>
-            <Tooltip label={dayjs(`2023-${monthId + 1}-${dayId + 1}`).format('D MMMM YYYY')}>
+            <CellTooltipWrapper monthId={monthId} dayId={dayId} target={target} habit={habit}>
                 {target && target.targetType === TargetType.Skip ? (
                     <Box
                         width={sizePx}
@@ -140,7 +141,7 @@ const Cell = ({
                         onClick={handleClick}
                     ></Box>
                 )}
-            </Tooltip>
+            </CellTooltipWrapper>
         </Box>
     );
 };

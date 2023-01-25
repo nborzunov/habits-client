@@ -91,7 +91,6 @@ const ChangePassword = ({ title }: { title: string }) => {
             }
 
             if (currentPassword == newPassword) {
-                console.log('err');
                 setTimeout(() => {
                     setError('newPassword', {
                         type: 'custom',

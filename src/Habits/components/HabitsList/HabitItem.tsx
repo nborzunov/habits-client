@@ -21,11 +21,13 @@ import {
     MenuList,
     Text,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import Icons from '~/common/helpers/Icons';
 import EditHabitDialog from '~/Habits/components/EditHabitDialog';
 import CompletedCheckbox from '~/Habits/components/HabitsList/CompletedCheckbox';
+import { setTitle } from '~/common/hooks/useTitle';
 
 const HabitItem = ({ habit }: { habit: Habit }) => {
     const [selectedHabitId, setSelectedHabitId] = useRecoilState(selectedHabitIdState);
@@ -33,6 +35,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
     const selected = selectedHabitId && habit.id === selectedHabitId;
     const completed = habit.completedToday;
 
+    const toast = useToast();
     const editHabit = useMutation({
         mutationFn: (formData: HabitData) => {
             return api
@@ -41,6 +44,25 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
                 .then((newHabit) => {
                     setHabits((prev) => prev.map((h) => (h.id === habit.id ? newHabit : h)));
                 })
+                .then(() =>
+                    toast({
+                        title: 'Success',
+                        description: 'Successfully created habit!',
+                        status: 'success',
+                        duration: 1000,
+                        isClosable: true,
+                    }),
+                )
+                .catch((err) =>
+                    toast({
+                        title: 'Error',
+                        description:
+                            err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    }),
+                )
                 .finally(() => onCloseEditHabit());
         },
     });
@@ -86,6 +108,12 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
         archiveHabit.mutate();
     };
 
+    const selectHabit = (habitId: string) => {
+        setSelectedHabitId(habitId);
+        setTitle(`${habit.title} - Habits`);
+        //     TODO: implement routing
+    };
+
     const {
         isOpen: isOpenDeleteConfirm,
         onOpen: onOpenDeleteConfirm,
@@ -103,7 +131,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
         <>
             <Box
                 key={habit.id}
-                onClick={() => setSelectedHabitId(habit.id)}
+                onClick={() => selectHabit(habit.id)}
                 bg={selected ? 'blackAlpha.50' : 'transparent'}
                 transition='all 0.2s ease'
                 _hover={{
@@ -209,7 +237,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Delete Habit "{habit.title}"
+                            Delete Habit &quot;{habit.title}&quot;
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
