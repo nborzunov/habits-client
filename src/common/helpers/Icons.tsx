@@ -18,11 +18,13 @@ import {
     FiPlus,
     FiRotateCcw,
     FiSave,
+    FiTrash,
+    FiTrash2,
 } from 'react-icons/fi';
 import { HiFire } from 'react-icons/hi';
 import { RxCross2 } from 'react-icons/rx';
 import { IoIosNotificationsOutline } from 'react-icons/io';
-import { MdDeleteOutline, MdOutlineArchive } from 'react-icons/all';
+import { MdOutlineArchive } from 'react-icons/all';
 
 const Icons = {
     Inbox: FiInbox,
@@ -38,7 +40,8 @@ const Icons = {
     Chart: FiPieChart,
     Add: FiPlus,
     Edit: FiEdit3,
-    Delete: MdDeleteOutline,
+    Delete: FiTrash,
+    TrashBin: FiTrash2,
     Archive: MdOutlineArchive,
     Show: FiEye,
     Hide: FiEyeOff,

@@ -41,7 +41,15 @@ const ChangePassword = ({ title }: { title: string }) => {
         mutationFn: (data: { currentPassword: string; newPassword: string }) => {
             return api
                 .post('/users/me/change-password', data)
-                .then((res) => res.data)
+                .then(() =>
+                    toast({
+                        title: 'Success',
+                        description: 'Profile updated!',
+                        status: 'success',
+                        duration: 1000,
+                        isClosable: true,
+                    }),
+                )
                 .catch((error) => {
                     processError<Fields>(
                         error,
