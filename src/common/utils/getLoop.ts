@@ -1,9 +1,3 @@
-const getLoop = (len: number) => {
-    const loop = [];
-    for (let i = 0; i < len; i++) {
-        loop.push(i);
-    }
-    return loop;
-};
+const getLoopCallback = (max: number) => Array.from({ length: max }, (_, i) => i);
 
-export default getLoop;
+export default getLoopCallback;

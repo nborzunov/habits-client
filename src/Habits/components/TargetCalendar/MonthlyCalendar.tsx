@@ -10,62 +10,60 @@ import {
     Text,
     Tooltip,
 } from '@chakra-ui/react';
-import getLoop from '~/common/utils/getLoop';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Icons from '~/common/helpers/Icons';
-import { Habit, Target, TargetType } from '~/Habits/types';
-import CellTooltipWrapper from '~/Habits/components/TargetCalendar/CellTooltipWrapper';
+import { Target, TargetType } from '~/Habits/types';
+import TargetActionWrapper from '~/Habits/components/TargetCalendar/TargetActionWrapper';
+import getLoopCallback from '~/common/utils/getLoop';
 
-const MonthlyCalendar = ({
-    size,
-    targets,
-    habit,
-    onCellClick,
-}: {
-    size?: 'sm' | 'md';
-    targets: Target[];
-    habit?: Habit;
-    onCellClick?: (targetId: string | null, date: Date, newType: TargetType) => void;
-}) => {
-    const targetsMap = targets.reduce((acc, target) => {
-        acc[dayjs(target.date).format('DD/MM/YYYY')] = target;
-        return acc;
-    }, {} as { [key: string]: Target });
-    size = size || 'md';
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets: Target[] }) => {
     const [monthId, setMonthId] = useState(dayjs().month());
     const [year, setYear] = useState(dayjs().year());
+    const targetsMap = useMemo(
+        () =>
+            Object.fromEntries(
+                targets.map((target) => [dayjs(target.date).format('DD/MM/YYYY'), target]),
+            ),
+        [targets],
+    );
+    size = size || 'md';
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    if (!habit) {
-        return null;
-    }
+    const getLoop = useCallback(getLoopCallback, []);
 
-    const daysInMonth = dayjs(`${year}-${monthId + 1}-1`).daysInMonth();
-    const date = dayjs(`${year}-${monthId + 1}-1`);
-    const firstDay = date.day();
-    const columns = Math.ceil((firstDay + daysInMonth) / 7);
+    const daysInMonth = useMemo(
+        () => dayjs(`${year}-${monthId + 1}-1`).daysInMonth(),
+        [year, monthId],
+    );
+    const date = useMemo(() => dayjs(`${year}-${monthId + 1}-1`), [year, monthId]);
+    const firstDay = useMemo(() => date.day(), [date]);
+    const columns = useMemo(() => Math.ceil((firstDay + daysInMonth) / 7), [firstDay, daysInMonth]);
 
-    const sizeBinary = size === 'sm' ? 0 : 1;
-    const gaps = [3, 12];
-    const cellSizes = [12, 12];
-    const gap = gaps[sizeBinary];
-    const cellSize = cellSizes[sizeBinary];
+    const sizeBinary = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
+    const gaps = useMemo(() => [3, 12], []);
+    const cellSizes = useMemo(() => [12, 12], []);
+    const gap = useMemo(() => gaps[sizeBinary], [gaps, sizeBinary]);
 
-    const handleSetMonth = (month: number) => {
-        if (monthId === 12) {
-            if (year <= 2023) {
-                setYear(year + 1);
-                setMonthId(0);
+    const cellSize = useMemo(() => cellSizes[sizeBinary], [cellSizes, sizeBinary]);
+
+    const handleSetMonth = useCallback(
+        (month: number) => {
+            if (monthId === 12) {
+                if (year <= 2023) {
+                    setYear(year + 1);
+                    setMonthId(0);
+                }
+            } else if (month === -1) {
+                if (year > 2022) {
+                    setYear(year - 1);
+                    setMonthId(11);
+                }
+            } else {
+                setMonthId(month);
             }
-        } else if (month === -1) {
-            if (year > 2022) {
-                setYear(year - 1);
-                setMonthId(11);
-            }
-        } else {
-            setMonthId(month);
-        }
-    };
+        },
+        [monthId, year, setYear, setMonthId],
+    );
 
     return (
         <Box p='2' textAlign={'center'}>
@@ -131,8 +129,6 @@ const MonthlyCalendar = ({
                                         daysInMonth={daysInMonth}
                                         size={cellSize}
                                         targetsMap={targetsMap}
-                                        habit={habit}
-                                        onCellClick={onCellClick}
                                         setMonthId={setMonthId}
                                     />
                                 ))}
@@ -154,9 +150,6 @@ const Cell = ({
     daysInMonth,
     size,
     targetsMap,
-    habit,
-    onCellClick,
-    setMonthId,
 }: {
     rawDayId: number;
     rawMonthId: number;
@@ -166,35 +159,15 @@ const Cell = ({
     daysInMonth: number;
     size: number;
     targetsMap: Record<string, Target>;
-    habit: Habit;
     setMonthId: (month: number) => void;
-    onCellClick?: (targetId: string | null, date: Date, newType: TargetType) => void;
 }) => {
-    const sizePx = `${size}px`;
+    const sizePx = useMemo(() => `${size}px`, [size]);
 
-    const handleClick = () => {
-        if (monthId !== rawMonthId) {
-            setMonthId(monthId);
-            return;
-        }
-        let newType;
-
-        if (!target) {
-            newType = TargetType.Done;
-        } else if (target.targetType === TargetType.Done && habit?.allowSkip) {
-            newType = TargetType.Skip;
-        } else {
-            newType = TargetType.Empty;
-        }
-
-        onCellClick?.(target?.id, day.toDate(), newType);
-    };
-
-    function getMonthId(day: number) {
+    const monthId: number = useMemo(() => {
         let month;
-        if (day > daysInMonth - 1) {
+        if (rawDayId > daysInMonth - 1) {
             month = rawMonthId + 1;
-        } else if (day < 0) {
+        } else if (rawDayId < 0) {
             month = rawMonthId - 1;
         } else {
             month = rawMonthId;
@@ -207,9 +180,11 @@ const Cell = ({
             month = 11;
         }
         return month;
-    }
+    }, [rawDayId, rawMonthId, daysInMonth]);
 
-    function getPrevMonthDate() {
+    const firstDay = useMemo(() => dayjs(`${year}-${rawMonthId + 1}-1`).day(), [year, rawMonthId]);
+
+    const prevDate = useMemo(() => {
         let y = year;
         let m = monthId;
         if (m < 0) {
@@ -221,36 +196,33 @@ const Cell = ({
         }
 
         return dayjs(`${y}-${m + 1}-1`);
-    }
+    }, [monthId, year]);
 
-    function getDayId(columnId: number, rowId: number, firstDay: number) {
+    const dayId = useMemo(() => {
         const day = columnId * 7 + rowId - firstDay;
         if (day > daysInMonth - 1) {
             return day - daysInMonth;
         } else if (day >= 0) {
             return day;
         } else {
-            const prevDate = getPrevMonthDate();
             return prevDate.daysInMonth() + day;
         }
-    }
+    }, [columnId, rowId, firstDay, daysInMonth, prevDate]);
+    const day = useMemo(
+        () => dayjs(`${year}-${monthId + 1}-${dayId + 1}`).startOf('day'),
+        [dayId, monthId, year],
+    );
+    const target = useMemo(() => targetsMap[day.format('DD/MM/YYYY')], [targetsMap, day]);
 
-    const monthId = getMonthId(rawDayId);
-    const firstDay = dayjs(`${year}-${rawMonthId + 1}-1`).day();
-    const dayId = getDayId(columnId, rowId, firstDay);
-    const day = dayjs(`${year}-${monthId + 1}-${dayId + 1}`);
-
-    const target = targetsMap[day.format('DD/MM/YYYY')];
     return (
         <Box cursor='pointer'>
-            <CellTooltipWrapper monthId={monthId} dayId={dayId} target={target} habit={habit}>
+            <TargetActionWrapper date={day} target={target}>
                 {target && target.targetType === TargetType.Skip ? (
                     <Box
                         p={2}
                         borderRadius='50%'
                         color={'black'}
                         bg={'green.100'}
-                        onClick={handleClick}
                         _hover={{
                             bg: 'green.200',
                         }}
@@ -268,7 +240,6 @@ const Cell = ({
                             target ? 'white' : monthId !== rawMonthId ? 'blackAlpha.600' : 'black'
                         }
                         bg={target ? 'green.500' : 'transparent'}
-                        onClick={handleClick}
                         _hover={{
                             bg: target ? 'green.600' : 'gray.200',
                         }}
@@ -277,7 +248,7 @@ const Cell = ({
                         {day.format('D')}
                     </Box>
                 )}
-            </CellTooltipWrapper>
+            </TargetActionWrapper>
         </Box>
     );
 };

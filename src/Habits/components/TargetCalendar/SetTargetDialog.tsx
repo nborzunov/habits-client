@@ -12,25 +12,30 @@ import {
 } from '@chakra-ui/react';
 import NumericInput from '~/common/components/NumericInput';
 import { useState } from 'react';
-import { Habit } from '~/Habits/types';
+import { Habit, Target } from '~/Habits/types';
 
 interface Props {
     habit: Habit;
+    target?: Target;
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (value: number) => void;
 }
 
-const SetTargetDialog = ({ habit, isOpen, onClose, onSubmit }: Props) => {
-    const [result, setResult] = useState(1);
+const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Props) => {
+    const [result, setResult] = useState(target?.value ?? 1);
 
     const handleSubmit = () => {
         onSubmit(result);
+        handleClose();
+    };
+
+    const handleClose = () => {
         setResult(1);
         onClose();
     };
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{habit.title} - Set Today&apos;s Result</ModalHeader>

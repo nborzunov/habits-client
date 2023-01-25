@@ -1,33 +1,33 @@
 import { Box, Flex, Grid, GridItem, Text, useTheme } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import getLoop from '~/common/utils/getLoop';
-import React, { useContext } from 'react';
-import { Habit, Target, TargetType } from '~/Habits/types';
-import CellTooltipWrapper from '~/Habits/components/TargetCalendar/CellTooltipWrapper';
+import React, { useCallback, useContext, useMemo } from 'react';
+import { Target, TargetType } from '~/Habits/types';
+import TargetActionWrapper from '~/Habits/components/TargetCalendar/TargetActionWrapper';
+import TargetActionContext from '~/Habits/components/TargetCalendar/TargetActionContext';
+import getLoopCallback from '~/common/utils/getLoop';
 
-interface TargetCalendarContext {
-    habit?: Habit;
-    onCellClick?: (targetId: string | null, date: Date, newType: TargetType) => void;
-}
-
-export const TargetCalendarContext = React.createContext<TargetCalendarContext>({});
-
-export const YearlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets: Target[] }) => {
-    const targetsMap = targets.reduce((acc, target) => {
-        acc[dayjs(target.date).format('DD/MM/YYYY')] = target;
-        return acc;
-    }, {} as { [key: string]: Target });
-    size = size || 'md';
+export const YearlyCalendar = ({
+    size = 'md',
+    targets,
+}: {
+    size?: 'sm' | 'md';
+    targets: Target[];
+}) => {
+    const targetsMap = useMemo(
+        () =>
+            targets.reduce((acc, target) => {
+                acc[dayjs(target.date).format('DD/MM/YYYY')] = target;
+                return acc;
+            }, {} as { [key: string]: Target }),
+        [targets],
+    );
+    const sizeIndex = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
+    const getLoop = useCallback(getLoopCallback, []);
     return (
         <Box height={'100%'}>
             <Flex p='2'>
                 {getLoop(12).map((i) => (
-                    <Month
-                        key={i}
-                        monthId={i}
-                        size={size === 'sm' ? 0 : 1}
-                        targetsMap={targetsMap}
-                    />
+                    <Month key={i} monthId={i} size={sizeIndex} targetsMap={targetsMap} />
                 ))}
             </Flex>
         </Box>
@@ -43,8 +43,8 @@ const Month = ({
     size: number;
     targetsMap: Record<string, Target>;
 }) => {
-    const daysInMonth = dayjs(`2023-${monthId + 1}-1`).daysInMonth();
-    const firstDay = dayjs(`2023-${monthId + 1}-1`).day();
+    const daysInMonth = useMemo(() => dayjs(`2023-${monthId + 1}-1`).daysInMonth(), [monthId]);
+    const firstDay = useMemo(() => dayjs(`2023-${monthId + 1}-1`).day(), [monthId]);
     const columns = Math.ceil((firstDay + daysInMonth) / 7);
 
     const gaps = [3, 3];
@@ -52,7 +52,9 @@ const Month = ({
     const gap = gaps[size];
     const cellSize = cellSizes[size];
 
-    const month = dayjs(`2023-${monthId + 1}-1`).format('MMM');
+    const month = useMemo(() => dayjs(`2023-${monthId + 1}-1`).format('MMM'), [monthId]);
+    const getLoop = useCallback(getLoopCallback, []);
+
     return (
         <Box p='1'>
             <Text pb='1' textAlign='center' fontWeight='bold'>
@@ -93,55 +95,45 @@ const Cell = ({
     size: number;
     targetsMap: Record<string, Target>;
 }) => {
-    const { habit, onCellClick } = useContext(TargetCalendarContext);
-    const sizePx = `${size}px`;
-    const theme = useTheme();
+    const { habit } = useContext(TargetActionContext);
+    const day = useMemo(
+        () => dayjs(`2023-${monthId + 1}-${dayId + 1}`).startOf('day'),
+        [dayId, monthId],
+    );
+    const target = useMemo(() => targetsMap[day.format('DD/MM/YYYY')], [targetsMap, day]);
+    const {
+        colors: { green },
+    } = useTheme();
+    const sizePx = useMemo(() => `${size}px`, [size]);
+    const bgColor = useMemo(
+        () =>
+            target && target.targetType === TargetType.Skip
+                ? 'gray.300'
+                : target
+                ? green[500]
+                : 'gray.300',
+        [target, green],
+    );
 
     if (dayId < 0 || dayId >= daysInMonth || !habit) {
         return <Box key={'empty' + monthId + dayId} width={sizePx} height={sizePx} />;
     }
-
-    const green = theme.colors.green;
-
-    const day = dayjs(`2023-${monthId + 1}-${dayId + 1}`);
-
-    const target = targetsMap[day.format('DD/MM/YYYY')];
-
-    const handleClick = () => {
-        let newType;
-
-        if (!target) {
-            newType = TargetType.Done;
-        } else if (target.targetType === TargetType.Done && habit?.allowSkip) {
-            newType = TargetType.Skip;
-        } else {
-            newType = TargetType.Empty;
-        }
-
-        onCellClick?.(target?.id, day.toDate(), newType);
-    };
     return (
         <Box key={monthId + dayId} cursor='pointer'>
-            <CellTooltipWrapper monthId={monthId} dayId={dayId} target={target} habit={habit}>
+            <TargetActionWrapper date={day} target={target}>
                 {target && target.targetType === TargetType.Skip ? (
                     <Box
                         width={sizePx}
                         height={sizePx}
-                        bg={'gray.300'}
+                        bg={bgColor}
                         borderTop='10px solid transparent'
                         borderWidth={`${sizePx} 0 0 ${sizePx}`}
                         borderColor={`transparent transparent transparent ${green[500]}}`}
-                        onClick={handleClick}
                     ></Box>
                 ) : (
-                    <Box
-                        width={sizePx}
-                        height={sizePx}
-                        bg={target ? 'green.500' : 'gray.300'}
-                        onClick={handleClick}
-                    ></Box>
+                    <Box width={sizePx} height={sizePx} bg={bgColor}></Box>
                 )}
-            </CellTooltipWrapper>
+            </TargetActionWrapper>
         </Box>
     );
 };

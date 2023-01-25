@@ -57,3 +57,11 @@ export enum TargetType {
     Skip = 'skip',
     Empty = 'empty',
 }
+
+export interface CreateTargetData {
+    id: string | undefined;
+    habitId: string;
+    date: Date;
+    targetType: string;
+    value: number;
+}
