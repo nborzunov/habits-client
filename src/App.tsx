@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Navigate,
+    Route,
+    RouterProvider,
+} from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '~/common/helpers/api';
 import { useRecoilState } from 'recoil';
@@ -12,8 +18,10 @@ import AuthStartup from '~/Auth/components/AuthStartup';
 import ProfilePage from '~/Profile/components/ProfilePage';
 import Dashboard from '~/Dashboard/components/Dashboard';
 import Login from '~/Auth/components/Login';
-import HabitsPage from '~/Habits/components/HabitsPage';
+
 import { useState } from 'react';
+import Habits from '~/Habits/components/Habits';
+import HabitDetails from '~/Habits/components/HabitDetails/HabitDetails';
 
 function App() {
     const [token, setToken] = useRecoilState(tokenState);
@@ -53,45 +61,38 @@ function App() {
     const handleRefetchUser = () => {
         refetch();
     };
-    return (
-        <BrowserRouter>
-            <Routes>
-                {screenSmallThanSm ? (
-                    <Route
-                        path='*'
-                        element={<Heading> Currently mobile view is not supported</Heading>}
-                    />
-                ) : (
-                    <>
-                        {!activeUser && !loading && (
-                            <Route path='/' element={<Auth />}>
-                                <Route path='/' element={<AuthStartup />} />
-                                <Route
-                                    path='signup'
-                                    element={<Signup refetch={handleRefetchUser} />}
-                                />
-                                <Route
-                                    path='login'
-                                    element={<Login refetch={handleRefetchUser} />}
-                                />
-                                <Route path='*' element={<Navigate to='/login' replace />} />
-                            </Route>
-                        )}
 
-                        {(!!activeUser || loading) && (
-                            <Route path='/' element={<Layout loading={loading} />}>
-                                <Route path='habits' element={<HabitsPage />} />
-                                <Route path='dashboard' element={<Dashboard />} />
-                                {/*TODO: user profile route*/}
-                                <Route path='me/*' element={<ProfilePage user={activeUser} />} />
-                                <Route path='*' element={<Navigate to='/habits' replace />} />
-                            </Route>
-                        )}
-                    </>
+    if (screenSmallThanSm) {
+        return <Heading> Currently mobile view is not supported</Heading>;
+    }
+
+    const router = createBrowserRouter(
+        createRoutesFromElements([
+            <>
+                {!activeUser && !loading && (
+                    <Route path='/' element={<Auth />}>
+                        <Route path='/' element={<AuthStartup />} />
+                        <Route path='signup' element={<Signup refetch={handleRefetchUser} />} />
+                        <Route path='login' element={<Login refetch={handleRefetchUser} />} />
+                        <Route path='*' element={<Navigate to='/login' replace />} />
+                    </Route>
                 )}
-            </Routes>
-        </BrowserRouter>
+
+                {(!!activeUser || loading) && (
+                    <Route path='/' element={<Layout loading={loading} />}>
+                        <Route path='habits' element={<Habits />}>
+                            <Route path={':habitId'} element={<HabitDetails />} />
+                        </Route>
+                        <Route path='dashboard' element={<Dashboard />} />
+                        {/*TODO: user profile route*/}
+                        <Route path='me/*' element={<ProfilePage user={activeUser} />} />
+                        <Route path='*' element={<Navigate to='/habits' replace />} />
+                    </Route>
+                )}
+            </>,
+        ]),
     );
+    return <RouterProvider router={router} />;
 }
 
 export default App;

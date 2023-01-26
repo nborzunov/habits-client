@@ -1,4 +1,4 @@
-import { Box, Heading, List, Stack } from '@chakra-ui/react';
+import { Box, Heading, List, Skeleton, Stack } from '@chakra-ui/react';
 import HabitsListHeader from '~/Habits/components/HabitsList/HabitsListHeader';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -37,33 +37,35 @@ const HabitsList = () => {
     const noHabits = uncompletedHabits.length === 0 && completedHabits.length === 0;
 
     return (
-        <Box borderRightColor='gray.200' borderRightWidth='2px' h='100vh'>
-            <HabitsListHeader />
-            <Box>
-                {noHabits && (
-                    <Heading p={2} py={4} size={'md'} textAlign={'center'}>
-                        No habits yet, let's create one!
-                    </Heading>
-                )}
-                <Stack spacing={0}>
-                    {uncompletedHabits.map((habit) => (
-                        <HabitItem key={habit.id} habit={habit} />
-                    ))}
-                </Stack>
-                {completedHabits.length > 0 && (
-                    <Box mt={4}>
-                        <Heading as='h3' size='md' mb={'12px'} py='8px' px={2}>
-                            Completed today
+        <Skeleton isLoaded={!isLoading}>
+            <Box borderRightColor='gray.200' borderRightWidth='2px' h='100vh'>
+                <HabitsListHeader />
+                <Box>
+                    {noHabits && (
+                        <Heading p={2} py={4} size={'md'} textAlign={'center'}>
+                            No habits yet, let&apos;s create one!
                         </Heading>
-                        <List styleType='none'>
-                            {completedHabits.map((habit) => (
-                                <HabitItem key={habit.id} habit={habit} />
-                            ))}
-                        </List>
-                    </Box>
-                )}
+                    )}
+                    <Stack spacing={0}>
+                        {uncompletedHabits.map((habit) => (
+                            <HabitItem key={habit.id} habit={habit} />
+                        ))}
+                    </Stack>
+                    {completedHabits.length > 0 && (
+                        <Box mt={4}>
+                            <Heading as='h3' size='md' mb={'12px'} py='8px' px={2}>
+                                Completed today
+                            </Heading>
+                            <List styleType='none'>
+                                {completedHabits.map((habit) => (
+                                    <HabitItem key={habit.id} habit={habit} />
+                                ))}
+                            </List>
+                        </Box>
+                    )}
+                </Box>
             </Box>
-        </Box>
+        </Skeleton>
     );
 };
 

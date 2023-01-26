@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
+    Box,
     Button,
     Checkbox,
     FormControl,
@@ -97,13 +98,18 @@ const EditHabitDialog = ({
 
                         <HStack spacing={3}>
                             <Tooltip label={'Daily Goal'} hasArrow>
-                                <NumericInput
-                                    min={form.allowPartialCompletion ? 2 : 1}
-                                    value={form.goal}
-                                    onChange={(e) =>
-                                        setValue('goal', !Number.isNaN(Number(e)) ? Number(e) : 1)
-                                    }
-                                />
+                                <Box>
+                                    <NumericInput
+                                        min={form.allowPartialCompletion ? 2 : 1}
+                                        value={form.goal}
+                                        onChange={(e) =>
+                                            setValue(
+                                                'goal',
+                                                !Number.isNaN(Number(e)) ? Number(e) : 1,
+                                            )
+                                        }
+                                    />
+                                </Box>
                             </Tooltip>
 
                             <Tooltip label={'Goal Type'} hasArrow>
