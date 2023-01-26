@@ -1,3 +1,4 @@
+import { MdOutlineArchive } from 'react-icons/all';
 import {
     FiArrowRight,
     FiCheck,
@@ -22,9 +23,8 @@ import {
     FiTrash2,
 } from 'react-icons/fi';
 import { HiFire } from 'react-icons/hi';
-import { RxCross2 } from 'react-icons/rx';
 import { IoIosNotificationsOutline } from 'react-icons/io';
-import { MdOutlineArchive } from 'react-icons/all';
+import { RxCross2 } from 'react-icons/rx';
 
 const Icons = {
     Inbox: FiInbox,

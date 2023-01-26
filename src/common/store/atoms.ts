@@ -1,8 +1,7 @@
-import { atom, selector } from 'recoil';
-
 import { Layout } from 'react-grid-layout';
-import { Habit } from '~/Habits/types';
-import { User } from '~/Profile/types';
+import { atom, selector } from 'recoil';
+import { Habit } from '~/modules/Habits/types';
+import { User } from '~/modules/Profile/types';
 
 export const habitsState = atom<Habit[]>({
     key: 'habitsState',
@@ -42,28 +41,12 @@ const localStorageEffect =
         });
     };
 
-export const selectedHabitIdState = atom<string | null>({
-    key: 'selectedHabitIdState',
-    default: null,
-    effects: [localStorageEffect('selectedHabit')],
-});
-
-export const selectedHabitState = selector({
-    key: 'selectedHabitState',
-    get: ({ get }) => {
-        const list = get(habitsState);
-
-        const selectedId = get(selectedHabitIdState);
-        return list.find((habit) => habit.id == selectedId);
-    },
-});
-
 export const activeUserState = atom<User | null>({
     key: 'activeUserState',
     default: null,
 });
 
-export const tokenState = atom<String | null>({
+export const tokenState = atom<string | null>({
     key: 'tokenState',
     default: null,
     effects: [localStorageEffect('authToken')],

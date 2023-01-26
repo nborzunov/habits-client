@@ -1,27 +1,20 @@
+import { Heading, useMediaQuery } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import {
-    createBrowserRouter,
-    createRoutesFromElements,
     Navigate,
     Route,
     RouterProvider,
+    createBrowserRouter,
+    createRoutesFromElements,
 } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import api from '~/common/helpers/api';
 import { useRecoilState } from 'recoil';
+import api from '~/common/helpers/api';
 import { activeUserState, tokenState } from '~/common/store/atoms';
-import { User } from '~/Profile/types';
-import { Heading, useMediaQuery } from '@chakra-ui/react';
-import Auth from '~/Auth/components/Auth';
-import Signup from '~/Auth/components/Signup';
-import Layout from '~/Layout/components/Layout';
-import AuthStartup from '~/Auth/components/AuthStartup';
-import ProfilePage from '~/Profile/components/ProfilePage';
-import Dashboard from '~/Dashboard/components/Dashboard';
-import Login from '~/Auth/components/Login';
-
-import { useState } from 'react';
-import Habits from '~/Habits/components/Habits';
-import HabitDetails from '~/Habits/components/HabitDetails/HabitDetails';
+import { Dashboard } from '~/modules/Dashboard';
+import { User } from '~/modules/Profile/types';
+import { AuthPage, HabitsPage, ProfilePage } from '~/pages';
+import Layout from '~/ui/Layout/components/Layout';
 
 function App() {
     const [token, setToken] = useRecoilState(tokenState);
@@ -58,7 +51,7 @@ function App() {
         initialData: null,
     });
 
-    const handleRefetchUser = () => {
+    const refetchUser = () => {
         refetch();
     };
 
@@ -70,22 +63,14 @@ function App() {
         createRoutesFromElements([
             <>
                 {!activeUser && !loading && (
-                    <Route path='/' element={<Auth />}>
-                        <Route path='/' element={<AuthStartup />} />
-                        <Route path='signup' element={<Signup refetch={handleRefetchUser} />} />
-                        <Route path='login' element={<Login refetch={handleRefetchUser} />} />
-                        <Route path='*' element={<Navigate to='/login' replace />} />
-                    </Route>
+                    <Route path='/*' element={<AuthPage refetchUser={refetchUser} />} />
                 )}
 
                 {(!!activeUser || loading) && (
                     <Route path='/' element={<Layout loading={loading} />}>
-                        <Route path='habits' element={<Habits />}>
-                            <Route path={':habitId'} element={<HabitDetails />} />
-                        </Route>
+                        <Route path='habits/*' element={<HabitsPage />} />
                         <Route path='dashboard' element={<Dashboard />} />
-                        {/*TODO: user profile route*/}
-                        <Route path='me/*' element={<ProfilePage user={activeUser} />} />
+                        <Route path='me/*' element={<ProfilePage />} />
                         <Route path='*' element={<Navigate to='/habits' replace />} />
                     </Route>
                 )}
