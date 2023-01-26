@@ -1,6 +1,6 @@
 import { GoalType, Habit, HabitData } from '~/Habits/types';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { habitsState, selectedHabitIdState } from '~/common/store/atoms';
+import { useSetRecoilState } from 'recoil';
+import { habitsState } from '~/common/store/atoms';
 import { useMutation } from '@tanstack/react-query';
 import api from '~/common/helpers/api';
 import {
@@ -23,11 +23,20 @@ import EditHabitDialog from '~/Habits/components/EditHabitDialog';
 import CompletedCheckbox from '~/Habits/components/HabitsList/CompletedCheckbox';
 import { setTitle } from '~/common/hooks/useTitle';
 import ConfirmationDialog from '~/common/components/ConfirmationDialog';
+import { useNavigate, useParams } from 'react-router';
 
 const HabitItem = ({ habit }: { habit: Habit }) => {
-    const [selectedHabitId, setSelectedHabitId] = useRecoilState(selectedHabitIdState);
     const setHabits = useSetRecoilState(habitsState);
+    const { habitId: selectedHabitId } = useParams();
+    const navigate = useNavigate();
+
     const selected = selectedHabitId && habit.id === selectedHabitId;
+
+    if (selected) {
+        setTitle(`${habit.title} - Habits`);
+    } else {
+        setTitle('All Habits');
+    }
     const completed = habit.completedToday;
 
     const toast = useToast();
@@ -70,7 +79,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
                 .then(() => {
                     setHabits((prev) => prev.filter((h) => h.id !== habit.id));
                     if (selectedHabitId === habit.id) {
-                        setSelectedHabitId(null);
+                        navigate('/habits');
                     }
                 })
                 .finally(() => onCloseDeleteConfirm());
@@ -85,7 +94,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
                 .then(() => {
                     setHabits((prev) => prev.filter((h) => h.id !== habit.id));
                     if (selectedHabitId === habit.id) {
-                        setSelectedHabitId(null);
+                        navigate('/habits');
                     }
                 })
                 .finally(() => onCloseDeleteConfirm());
@@ -138,9 +147,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
     };
 
     const selectHabit = (habitId: string) => {
-        setSelectedHabitId(habitId);
-        setTitle(`${habit.title} - Habits`);
-        //     TODO: implement routing
+        navigate(`/habits/${habitId}`);
     };
 
     const handleCleanData = () => {

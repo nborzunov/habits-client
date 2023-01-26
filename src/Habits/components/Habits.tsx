@@ -1,11 +1,8 @@
 import { Box, Grid, GridItem } from '@chakra-ui/react';
-
 import HabitsList from '~/Habits/components/HabitsList/HabitsList';
-import HabitDetails from '~/Habits/components/HabitDetails/HabitDetails';
-import useTitle from '~/common/hooks/useTitle';
+import { Outlet } from 'react-router-dom';
 
-const HabitsPage = () => {
-    useTitle('All Habits');
+const Habits = () => {
     return (
         <Box>
             <Grid templateColumns='460px 1fr'>
@@ -13,11 +10,11 @@ const HabitsPage = () => {
                     <HabitsList />
                 </GridItem>
                 <GridItem>
-                    <HabitDetails />
+                    <Outlet />
                 </GridItem>
             </Grid>
         </Box>
     );
 };
 
-export default HabitsPage;
+export default Habits;

@@ -2,9 +2,9 @@ import { Box, Button, Flex, Heading, HStack, Icon, IconButton, Tooltip } from '@
 import Icons from '~/common/helpers/Icons';
 import Statistics from '~/Habits/components/HabitDetails/Statistics';
 import { YearlyCalendar } from '~/Habits/components/TargetCalendar/YearlyCalendar';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import TargetChart from '~/Habits/components/HabitDetails/TargetChart';
-import { habitsState, selectedHabitState } from '~/common/store/atoms';
+import { habitsState } from '~/common/store/atoms';
 import { useMutation } from '@tanstack/react-query';
 import api from '~/common/helpers/api';
 import MonthlyCalendar from '~/Habits/components/TargetCalendar/MonthlyCalendar';
@@ -16,10 +16,12 @@ import getCorrectDate from '~/common/utils/getCorrectDate';
 import { CreateTargetData, Habit, TargetType } from '~/Habits/types';
 import { setTitle } from '~/common/hooks/useTitle';
 import TargetActionContext from '~/Habits/components/TargetCalendar/TargetActionContext';
+import { useParams } from 'react-router';
 
 const HabitDetails = () => {
-    const habit = useRecoilValue(selectedHabitState);
-    const setHabits = useSetRecoilState(habitsState);
+    const [habits, setHabits] = useRecoilState(habitsState);
+    const { habitId: selectedHabitId } = useParams();
+    const habit = habits.find((h) => h.id === selectedHabitId);
     const [isEditMode, setIsEditMode] = useState(false);
     const { save, reset, removeWidget, widgets, props } = useWidgets(isEditMode);
 
