@@ -42,13 +42,13 @@ export const ProfilePage = () => {
             <Flex mt={'16'}>
                 <Box width={250} mr={5} p={8}>
                     <Stack spacing={3}>
-                        <ProfilePageLink path='/me/' name='View Profile' />
-                        <ProfilePageLink path='/me/edit' name='Edit Profile' />
-                        <ProfilePageLink path='/me/notifications' name='Notifications' />
-                        <ProfilePageLink path='/me/change-password' name='Change Password' />
-                        <ProfilePageLink path='/me/change-email' name='Change Email' />
-                        <ProfilePageLink path='/me/delete-account' name='Delete Account' />
-                        <ProfilePageLink path='/me/clean-data' name='Clean Data' />
+                        <ProfilePageLink path='' name='View Profile' />
+                        <ProfilePageLink path='edit' name='Edit Profile' />
+                        <ProfilePageLink path='notifications' name='Notifications' />
+                        <ProfilePageLink path='change-password' name='Change Password' />
+                        <ProfilePageLink path='change-email' name='Change Email' />
+                        <ProfilePageLink path='delete-account' name='Delete Account' />
+                        <ProfilePageLink path='clean-data' name='Clean Data' />
                     </Stack>
                 </Box>
                 <Box

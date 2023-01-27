@@ -43,21 +43,10 @@ export const EditHabitDialog = ({
     initialState?: HabitData;
     onSubmit: (h: HabitData) => void;
 }) => {
-    const [form, setForm] = useState({
-        title: initialState?.title ?? defaultState.title,
-        goal: initialState?.goal ?? defaultState.goal,
-        goalType: initialState?.goalType ?? defaultState.goalType,
-        periodicity: initialState?.periodicity ?? defaultState.periodicity,
-        allowSkip: initialState?.allowSkip ?? defaultState.allowSkip,
-        allowPartialCompletion:
-            initialState?.allowPartialCompletion ?? defaultState.allowPartialCompletion,
-        allowOverGoalCompletion:
-            initialState?.allowOverGoalCompletion ?? defaultState.allowPartialCompletion,
-    });
+    const [form, setForm] = useState(defaultState);
 
     const handleSubmit = () => {
         onSubmit(form);
-        setForm(defaultState);
     };
 
     const handleChangeTitle = (value: string) => {
@@ -77,6 +66,23 @@ export const EditHabitDialog = ({
         }
     }, [form.goal, form.allowPartialCompletion, setValue]);
 
+    const setInitialState = useCallback(() => {
+        setForm({
+            title: initialState?.title ?? defaultState.title,
+            goal: initialState?.goal ?? defaultState.goal,
+            goalType: initialState?.goalType ?? defaultState.goalType,
+            periodicity: initialState?.periodicity ?? defaultState.periodicity,
+            allowSkip: initialState?.allowSkip ?? defaultState.allowSkip,
+            allowPartialCompletion:
+                initialState?.allowPartialCompletion ?? defaultState.allowPartialCompletion,
+            allowOverGoalCompletion:
+                initialState?.allowOverGoalCompletion ?? defaultState.allowPartialCompletion,
+        });
+    }, [initialState]);
+
+    useEffect(() => {
+        if (isOpen) setInitialState();
+    }, [isOpen, setInitialState]);
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />

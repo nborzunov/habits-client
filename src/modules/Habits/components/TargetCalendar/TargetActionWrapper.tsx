@@ -83,7 +83,7 @@ export const TargetActionWrapper = ({
     );
 
     const onSkip = useCallback(() => {
-        onChangeTarget(target?.id, date.toDate(), TargetType.Skip);
+        onChangeTarget(target?.id, date.toDate(), TargetType.Skip, 0);
     }, [target?.id, date, onChangeTarget]);
 
     const onReset = useCallback(() => {
@@ -117,7 +117,7 @@ export const TargetActionWrapper = ({
                         />
                     )}
 
-                    {target?.targetType !== TargetType.Skip && (
+                    {target?.targetType !== TargetType.Skip && habit.allowSkip && (
                         <TargetCellMenuItem
                             onClick={() => onSkip()}
                             label={'Skip'}
