@@ -41,7 +41,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
 
     const sizeBinary = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
     const gaps = useMemo(() => [3, 12], []);
-    const cellSizes = useMemo(() => [12, 12], []);
+    const cellSizes = useMemo(() => [40, 40], []);
     const gap = useMemo(() => gaps[sizeBinary], [gaps, sizeBinary]);
 
     const cellSize = useMemo(() => cellSizes[sizeBinary], [cellSizes, sizeBinary]);
@@ -107,7 +107,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                     </Tooltip>
                 </HStack>
             </Flex>
-            <Grid templateColumns={`repeat(7, ${cellSize + 30}px)`} gap={`${gap}px`}>
+            <Grid templateColumns={`repeat(7, ${cellSize}px)`} gap={`${gap}px`}>
                 {getLoop(7).map((rowId) => (
                     <GridItem key={'grid-column' + monthId + rowId}>
                         <Box>
@@ -220,6 +220,8 @@ const Cell = ({
                 {target && target.targetType === TargetType.Skip ? (
                     <Box
                         p={2}
+                        width={sizePx}
+                        height={sizePx}
                         borderRadius='50%'
                         color={'black'}
                         bg={'green.100'}
@@ -233,8 +235,8 @@ const Cell = ({
                 ) : (
                     <Box
                         p={2}
-                        width={sizePx + 20}
-                        height={sizePx + 20}
+                        width={sizePx}
+                        height={sizePx}
                         borderRadius='50%'
                         color={
                             target ? 'white' : monthId !== rawMonthId ? 'blackAlpha.600' : 'black'

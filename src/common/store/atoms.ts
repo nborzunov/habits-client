@@ -52,14 +52,10 @@ export const tokenState = atom<string | null>({
     effects: [localStorageEffect('authToken')],
 });
 
-// export const widgetsState = atom<String | null>({
-//     key: 'tokenState',
-//     default: [],
-//     effects: [localStorageEffect('widgets')],
-// });
-
-export const layoutState = atom<Layout[] | undefined>({
+export const layoutState = atom<{
+    [key: string]: Layout[] | undefined;
+}>({
     key: 'layoutState',
-    default: undefined,
-    // effects: [localStorageEffect('layout')],
+    default: {},
+    effects: [localStorageEffect('layout')],
 });

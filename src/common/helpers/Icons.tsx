@@ -1,4 +1,4 @@
-import { MdOutlineArchive } from 'react-icons/all';
+import { FiBarChart2, FiCalendar, MdOutlineArchive } from 'react-icons/all';
 import {
     FiArrowRight,
     FiCheck,
@@ -53,6 +53,8 @@ const Icons = {
     Grid: FiGrid,
     Save: FiSave,
     Reset: FiRotateCcw,
+    Stats: FiBarChart2,
+    Calendar: FiCalendar,
 };
 
 // TODO: write proxy for icons

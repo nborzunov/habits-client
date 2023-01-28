@@ -2,26 +2,28 @@ import { Box, Icon, IconButton } from '@chakra-ui/react';
 import Icons from '~/common/helpers/Icons';
 
 export const Widget = ({
-    showCross,
+    isEditMode,
     remove,
     children,
 }: {
-    showCross: boolean;
+    isEditMode: boolean;
     remove: () => void;
     children: any;
 }) => {
     return (
         <Box
             borderRadius='xl'
-            borderColor='gray.200'
+            borderColor={'gray.200'}
             borderWidth='2px'
             p='2'
             display='flex'
             justifyContent='center'
+            alignItems={'center'}
             height={'100%'}
             position={'relative'}
+            bg={'gray.50'}
         >
-            {showCross && (
+            {isEditMode && (
                 <IconButton
                     icon={<Icon as={Icons.Cross} />}
                     aria-label={'remove widget'}

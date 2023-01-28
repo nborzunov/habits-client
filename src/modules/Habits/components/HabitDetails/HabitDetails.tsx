@@ -1,15 +1,15 @@
 import { Box, Button, Flex, HStack, Heading, Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { useParams } from 'react-router';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
 import api from '~/common/helpers/api';
 import { setTitle } from '~/common/hooks/useTitle';
 import { habitsState } from '~/common/store/atoms';
 import getCorrectDate from '~/common/utils/getCorrectDate';
-import { Widget } from '~/modules/Habits/components/Grid';
+import { Widget, WidgetsList } from '~/modules/Habits/components/Grid';
 import { Statistics, TargetChart } from '~/modules/Habits/components/HabitDetails';
 import {
     MonthlyCalendar,
@@ -20,11 +20,24 @@ import { WidgetIdentifiers, useWidgets } from '~/modules/Habits/helpers';
 import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
 
 export const HabitDetails = () => {
-    const [habits, setHabits] = useRecoilState(habitsState);
+    const habits = useRecoilValue(habitsState);
     const { habitId: selectedHabitId } = useParams();
     const habit = habits.find((h) => h.id === selectedHabitId);
+
+    if (!habit) {
+        return null;
+    }
+
+    return <HabitDetailsInner habit={habit} />;
+};
+
+export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
+    const setHabits = useSetRecoilState(habitsState);
     const [isEditMode, setIsEditMode] = useState(false);
-    const { save, reset, removeWidget, widgets, props } = useWidgets(isEditMode);
+    const { save, reset, removeWidget, addWidget, widgets, layout, props } = useWidgets(
+        habit,
+        isEditMode,
+    );
 
     // TODO: вынести мутейшены в отдельный файл
     const createTarget = useMutation({
@@ -37,8 +50,6 @@ export const HabitDetails = () => {
                 );
         },
     });
-
-    if (!habit) return null;
 
     setTitle(`${habit.title} - Habits`);
 
@@ -123,125 +134,139 @@ export const HabitDetails = () => {
                             onChangeTarget,
                         }}
                     >
-                        <GridLayout {...props}>
-                            <div key={WidgetIdentifiers.CURRENT_STREAK}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.CURRENT_STREAK)}
-                                >
-                                    <Statistics
-                                        title='Current streak'
-                                        value={habit.currentStreak}
-                                        type='streak'
-                                        startDate={habit.currentStreakStartDate}
-                                    />
-                                </Widget>
-                            </div>
-
-                            <Box key={WidgetIdentifiers.COMPLETED_CHART}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.COMPLETED_CHART)}
-                                >
-                                    <TargetChart
-                                        completed={habit.completedTargets}
-                                        failed={habit.failedTargets}
-                                    />
-                                </Widget>
-                            </Box>
-
-                            <div key={WidgetIdentifiers.COMPLETED_TARGETS}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.COMPLETED_TARGETS)}
-                                >
-                                    <Statistics
-                                        icon={Icons.Complete}
-                                        title='Complete'
-                                        value={habit.completedTargets}
-                                        type='increase'
-                                        footerValue={habit.completedTargets}
-                                    />
-                                </Widget>
-                            </div>
-
-                            <div key={WidgetIdentifiers.FAILED_TARGETS}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.FAILED_TARGETS)}
-                                >
-                                    <Statistics
-                                        icon={Icons.Cross}
-                                        title='Failed'
-                                        value={habit.failedTargets}
-                                        type='decrease'
-                                        footerValue={habit.failedTargets}
-                                    />
-                                </Widget>
-                            </div>
-
-                            <div key={WidgetIdentifiers.TOTAL_TARGETS}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.TOTAL_TARGETS)}
-                                >
-                                    <Statistics
-                                        title='Total'
-                                        value={habit.totalTargets}
-                                        type='none'
-                                    />
-                                </Widget>
-                            </div>
-
-                            <div key={WidgetIdentifiers.SKIPPED_TARGETS}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.SKIPPED_TARGETS)}
-                                >
-                                    <Statistics
-                                        icon={Icons.ArrowRight}
-                                        title='Skipped'
-                                        value={habit.completedTargets}
-                                        type='none'
-                                    />
-                                </Widget>
-                            </div>
-
-                            <div key={WidgetIdentifiers.YEARLY_CALENDAR}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.YEARLY_CALENDAR)}
-                                >
-                                    <YearlyCalendar targets={habit.targets} />
-                                </Widget>
-                            </div>
-                            <div key={WidgetIdentifiers.MONTHLY_CALENDAR}>
-                                <Widget
-                                    showCross={isEditMode}
-                                    remove={() => removeWidget(WidgetIdentifiers.MONTHLY_CALENDAR)}
-                                >
-                                    <MonthlyCalendar targets={habit.targets} />
-                                </Widget>
-                            </div>
+                        <GridLayout {...props} layout={layout}>
+                            {layout.map((widget) => (
+                                <Box key={widget.i}>
+                                    {widget.i === WidgetIdentifiers.CURRENT_STREAK && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.CURRENT_STREAK)
+                                            }
+                                        >
+                                            <Statistics
+                                                title='Current streak'
+                                                value={habit.currentStreak}
+                                                type='streak'
+                                                startDate={habit.currentStreakStartDate}
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.COMPLETED_CHART && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.COMPLETED_CHART)
+                                            }
+                                        >
+                                            <TargetChart
+                                                completed={habit.completedTargets}
+                                                failed={habit.failedTargets}
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.COMPLETED_TARGETS && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.COMPLETED_TARGETS)
+                                            }
+                                        >
+                                            <Statistics
+                                                icon={Icons.Complete}
+                                                title='Complete'
+                                                value={habit.completedTargets}
+                                                type='increase'
+                                                footerValue={habit.completedTargets}
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.FAILED_TARGETS && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.FAILED_TARGETS)
+                                            }
+                                        >
+                                            <Statistics
+                                                icon={Icons.Cross}
+                                                title='Failed'
+                                                value={habit.failedTargets}
+                                                type='decrease'
+                                                footerValue={habit.failedTargets}
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.TOTAL_TARGETS && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.TOTAL_TARGETS)
+                                            }
+                                        >
+                                            <Statistics
+                                                title='Total'
+                                                value={habit.totalTargets}
+                                                type='none'
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.SKIPPED_TARGETS && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.SKIPPED_TARGETS)
+                                            }
+                                        >
+                                            <Statistics
+                                                icon={Icons.ArrowRight}
+                                                title='Skipped'
+                                                value={habit.completedTargets}
+                                                type='none'
+                                            />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.YEARLY_CALENDAR && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.YEARLY_CALENDAR)
+                                            }
+                                        >
+                                            <YearlyCalendar targets={habit.targets} />
+                                        </Widget>
+                                    )}
+                                    {widget.i === WidgetIdentifiers.MONTHLY_CALENDAR && (
+                                        <Widget
+                                            isEditMode={isEditMode}
+                                            remove={() =>
+                                                removeWidget(WidgetIdentifiers.MONTHLY_CALENDAR)
+                                            }
+                                        >
+                                            <MonthlyCalendar targets={habit.targets} />
+                                        </Widget>
+                                    )}
+                                </Box>
+                            ))}
                         </GridLayout>
                     </TargetActionContext.Provider>
                 </Box>
             </Box>
             {isEditMode && (
                 <Box m={0} flex={'1'}>
-                    <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
+                    <Flex
+                        alignItems={'center'}
+                        justifyContent={'space-between'}
+                        pt={2}
+                        height={'48px'}
+                    >
                         <Heading as='h3' size='md'>
                             Widgets
                         </Heading>
                     </Flex>
-                    <HStack spacing={2}>
-                        {!widgets.length && <Heading>No widgets left</Heading>}
-                        {widgets.map((widget) => (
-                            <Box key={widget} p={4}>
-                                {widget}
-                            </Box>
-                        ))}
-                    </HStack>
+                    <Box py={2} pr={2}>
+                        <WidgetsList widgets={widgets} addWidget={addWidget} />
+                    </Box>
                 </Box>
             )}
         </Flex>

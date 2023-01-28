@@ -51,8 +51,8 @@ export const TargetActionWrapper = ({
     const periodicity = useMemo(
         () =>
             target?.value === 1
-                ? habit.goalType.slice(0, habit.goalType.length - 1)
-                : habit.goalType,
+                ? habit?.goalType?.slice(0, habit?.goalType?.length - 1)
+                : habit?.goalType,
         [target, habit],
     );
     const prefix = useMemo(() => `${target?.value} ${periodicity} on `, [target, periodicity]);
@@ -101,15 +101,15 @@ export const TargetActionWrapper = ({
 
                 <MenuList p={0}>
                     {(target?.targetType !== TargetType.Done ||
-                        (habit.allowPartialCompletion && target?.value !== habit.goal)) && (
+                        (habit?.allowPartialCompletion && target?.value !== habit?.goal)) && (
                         <TargetCellMenuItem
                             onClick={() => onComplete()}
                             label={'Complete'}
                             icon={Icons.Complete}
                         />
                     )}
-                    {((habit.allowPartialCompletion && Number(target?.value) <= habit.goal) ||
-                        habit.allowOverGoalCompletion) && (
+                    {((habit?.allowPartialCompletion && Number(target?.value) <= habit?.goal) ||
+                        habit?.allowOverGoalCompletion) && (
                         <TargetCellMenuItem
                             onClick={() => onOpenSetTarget()}
                             label={'Set'}
@@ -117,7 +117,7 @@ export const TargetActionWrapper = ({
                         />
                     )}
 
-                    {target?.targetType !== TargetType.Skip && habit.allowSkip && (
+                    {target?.targetType !== TargetType.Skip && habit?.allowSkip && (
                         <TargetCellMenuItem
                             onClick={() => onSkip()}
                             label={'Skip'}

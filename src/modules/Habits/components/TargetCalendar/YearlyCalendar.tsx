@@ -26,7 +26,7 @@ export const YearlyCalendar = ({
     const sizeIndex = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
     const getLoop = useCallback(getLoopCallback, []);
     return (
-        <Box height={'100%'}>
+        <Box>
             <Flex p='2'>
                 {getLoop(12).map((i) => (
                     <Month key={i} monthId={i} size={sizeIndex} targetsMap={targetsMap} />
