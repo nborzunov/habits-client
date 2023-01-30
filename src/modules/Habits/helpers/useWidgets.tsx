@@ -35,7 +35,7 @@ export const WIDGETS: {
     SKIPPED_TARGETS: { title: 'Skipped Targets', icon: Icons.Stats, w: 1, h: 1 },
     YEARLY_CALENDAR: { title: 'Yearly Calendar', icon: Icons.Calendar, w: 2, h: 2 },
     COMPLETED_CHART: { title: 'Completed Chart', icon: Icons.Chart, w: 1, h: 3 },
-    MONTHLY_CALENDAR: { title: 'Monthly Calendar', icon: Icons.Calendar, w: 1, h: 3.5 },
+    MONTHLY_CALENDAR: { title: 'Monthly Calendar', icon: Icons.Calendar, w: 1, h: 4 },
 };
 const WIDGET_LAYOUTS = {
     CURRENT_STREAK: {

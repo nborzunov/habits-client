@@ -136,7 +136,13 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                     >
                         <GridLayout {...props} layout={layout}>
                             {layout.map((widget) => (
-                                <Box key={widget.i}>
+                                <Box
+                                    key={widget.i}
+                                    onDragStart={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                >
                                     {widget.i === WidgetIdentifiers.CURRENT_STREAK && (
                                         <Widget
                                             isEditMode={isEditMode}

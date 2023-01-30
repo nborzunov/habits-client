@@ -65,8 +65,9 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
         [monthId, year, setYear, setMonthId],
     );
 
+    console.log(year);
     return (
-        <Box p='2' textAlign={'center'}>
+        <Box p='2' textAlign={'center'} height={'404px'}>
             <Flex justifyContent={'space-between'} alignItems={'center'} width={'100%'} pb={'2'}>
                 <HStack spacing={'1'}>
                     <Tooltip label={'Previous year'} placement={'top'}>
@@ -74,7 +75,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             aria-label='left'
                             icon={<Icon as={Icons.LeftDouble} />}
                             onClick={() => setYear(year - 1)}
-                            disabled={year <= 2022}
+                            isDisabled={year <= 2022}
                         />
                     </Tooltip>
                     <Tooltip label={'Previous month'} placement={'top'}>
@@ -82,7 +83,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             aria-label='left'
                             icon={<Icon as={Icons.Left} />}
                             onClick={() => handleSetMonth(monthId - 1)}
-                            disabled={year <= 2022 && monthId === 0}
+                            isDisabled={year <= 2022 && monthId === 0}
                         />
                     </Tooltip>
                 </HStack>
@@ -93,7 +94,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             aria-label='right'
                             icon={<Icon as={Icons.Right} />}
                             onClick={() => handleSetMonth(monthId + 1)}
-                            disabled={year > 2023 && monthId === 11}
+                            isDisabled={year > 2023 && monthId === 11}
                         />
                     </Tooltip>
 
@@ -102,7 +103,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             aria-label='right'
                             icon={<Icon as={Icons.RightDouble} />}
                             onClick={() => setYear(year + 1)}
-                            disabled={year > 2023}
+                            isDisabled={year > 2023}
                         />
                     </Tooltip>
                 </HStack>
