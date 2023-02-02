@@ -46,12 +46,6 @@ export const activeUserState = atom<User | null>({
     default: null,
 });
 
-export const tokenState = atom<string | null>({
-    key: 'tokenState',
-    default: null,
-    effects: [localStorageEffect('authToken')],
-});
-
 export const layoutState = atom<{
     [key: string]: {
         desktop: Layout[];

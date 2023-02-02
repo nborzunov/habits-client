@@ -3,12 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
 import processError from '~/common/helpers/processError';
 import validationRules from '~/common/helpers/validationRules';
 import useTitle from '~/common/hooks/useTitle';
-import { tokenState } from '~/common/store/atoms';
 import FormField, { FieldsConfig } from '~/ui/FormField';
 import Back from '~/ui/Layout/components/Back';
 
@@ -16,16 +14,15 @@ type Fields = 'username' | 'password';
 
 export const Login = ({ refetch }: { refetch: () => void }) => {
     useTitle('Login');
-    const setToken = useSetRecoilState(tokenState);
     const toast = useToast();
     const login = useMutation({
         mutationFn: (data: { username: string; password: string }) => {
             return api
-                .post<{
+                .post('auth/', { json: data })
+                .json<{
                     token: string;
-                }>('/auth/', data)
-                .then((res) => res.data)
-                .then((data) => setToken(`Bearer ${data.token}`))
+                }>()
+                .then((data) => localStorage.setItem('authToken', data.token))
                 .then(() => refetch())
                 .then(() =>
                     toast({

@@ -22,8 +22,8 @@ export const HabitsList = () => {
         queryKey: ['habits'],
         queryFn: () =>
             api
-                .get<Habit[]>('/habits/')
-                .then((res) => res.data)
+                .get('habits/')
+                .json<Habit[]>()
                 .then((data) => {
                     setHabits(data);
                     return data;

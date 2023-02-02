@@ -19,8 +19,8 @@ export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Hab
     const createTarget = useMutation({
         mutationFn: (data: CreateTargetData) => {
             return api
-                .post<Habit>('/targets/', data)
-                .then((res) => res.data)
+                .post('targets/', { json: data })
+                .json<Habit>()
                 .then((newHabit) =>
                     setHabits((prev) => prev.map((h) => (h.id !== newHabit.id ? h : newHabit))),
                 );

@@ -44,7 +44,8 @@ export const ChangePassword = () => {
     const changePassword = useMutation({
         mutationFn: (data: { currentPassword: string; newPassword: string }) => {
             return api
-                .post('/users/me/change-password', data)
+                .post('users/me/change-password', { json: data })
+                .json()
                 .then(() =>
                     toast({
                         title: 'Success',

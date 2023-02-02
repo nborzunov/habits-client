@@ -18,7 +18,7 @@ export const CleanData = () => {
     const cleanHabits = useMutation({
         mutationFn: () => {
             return api
-                .post(`/habits/clean`)
+                .post(`habits/clean`)
                 .then(() =>
                     setHabits((prev) =>
                         prev.map((h) => ({
@@ -52,7 +52,7 @@ export const CleanData = () => {
     const deleteHabits = useMutation({
         mutationFn: () => {
             return api
-                .delete(`/habits/`)
+                .delete(`habits/`)
                 .then(() => setHabits([]))
                 .then(() =>
                     toast({

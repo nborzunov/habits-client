@@ -41,10 +41,10 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
 
     const toast = useToast();
     const editHabit = useMutation({
-        mutationFn: (formData: HabitData) => {
+        mutationFn: (data: HabitData) => {
             return api
-                .put<Habit>(`/habits/${habit.id}`, formData)
-                .then((res) => res.data)
+                .put(`habits/${habit.id}`, { json: data })
+                .json<Habit>()
                 .then((newHabit) => {
                     setHabits((prev) => prev.map((h) => (h.id === habit.id ? newHabit : h)));
                 })
@@ -74,8 +74,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     const deleteHabit = useMutation({
         mutationFn: () => {
             return api
-                .delete<Habit>(`/habits/${habit.id}`)
-                .then((res) => res.data)
+                .delete(`habits/${habit.id}`)
+                .json<Habit>()
                 .then(() => {
                     setHabits((prev) => prev.filter((h) => h.id !== habit.id));
                     if (selectedHabitId === habit.id) {
@@ -89,8 +89,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     const archiveHabit = useMutation({
         mutationFn: () => {
             return api
-                .put<Habit>(`/habits/${habit.id}/archive/`)
-                .then((res) => res.data)
+                .put(`habits/${habit.id}/archive/`)
+                .json<Habit>()
                 .then(() => {
                     setHabits((prev) => prev.filter((h) => h.id !== habit.id));
                     if (selectedHabitId === habit.id) {
@@ -104,7 +104,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     const cleanData = useMutation({
         mutationFn: () => {
             return api
-                .put(`/habits/${habit.id}/clean`)
+                .put(`habits/${habit.id}/clean`)
                 .then(() => {
                     setHabits((prev) =>
                         prev.map((h) => ({

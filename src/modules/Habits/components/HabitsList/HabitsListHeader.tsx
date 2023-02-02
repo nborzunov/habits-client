@@ -18,8 +18,8 @@ export const HabitsListHeader = () => {
     const createHabit = useMutation({
         mutationFn: (data: HabitData) =>
             api
-                .post<Habit>('/habits/', data)
-                .then((res) => res.data)
+                .post('habits/', { json: data })
+                .json<Habit>()
                 .then((newHabit) => setHabits((prev) => [newHabit, ...prev]))
                 .then(() =>
                     toast({

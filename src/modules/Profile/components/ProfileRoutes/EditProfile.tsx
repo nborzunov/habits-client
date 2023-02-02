@@ -38,8 +38,8 @@ export const EditProfile = ({ initialState }: Props) => {
     const editProfile = useMutation({
         mutationFn: (formData: EditProFileData) => {
             return api
-                .put<User>(`/users/me`, formData)
-                .then((res) => res.data)
+                .put(`users/me`, { json: formData })
+                .json<User>()
                 .then((newUserData) => {
                     setActiveUser(newUserData);
                 })

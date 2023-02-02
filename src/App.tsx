@@ -9,14 +9,13 @@ import {
 } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
-import { activeUserState, tokenState } from '~/common/store/atoms';
+import { activeUserState } from '~/common/store/atoms';
 import { Dashboard } from '~/modules/Dashboard';
 import { User } from '~/modules/Profile/types';
 import { AuthPage, HabitsPage, ProfilePage } from '~/pages';
 import { Layout } from '~/ui/Layout/components/Layout';
 
 function App() {
-    const [token, setToken] = useRecoilState(tokenState);
     const [activeUser, setActiveUser] = useRecoilState(activeUserState);
 
     const [loading, setLoading] = useState(true);
@@ -24,24 +23,23 @@ function App() {
     const { refetch } = useQuery<User | null>({
         queryKey: ['active_user'],
         queryFn: async () => {
+            const token = localStorage.getItem('authToken');
             if (!token) {
                 setActiveUser(null);
                 setLoading(false);
                 return Promise.resolve(null);
             }
 
-            api.defaults.headers.common['Authorization'] = token as string;
-
             return await api
-                .get<User>('/users/me')
-                .then((res) => res.data)
+                .get('users/me')
+                .json<User>()
                 .then((user) => {
                     setActiveUser(user);
                     setLoading(false);
                     return user;
                 })
                 .catch(() => {
-                    setToken(null);
+                    localStorage.removeItem('authToken');
                     setLoading(false);
                     return null;
                 });
