@@ -54,8 +54,10 @@ export const HabitDetails = () => {
 export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
     const setHabits = useSetRecoilState(habitsState);
     const [isEditMode, setIsEditMode] = useState(false);
-    const { save, reset, removeWidget, addWidget, widgets, layout, mobileLayout, props } =
-        useWidgets(habit, isEditMode);
+    const { save, reset, removeWidget, addWidget, widgets, layout, props } = useWidgets(
+        habit,
+        isEditMode,
+    );
 
     // TODO: вынести мутейшены в отдельный файл
     const createTarget = useMutation({
@@ -171,21 +173,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                             onChangeTarget,
                         }}
                     >
-                        <GridLayout
-                            {...props}
-                            layouts={{
-                                lg: layout,
-                                md: layout,
-                                sm: layout,
-                                xs: mobileLayout,
-                                xxs: mobileLayout,
-                            }}
-                            breakpoints={{ lg: 1600, md: 1320, sm: 900, xs: 0, xxs: 0 }}
-                            cols={{ lg: 3, md: 3, sm: 3, xs: 2, xxs: 2 }}
-                            rowHeight={94}
-                            isResizable={isEditMode && !isMobile}
-                            onBreakpointChange={(breakpoint) => console.log(breakpoint)}
-                        >
+                        <GridLayout {...props}>
                             {layout.map((widget) => (
                                 <Box
                                     key={widget.i}

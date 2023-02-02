@@ -17,9 +17,6 @@ export enum WidgetIdentifiers {
     MONTHLY_CALENDAR = 'MONTHLY_CALENDAR',
 }
 
-const layoutWidth = 3;
-const layoutHeight = 94;
-
 export const WIDGETS: {
     [key in WidgetIdentifiers]: {
         title: string;
@@ -185,10 +182,7 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
                 ...current,
                 [habit.id]: (() => {
                     const result = { ...current[habit.id] } || {};
-                    console.log({
-                        newLayout,
-                        newMobileLayout,
-                    });
+
                     if (dimension === 'desktop') {
                         result.desktop = data;
                     }
@@ -199,7 +193,7 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
                 })(),
             }));
         },
-        [habit.id, setLayouts, newLayout, newMobileLayout],
+        [habit.id, setLayouts],
     );
 
     const filterWidget = useCallback(
@@ -256,9 +250,10 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
     const getWidgetConfiguration = (id: WidgetIdentifiers, dimension: 'desktop' | 'mobile') => {
         const configuration = WIDGETS[id];
         const position = configuration[dimension];
+
         return {
             ...position,
-            isResizable: configuration.isResizable ?? true,
+            isResizable: configuration.isResizable,
             i: id,
             resizeHandles: ['e', 'w'],
         } as Layout;
@@ -318,12 +313,6 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
         setLayout(boostrapLayout('desktop'), 'desktop');
     }, [layout, setLayout, boostrapLayout]);
 
-    console.log({
-        layout,
-        mobileLayout,
-        newLayout,
-        newMobileLayout,
-    });
     return {
         save: saveLayout,
         reset: resetLayout,
@@ -332,16 +321,22 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
         filterWidget,
         widgets,
         layout: currentWidgetLayout || [],
-        mobileLayout: mobileLayout || [],
         props: {
             className: 'layout',
-            cols: layoutWidth,
             margin: [16, 16] as [number, number],
-            rowHeight: layoutHeight,
-            width: 1600,
+            rowHeight: 94,
             isDraggable: isEditMode,
-            isResizable: isEditMode,
+            isResizable: isEditMode && !isMobile,
             onLayoutChange: onLayoutChange,
+            layouts: {
+                lg: layout,
+                md: layout,
+                sm: layout,
+                xs: mobileLayout,
+                xxs: mobileLayout,
+            },
+            breakpoints: { lg: 1600, md: 1320, sm: 900, xs: 0, xxs: 0 },
+            cols: { lg: 3, md: 3, sm: 3, xs: 2, xxs: 2 },
         },
     };
 };
