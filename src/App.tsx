@@ -1,4 +1,3 @@
-import { Heading, useMediaQuery } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import {
@@ -14,13 +13,12 @@ import { activeUserState, tokenState } from '~/common/store/atoms';
 import { Dashboard } from '~/modules/Dashboard';
 import { User } from '~/modules/Profile/types';
 import { AuthPage, HabitsPage, ProfilePage } from '~/pages';
-import Layout from '~/ui/Layout/components/Layout';
+import { Layout } from '~/ui/Layout/components/Layout';
 
 function App() {
     const [token, setToken] = useRecoilState(tokenState);
     const [activeUser, setActiveUser] = useRecoilState(activeUserState);
 
-    const [screenSmallThanSm] = useMediaQuery('(max-width: 800px)');
     const [loading, setLoading] = useState(true);
 
     const { refetch } = useQuery<User | null>({
@@ -54,10 +52,6 @@ function App() {
     const refetchUser = () => {
         refetch();
     };
-
-    if (screenSmallThanSm) {
-        return <Heading> Currently mobile view is not supported</Heading>;
-    }
 
     const router = createBrowserRouter(
         createRoutesFromElements([

@@ -1,11 +1,28 @@
-import { Box, Button, Flex, HStack, Heading, Icon, IconButton, Tooltip } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Drawer,
+    DrawerCloseButton,
+    DrawerContent,
+    DrawerHeader,
+    DrawerOverlay,
+    Flex,
+    HStack,
+    Heading,
+    Icon,
+    IconButton,
+    Tooltip,
+    useDisclosure,
+} from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import GridLayout from 'react-grid-layout';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
 import api from '~/common/helpers/api';
+import useMobile from '~/common/hooks/useMobile';
 import { setTitle } from '~/common/hooks/useTitle';
 import { habitsState } from '~/common/store/atoms';
 import getCorrectDate from '~/common/utils/getCorrectDate';
@@ -18,6 +35,9 @@ import {
 } from '~/modules/Habits/components/TargetCalendar';
 import { WidgetIdentifiers, useWidgets } from '~/modules/Habits/helpers';
 import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
+import Back from '~/ui/Layout/components/Back';
+
+const GridLayout = WidthProvider(Responsive);
 
 export const HabitDetails = () => {
     const habits = useRecoilValue(habitsState);
@@ -34,10 +54,8 @@ export const HabitDetails = () => {
 export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
     const setHabits = useSetRecoilState(habitsState);
     const [isEditMode, setIsEditMode] = useState(false);
-    const { save, reset, removeWidget, addWidget, widgets, layout, props } = useWidgets(
-        habit,
-        isEditMode,
-    );
+    const { save, reset, removeWidget, addWidget, widgets, layout, mobileLayout, props } =
+        useWidgets(habit, isEditMode);
 
     // TODO: вынести мутейшены в отдельный файл
     const createTarget = useMutation({
@@ -73,13 +91,23 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
         });
     };
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const isMobile = useMobile();
+
     return (
         <Flex width={'100%'}>
-            <Box m={0} width={'1600px'}>
+            <Box m={0} width='100%' maxWidth={'1600px'}>
                 <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
-                    <Heading as='h3' size='md'>
-                        {habit.title}
-                    </Heading>
+                    <Flex alignItems={'center'}>
+                        {isMobile && (
+                            <Link to={'/habits'}>
+                                <Back />
+                            </Link>
+                        )}
+                        <Heading as='h3' size='md'>
+                            {habit.title}
+                        </Heading>
+                    </Flex>
                     <HStack spacing={2}>
                         {isEditMode && (
                             <HStack spacing={2}>
@@ -92,6 +120,15 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                     />
                                 </Tooltip>
 
+                                <Tooltip label={'Add Widget'}>
+                                    <Button
+                                        colorScheme={'purple'}
+                                        variant={'outline'}
+                                        onClick={onOpen}
+                                    >
+                                        Add {widgets.length ? `(${widgets.length})` : ''}
+                                    </Button>
+                                </Tooltip>
                                 <Tooltip label={'Reset'}>
                                     <Button
                                         colorScheme={'purple'}
@@ -134,7 +171,21 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                             onChangeTarget,
                         }}
                     >
-                        <GridLayout {...props} layout={layout}>
+                        <GridLayout
+                            {...props}
+                            layouts={{
+                                lg: layout,
+                                md: layout,
+                                sm: layout,
+                                xs: mobileLayout,
+                                xxs: mobileLayout,
+                            }}
+                            breakpoints={{ lg: 1600, md: 1320, sm: 900, xs: 0, xxs: 0 }}
+                            cols={{ lg: 3, md: 3, sm: 3, xs: 2, xxs: 2 }}
+                            rowHeight={94}
+                            isResizable={isEditMode && !isMobile}
+                            onBreakpointChange={(breakpoint) => console.log(breakpoint)}
+                        >
                             {layout.map((widget) => (
                                 <Box
                                     key={widget.i}
@@ -258,23 +309,28 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                     </TargetActionContext.Provider>
                 </Box>
             </Box>
-            {isEditMode && (
-                <Box m={0} flex={'1'}>
-                    <Flex
-                        alignItems={'center'}
-                        justifyContent={'space-between'}
-                        pt={2}
-                        height={'48px'}
-                    >
+            <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
+                <DrawerOverlay />
+                <DrawerContent
+                    width={{
+                        sm: '20em',
+                        md: '20em',
+                        lg: '12em',
+                        xl: '14em',
+                        '2xl': '15.5em',
+                    }}
+                >
+                    <DrawerCloseButton />
+                    <DrawerHeader>
                         <Heading as='h3' size='md'>
                             Widgets
                         </Heading>
-                    </Flex>
-                    <Box py={2} pr={2}>
+                    </DrawerHeader>
+                    <Box p={4}>
                         <WidgetsList widgets={widgets} addWidget={addWidget} />
                     </Box>
-                </Box>
-            )}
+                </DrawerContent>
+            </Drawer>
         </Flex>
     );
 };

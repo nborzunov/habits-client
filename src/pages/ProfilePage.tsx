@@ -1,7 +1,8 @@
-import { Box, Link as ChakraLink, Flex, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-import { Link, Navigate, Route, Routes, useMatch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import useMobile from '~/common/hooks/useMobile';
 import { activeUserState } from '~/common/store/atoms';
 import {
     ChangeEmail,
@@ -11,7 +12,9 @@ import {
     EditProfile,
     Notifications,
     ProfileDetails,
+    ProfileInfo,
 } from '~/modules/Profile';
+import { MobileMenu } from '~/ui/Layout/components/MobileMenu';
 
 export const ProfilePage = () => {
     const user = useRecoilValue(activeUserState);
@@ -26,6 +29,8 @@ export const ProfilePage = () => {
         };
     }, [user]);
 
+    const isMobile = useMobile();
+
     return (
         <Flex
             p={5}
@@ -38,27 +43,23 @@ export const ProfilePage = () => {
             display={'flex'}
             alignItems={'start'}
             justifyContent={'center'}
+            flexWrap='wrap'
         >
-            <Flex mt={'16'}>
-                <Box width={250} mr={5} p={8}>
-                    <Stack spacing={3}>
-                        <ProfilePageLink path='' name='View Profile' />
-                        <ProfilePageLink path='edit' name='Edit Profile' />
-                        <ProfilePageLink path='notifications' name='Notifications' />
-                        <ProfilePageLink path='change-password' name='Change Password' />
-                        <ProfilePageLink path='change-email' name='Change Email' />
-                        <ProfilePageLink path='delete-account' name='Delete Account' />
-                        <ProfilePageLink path='clean-data' name='Clean Data' />
-                    </Stack>
-                </Box>
+            <Box maxW={'3xl'} minH={'xs'} width={'100%'} height={'auto'}>
+                {isMobile && (
+                    <Flex mb={4} justifyContent={'space-between'}>
+                        <MobileMenu /> <ProfileInfo />
+                    </Flex>
+                )}
                 <Box
+                    mt={{
+                        lg: '16',
+                        md: '16',
+                        sm: '0',
+                    }}
                     rounded={'lg'}
                     bg={useColorModeValue('white', 'gray.700')}
                     boxShadow={'lg'}
-                    mx={'auto'}
-                    maxW={'lg'}
-                    minW={'800px'}
-                    height={'auto'}
                     p={8}
                 >
                     <Routes>
@@ -76,22 +77,7 @@ export const ProfilePage = () => {
                         <Route path='*' element={<Navigate to='' replace />} />
                     </Routes>
                 </Box>
-            </Flex>
+            </Box>
         </Flex>
-    );
-};
-
-const ProfilePageLink = ({ path, name }: { path: string; name: string }) => {
-    const matchedRoute = useMatch(path);
-
-    return (
-        <ChakraLink
-            as={Link}
-            to={path}
-            fontWeight={matchedRoute ? 'semibold' : 'normal'}
-            fontSize={'lg'}
-        >
-            {name}
-        </ChakraLink>
     );
 };

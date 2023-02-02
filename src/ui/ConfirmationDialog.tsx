@@ -27,7 +27,7 @@ const ConfirmationDialog = ({
     return (
         <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={cancelRef}>
             <AlertDialogOverlay>
-                <AlertDialogContent>
+                <AlertDialogContent mx={4}>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                         {title}
                     </AlertDialogHeader>

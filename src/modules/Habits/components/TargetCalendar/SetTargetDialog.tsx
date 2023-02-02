@@ -37,7 +37,7 @@ export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Pr
     return (
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent mx={4}>
                 <ModalHeader>{habit.title} - Set Today&apos;s Result</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>

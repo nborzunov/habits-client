@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Heading, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import Icons from '~/common/helpers/Icons';
+import useMobile from '~/common/hooks/useMobile';
 import { WIDGETS, WidgetIdentifiers } from '~/modules/Habits/helpers';
 
 export const WidgetsList = ({
@@ -13,6 +14,9 @@ export const WidgetsList = ({
     const addAll = () => {
         widgets.forEach((widget) => addWidget(widget));
     };
+
+    const isMobile = useMobile();
+
     return (
         <>
             {!widgets.length && <Heading fontSize={'xl'}>No widgets left</Heading>}
@@ -39,7 +43,9 @@ export const WidgetsList = ({
                                                 {WIDGETS[widget].title}
                                             </Text>
                                             <Text color={'gray.500'} fontSize={'sm'}>
-                                                {WIDGETS[widget].w}x{WIDGETS[widget].h}
+                                                {WIDGETS[widget][isMobile ? 'mobile' : 'desktop'].w}
+                                                x
+                                                {WIDGETS[widget][isMobile ? 'mobile' : 'desktop'].h}
                                             </Text>
                                         </Box>
                                     </Flex>

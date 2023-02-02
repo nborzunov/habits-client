@@ -166,7 +166,7 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
                 <Stack spacing={10} pt={4}>
                     <HStack spacing={3}>
                         <NavLink to={'/'}>
-                            <Back />
+                            <Back size={'lg'} />
                         </NavLink>
 
                         <Button

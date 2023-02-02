@@ -5,7 +5,7 @@ interface NavItemProps {
     icon?: IconType;
 }
 
-const NavItem = (props: React.PropsWithChildren<NavItemProps>) => {
+export const NavItem = (props: React.PropsWithChildren<NavItemProps>) => {
     const { icon, children, ...rest } = props;
     return (
         <Flex
@@ -30,5 +30,3 @@ const NavItem = (props: React.PropsWithChildren<NavItemProps>) => {
         </Flex>
     );
 };
-
-export default NavItem;

@@ -20,9 +20,9 @@ export const AuthPage = ({ refetchUser }: { refetchUser: () => void }) => {
                 rounded={'lg'}
                 bg={useColorModeValue('white', 'gray.700')}
                 boxShadow={'lg'}
-                mx={'auto'}
                 maxW={'lg'}
-                minW={'500px'}
+                width={'100%'}
+                mx={4}
                 p={8}
             >
                 <Routes>

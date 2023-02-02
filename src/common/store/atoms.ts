@@ -53,7 +53,10 @@ export const tokenState = atom<string | null>({
 });
 
 export const layoutState = atom<{
-    [key: string]: Layout[] | undefined;
+    [key: string]: {
+        desktop: Layout[];
+        mobile: Layout[];
+    };
 }>({
     key: 'layoutState',
     default: {},

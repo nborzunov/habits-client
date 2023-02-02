@@ -12,11 +12,27 @@ import {
 import dayjs from 'dayjs';
 import React, { useCallback, useMemo, useState } from 'react';
 import Icons from '~/common/helpers/Icons';
+import useRelativeSize from '~/common/hooks/useRelativeSize';
 import getLoopCallback from '~/common/utils/getLoop';
 import { TargetActionWrapper } from '~/modules/Habits/components/TargetCalendar';
 import { Target, TargetType } from '~/modules/Habits/types';
 
-export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets: Target[] }) => {
+const cellGaps = {
+    sm: 6,
+    md: 6,
+    lg: 8,
+    xl: 8,
+    '2xl': 9,
+};
+const cellSizes = {
+    sm: 36,
+    md: 36,
+    lg: 36,
+    xl: 36,
+    '2xl': 36,
+};
+
+export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
     const [monthId, setMonthId] = useState(dayjs().month());
     const [year, setYear] = useState(dayjs().year());
     const targetsMap = useMemo(
@@ -26,7 +42,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
             ),
         [targets],
     );
-    size = size || 'md';
+
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     const getLoop = useCallback(getLoopCallback, []);
@@ -39,12 +55,8 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
     const firstDay = useMemo(() => date.day(), [date]);
     const columns = useMemo(() => Math.ceil((firstDay + daysInMonth) / 7), [firstDay, daysInMonth]);
 
-    const sizeBinary = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
-    const gaps = useMemo(() => [3, 12], []);
-    const cellSizes = useMemo(() => [40, 40], []);
-    const gap = useMemo(() => gaps[sizeBinary], [gaps, sizeBinary]);
-
-    const cellSize = useMemo(() => cellSizes[sizeBinary], [cellSizes, sizeBinary]);
+    const cellGap = useRelativeSize(cellGaps);
+    const cellSize = useRelativeSize(cellSizes);
 
     const handleSetMonth = useCallback(
         (month: number) => {
@@ -65,9 +77,8 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
         [monthId, year, setYear, setMonthId],
     );
 
-    console.log(year);
     return (
-        <Box p='2' textAlign={'center'} height={'404px'}>
+        <Box p='2' textAlign={'center'} height={`${cellSize * 7 + cellGap * 6 + 60}px`}>
             <Flex justifyContent={'space-between'} alignItems={'center'} width={'100%'} pb={'2'}>
                 <HStack spacing={'1'}>
                     <Tooltip label={'Previous year'} placement={'top'}>
@@ -76,6 +87,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             icon={<Icon as={Icons.LeftDouble} />}
                             onClick={() => setYear(year - 1)}
                             isDisabled={year <= 2022}
+                            size={{ base: 'md', sm: 'sm' }}
                         />
                     </Tooltip>
                     <Tooltip label={'Previous month'} placement={'top'}>
@@ -84,10 +96,18 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             icon={<Icon as={Icons.Left} />}
                             onClick={() => handleSetMonth(monthId - 1)}
                             isDisabled={year <= 2022 && monthId === 0}
+                            size={{ base: 'md', sm: 'sm' }}
                         />
                     </Tooltip>
                 </HStack>
-                <Text px={'2'}>{date.format('MMMM YYYY')}</Text>
+                <Text
+                    px={{
+                        base: 2,
+                        sm: 1,
+                    }}
+                >
+                    {date.format('MMMM YYYY')}
+                </Text>
                 <HStack spacing={'1'}>
                     <Tooltip label={'Next month'} placement={'top'}>
                         <IconButton
@@ -95,6 +115,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             icon={<Icon as={Icons.Right} />}
                             onClick={() => handleSetMonth(monthId + 1)}
                             isDisabled={year > 2023 && monthId === 11}
+                            size={{ base: 'md', sm: 'sm' }}
                         />
                     </Tooltip>
 
@@ -104,11 +125,12 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                             icon={<Icon as={Icons.RightDouble} />}
                             onClick={() => setYear(year + 1)}
                             isDisabled={year > 2023}
+                            size={{ base: 'md', sm: 'sm' }}
                         />
                     </Tooltip>
                 </HStack>
             </Flex>
-            <Grid templateColumns={`repeat(7, ${cellSize}px)`} gap={`${gap}px`}>
+            <Grid templateColumns={`repeat(7, ${cellSize}px)`} gap={`${cellGap}px`}>
                 {getLoop(7).map((rowId) => (
                     <GridItem key={'grid-column' + monthId + rowId}>
                         <Box>
@@ -118,7 +140,7 @@ export const MonthlyCalendar = ({ size, targets }: { size?: 'sm' | 'md'; targets
                                 </Text>
                             </Box>
 
-                            <Grid templateRows={`repeat(${columns}, 1fr)`} gap={`${gap}px`}>
+                            <Grid templateRows={`repeat(${columns}, 1fr)`} gap={`${cellGap}px`}>
                                 {getLoop(columns).map((columnId) => (
                                     <Cell
                                         year={year}
@@ -218,39 +240,39 @@ const Cell = ({
     return (
         <Box cursor='pointer'>
             <TargetActionWrapper date={day} target={target}>
-                {target && target.targetType === TargetType.Skip ? (
-                    <Box
-                        p={2}
-                        width={sizePx}
-                        height={sizePx}
-                        borderRadius='50%'
-                        color={'black'}
-                        bg={'green.100'}
-                        _hover={{
-                            bg: 'green.200',
-                        }}
-                        transition={'all 0.2s'}
-                    >
-                        {day.format('D')}
-                    </Box>
-                ) : (
-                    <Box
-                        p={2}
-                        width={sizePx}
-                        height={sizePx}
-                        borderRadius='50%'
-                        color={
-                            target ? 'white' : monthId !== rawMonthId ? 'blackAlpha.600' : 'black'
-                        }
-                        bg={target ? 'green.500' : 'transparent'}
-                        _hover={{
-                            bg: target ? 'green.600' : 'gray.200',
-                        }}
-                        transition={'all 0.2s'}
-                    >
-                        {day.format('D')}
-                    </Box>
-                )}
+                <Box
+                    width={sizePx}
+                    height={sizePx}
+                    lineHeight={sizePx}
+                    borderRadius='50%'
+                    bg={
+                        target && target.targetType === TargetType.Skip
+                            ? 'green.100'
+                            : target
+                            ? 'green.500'
+                            : 'transparent'
+                    }
+                    color={
+                        target && target.targetType === TargetType.Skip
+                            ? 'black'
+                            : target
+                            ? 'white'
+                            : monthId !== rawMonthId
+                            ? 'blackAlpha.600'
+                            : 'black'
+                    }
+                    _hover={{
+                        bg:
+                            target && target.targetType === TargetType.Skip
+                                ? 'green.200'
+                                : target
+                                ? 'green.600'
+                                : 'gray.200',
+                    }}
+                    transition={'all 0.2s'}
+                >
+                    {day.format('D')}
+                </Box>
             </TargetActionWrapper>
         </Box>
     );

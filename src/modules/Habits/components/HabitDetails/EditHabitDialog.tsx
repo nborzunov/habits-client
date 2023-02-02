@@ -86,7 +86,7 @@ export const EditHabitDialog = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent mx={4}>
                 <ModalHeader>
                     {initialState ? `Edit Habit "${initialState.title}"` : 'New Habit'}
                 </ModalHeader>

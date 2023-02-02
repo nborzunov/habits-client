@@ -278,13 +278,13 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     );
 };
 
-const OperationMenuItem = ({
+export const OperationMenuItem = ({
     onClick,
     icon,
     label,
 }: {
-    onClick: () => void;
-    icon: any;
+    onClick?: () => void;
+    icon?: any;
     label: string;
 }) => {
     return (
@@ -304,7 +304,7 @@ const OperationMenuItem = ({
             transition='.15s ease'
         >
             <Flex alignItems={'center'}>
-                <Icon as={icon} mr={2} />
+                {icon && <Icon as={icon} mr={2} />}
                 <Text>{label}</Text>
             </Flex>
         </MenuItem>

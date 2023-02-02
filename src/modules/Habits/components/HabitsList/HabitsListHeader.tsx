@@ -6,6 +6,7 @@ import api from '~/common/helpers/api';
 import { habitsState } from '~/common/store/atoms';
 import { EditHabitDialog } from '~/modules/Habits/components/HabitDetails';
 import { Habit, HabitData } from '~/modules/Habits/types';
+import { MobileMenu } from '~/ui/Layout/components/MobileMenu';
 
 export const HabitsListHeader = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,10 +50,14 @@ export const HabitsListHeader = () => {
 
     return (
         <>
-            <Flex justifyContent='space-between' alignItems='center' p={2}>
-                <Heading as='h3' size='md' mb={'12px'}>
-                    All habits
-                </Heading>
+            <Flex justifyContent='space-between' alignItems='center' p={4}>
+                <Flex alignItems={'center'}>
+                    <MobileMenu />
+                    <Heading as='h3' size='md'>
+                        All habits
+                    </Heading>
+                </Flex>
+
                 <Button colorScheme='blue' variant='solid' size='sm' onClick={onOpen}>
                     <Icon as={Icons.Add} fontSize={'20px'} /> Add Habits
                 </Button>

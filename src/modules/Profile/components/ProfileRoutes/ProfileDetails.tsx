@@ -10,7 +10,7 @@ export const ProfileDetails = () => {
 
     if (!user) return null;
     return (
-        <Box maxW='700px' mx='auto'>
+        <Box mx='auto'>
             <Stack>
                 <Flex justifyContent={'space-between'}>
                     <Flex>
@@ -21,8 +21,8 @@ export const ProfileDetails = () => {
                             size={'sm'}
                             colorScheme={'black'}
                             bgColor={'purple.300'}
-                            width={'70px'}
-                            height={'70px'}
+                            width={'4.5em'}
+                            height={'4.5em'}
                             mr={'4'}
                         />
                         <Flex flexDirection={'column'} justifyContent={'space-evenly'}>

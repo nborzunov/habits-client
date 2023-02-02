@@ -135,7 +135,7 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
                     </Stack>
                     <HStack spacing={3}>
                         <NavLink to={'/'}>
-                            <Back />
+                            <Back size={'lg'} />
                         </NavLink>
 
                         <Button

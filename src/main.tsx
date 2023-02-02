@@ -1,11 +1,11 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
+import { BREAKPOINTS } from '~/common/constants';
 
 import App from './App';
 import './index.css';
@@ -20,6 +20,13 @@ const theme = extendTheme({
             50: '#F6F8FA',
         },
     },
+    breakpoints: {
+        sm: `${BREAKPOINTS.sm}em`,
+        md: `${BREAKPOINTS.md}em`,
+        lg: `${BREAKPOINTS.lg}em`,
+        xl: `${BREAKPOINTS.xl}em`,
+        '2xl': `${BREAKPOINTS['2xl']}em`,
+    },
 });
 
 const queryClient = new QueryClient();
@@ -30,7 +37,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <RecoilRoot>
                 <QueryClientProvider client={queryClient}>
                     <App />
-                    <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </RecoilRoot>
         </ChakraProvider>

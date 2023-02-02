@@ -24,7 +24,7 @@ interface FormFieldProps {
     validationProps: any;
     hideResetButton: boolean;
     isRequired: boolean;
-    minWidth: string;
+    minWidth: string | any;
     resetValue?: () => void;
     direction: 'row' | 'column';
     variant: 'outline' | 'filled';

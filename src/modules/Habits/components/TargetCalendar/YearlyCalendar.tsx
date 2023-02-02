@@ -1,6 +1,8 @@
 import { Box, Flex, Grid, GridItem, Text, useTheme } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import React, { useCallback, useContext, useMemo } from 'react';
+import useMobile from '~/common/hooks/useMobile';
+import useRelativeSize from '~/common/hooks/useRelativeSize';
 import getLoopCallback from '~/common/utils/getLoop';
 import {
     TargetActionContext,
@@ -8,13 +10,22 @@ import {
 } from '~/modules/Habits/components/TargetCalendar';
 import { Target, TargetType } from '~/modules/Habits/types';
 
-export const YearlyCalendar = ({
-    size = 'md',
-    targets,
-}: {
-    size?: 'sm' | 'md';
-    targets: Target[];
-}) => {
+const cellGaps = {
+    sm: 2,
+    md: 2,
+    lg: 2,
+    xl: 2,
+    '2xl': 2,
+};
+const cellSizes = {
+    sm: 10,
+    md: 10,
+    lg: 10,
+    xl: 10,
+    '2xl': 10,
+};
+
+export const YearlyCalendar = ({ targets }: { targets: Target[] }) => {
     const targetsMap = useMemo(
         () =>
             targets.reduce((acc, target) => {
@@ -23,14 +34,43 @@ export const YearlyCalendar = ({
             }, {} as { [key: string]: Target }),
         [targets],
     );
-    const sizeIndex = useMemo(() => (size === 'sm' ? 0 : 1), [size]);
+
+    const cellGap = useRelativeSize(cellGaps);
+    const cellSize = useRelativeSize(cellSizes);
+
     const getLoop = useCallback(getLoopCallback, []);
+
+    const isMobile = useMobile();
+
     return (
         <Box>
             <Flex p='2'>
-                {getLoop(12).map((i) => (
-                    <Month key={i} monthId={i} size={sizeIndex} targetsMap={targetsMap} />
-                ))}
+                {isMobile ? (
+                    <Grid gridTemplateColumns={'repeat(4, 1fr)'}>
+                        {getLoop(12).map((i) => (
+                            <GridItem key={i}>
+                                <Month
+                                    monthId={i}
+                                    gap={cellGap}
+                                    size={cellSize}
+                                    targetsMap={targetsMap}
+                                />
+                            </GridItem>
+                        ))}
+                    </Grid>
+                ) : (
+                    <>
+                        {getLoop(12).map((i) => (
+                            <Month
+                                key={i}
+                                monthId={i}
+                                gap={cellGap}
+                                size={cellSize}
+                                targetsMap={targetsMap}
+                            />
+                        ))}
+                    </>
+                )}
             </Flex>
         </Box>
     );
@@ -38,21 +78,18 @@ export const YearlyCalendar = ({
 
 const Month = ({
     monthId,
+    gap,
     size,
     targetsMap,
 }: {
     monthId: number;
+    gap: number;
     size: number;
     targetsMap: Record<string, Target>;
 }) => {
     const daysInMonth = useMemo(() => dayjs(`2023-${monthId + 1}-1`).daysInMonth(), [monthId]);
     const firstDay = useMemo(() => dayjs(`2023-${monthId + 1}-1`).day(), [monthId]);
     const columns = Math.ceil((firstDay + daysInMonth) / 7);
-
-    const gaps = [3, 3];
-    const cellSizes = [12, 12];
-    const gap = gaps[size];
-    const cellSize = cellSizes[size];
 
     const month = useMemo(() => dayjs(`2023-${monthId + 1}-1`).format('MMM'), [monthId]);
     const getLoop = useCallback(getLoopCallback, []);
@@ -62,17 +99,17 @@ const Month = ({
             <Text pb='1' textAlign='center' fontWeight='bold'>
                 {month}
             </Text>
-            <Grid templateColumns={`repeat(${columns}, ${cellSize}px)`} gap={`${gap}px`}>
+            <Grid templateColumns={`repeat(${columns}, ${size}px)`} gap={`${gap}px`}>
                 {getLoop(columns).map((columnId) => (
                     <GridItem key={monthId + columnId}>
-                        <Grid templateRows={`repeat(7, ${cellSize}px)`} gap={`${gap}px`}>
+                        <Grid templateRows={`repeat(7, ${size}px)`} gap={`${gap}px`}>
                             {getLoop(7).map((rowId) => (
                                 <Cell
                                     key={monthId + columnId + rowId}
                                     monthId={monthId}
                                     dayId={columnId * 7 + rowId - firstDay}
                                     daysInMonth={daysInMonth}
-                                    size={cellSize}
+                                    size={size}
                                     targetsMap={targetsMap}
                                 />
                             ))}

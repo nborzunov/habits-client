@@ -2,6 +2,7 @@ import { Box, Heading, List, Skeleton, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
+import useMobile from '~/common/hooks/useMobile';
 import {
     activeUserState,
     completedHabitsState,
@@ -31,13 +32,20 @@ export const HabitsList = () => {
         enabled: !!activeUser,
     });
 
-    if (isLoading) return <div>Loading...</div>;
-
     const noHabits = uncompletedHabits.length === 0 && completedHabits.length === 0;
 
+    const isMobile = useMobile();
+
+    if (isLoading) return <div>Loading...</div>;
+
     return (
-        <Skeleton isLoaded={!isLoading}>
-            <Box borderRightColor='gray.200' borderRightWidth='2px' h='100vh'>
+        <Box
+            borderRightColor='gray.200'
+            borderRightWidth='2px'
+            h='100vh'
+            width={isMobile ? '100%' : '360px'}
+        >
+            <Skeleton isLoaded={!isLoading}>
                 <HabitsListHeader />
                 <Box>
                     {noHabits && (
@@ -63,7 +71,7 @@ export const HabitsList = () => {
                         </Box>
                     )}
                 </Box>
-            </Box>
-        </Skeleton>
+            </Skeleton>
+        </Box>
     );
 };
