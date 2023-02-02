@@ -119,7 +119,11 @@ const FormField = ({
 FormField.defaultProps = {
     hideResetButton: false,
     isRequired: false,
-    minWidth: '140px',
+    minWidth: {
+        lg: '140px',
+        md: '100px',
+        sm: '100px',
+    },
     direction: 'row',
     variant: 'filled',
     showPasswordIcon: false,

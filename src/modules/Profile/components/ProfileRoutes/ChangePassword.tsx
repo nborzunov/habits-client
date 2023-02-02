@@ -120,17 +120,17 @@ export const ChangePassword = () => {
         () => [
             {
                 field: 'currentPassword',
-                label: isMobile ? 'Current Password' : 'Old',
+                label: !isMobile ? 'Current Password' : 'Password',
                 validationProps: register('currentPassword', validationRules.password()),
             },
             {
                 field: 'newPassword',
-                label: isMobile ? 'New Password' : 'New',
+                label: !isMobile ? 'New Password' : 'New',
                 validationProps: register('newPassword', validationRules.newPassword()),
             },
             {
                 field: 'newPasswordConfirm',
-                label: isMobile ? 'Repeat Password' : 'Repeat',
+                label: !isMobile ? 'Repeat Password' : 'Repeat',
                 validationProps: register(
                     'newPasswordConfirm',
                     validationRules.newPasswordConfirm(),

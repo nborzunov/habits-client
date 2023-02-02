@@ -13,6 +13,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import validationRules from '~/common/helpers/validationRules';
+import useMobile from '~/common/hooks/useMobile';
 import useTitle from '~/common/hooks/useTitle';
 import { activeUserState } from '~/common/store/atoms';
 import { User } from '~/modules/Profile/types';
@@ -53,10 +54,11 @@ export const ChangeEmail = ({ initialState }: Props) => {
         });
     };
 
+    const isMobile = useMobile();
     const fieldsConfig: FieldsConfig<'email'> = [
         {
             field: 'email',
-            label: 'Email Address',
+            label: !isMobile ? 'Email Address' : 'Email',
             validationProps: register('email', validationRules.email()),
         },
     ];

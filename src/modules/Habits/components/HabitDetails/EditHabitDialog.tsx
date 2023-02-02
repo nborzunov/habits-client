@@ -4,9 +4,7 @@ import {
     Checkbox,
     FormControl,
     FormHelperText,
-    FormLabel,
     HStack,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -20,7 +18,10 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import validationRules from '~/common/helpers/validationRules';
 import { GoalType, HabitData, Periodicity } from '~/modules/Habits/types';
+import FormField from '~/ui/FormField';
 import NumericInput from '~/ui/NumericInput';
 
 const defaultState = {
@@ -44,14 +45,6 @@ export const EditHabitDialog = ({
     onSubmit: (h: HabitData) => void;
 }) => {
     const [form, setForm] = useState(defaultState);
-
-    const handleSubmit = () => {
-        onSubmit(form);
-    };
-
-    const handleChangeTitle = (value: string) => {
-        setValue('title', value.charAt(0).toUpperCase() + value.slice(1));
-    };
 
     const setValue = useCallback((field: string, value: string | boolean | number) => {
         setForm((form) => ({
@@ -80,27 +73,46 @@ export const EditHabitDialog = ({
         });
     }, [initialState]);
 
+    const {
+        register,
+        formState: { errors, isSubmitting },
+        handleSubmit,
+    } = useForm({
+        mode: 'all',
+        defaultValues: {
+            title: initialState?.title ?? defaultState.title,
+        },
+    });
+
+    const onFormSubmit = (data: { title: string }) => {
+        onSubmit({
+            ...form,
+            title: data.title,
+        });
+    };
+
     useEffect(() => {
         if (isOpen) setInitialState();
     }, [isOpen, setInitialState]);
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent mx={4}>
+            <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <ModalHeader>
                     {initialState ? `Edit Habit "${initialState.title}"` : 'New Habit'}
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={3}>
-                        <FormControl isRequired>
-                            <FormLabel>Title</FormLabel>
-                            <Input
-                                type='text'
-                                value={form.title}
-                                onChange={(e) => handleChangeTitle(e.target.value)}
-                            />
-                        </FormControl>
+                        <FormField
+                            label={'Title'}
+                            validationProps={register('title', validationRules.text(2))}
+                            validationError={errors.title}
+                            field={'title'}
+                            direction={'column'}
+                            variant={'outline'}
+                            isRequired
+                        />
 
                         <HStack spacing={3}>
                             <Tooltip label={'Daily Goal'} hasArrow>
@@ -193,7 +205,7 @@ export const EditHabitDialog = ({
                     <Button colorScheme='blue' mr={3} onClick={onClose}>
                         Close
                     </Button>
-                    <Button colorScheme='green' onClick={handleSubmit}>
+                    <Button colorScheme='green' type='submit' isLoading={isSubmitting}>
                         {initialState ? 'Update' : 'Create'}
                     </Button>
                 </ModalFooter>
