@@ -5,7 +5,13 @@ interface NavItemProps {
     icon?: IconType;
 }
 
-export const NavItem = (props: React.PropsWithChildren<NavItemProps>) => {
+export const NavItem = (
+    props: React.PropsWithChildren<
+        NavItemProps & {
+            onClick?: () => void;
+        }
+    >,
+) => {
     const { icon, children, ...rest } = props;
     return (
         <Flex

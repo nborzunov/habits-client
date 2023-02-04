@@ -19,6 +19,10 @@ export const MobileMenu = () => {
                     colorScheme={'purple'}
                     variant={'outline'}
                     cursor={'pointer'}
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
                 />
             )}
         </>

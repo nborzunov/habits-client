@@ -1,18 +1,39 @@
-import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import { Box, BoxProps, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
 import useMobile from '~/common/hooks/useMobile';
+import { activeUserState, habitsState } from '~/common/store/atoms';
 import { ProfileInfo } from '~/modules/Profile';
-import { LayoutContext } from '~/ui/Layout/components/Layout';
 import { NavItem } from '~/ui/Layout/components/NavItem';
+import { SettingsDialog } from '~/ui/Layout/components/SettingsDialog';
 
 export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
     const isMobile = useMobile();
-    const { onCloseMenu } = useContext(LayoutContext);
 
     const { t } = useTranslation();
+
+    const setHabits = useSetRecoilState(habitsState);
+    const setActiveUser = useSetRecoilState(activeUserState);
+
+    const navigate = useNavigate();
+
+    const logout = () => {
+        setHabits([]);
+        setActiveUser(null);
+        setActiveUser(null);
+        localStorage.removeItem('authToken');
+        navigate('/login');
+    };
+
+    const {
+        isOpen: isOpenSettingsDialog,
+        onOpen: onOpenSettingsDialog,
+        onClose: onCloseSettingsDialog,
+    } = useDisclosure();
     return (
         <Box
             as='nav'
@@ -20,8 +41,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
             top='0'
             left='0'
             zIndex='sticky'
-            h='full'
-            pb='10'
+            h='100%'
             overflowX='hidden'
             overflowY='auto'
             bg='white'
@@ -36,36 +56,33 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
             </Flex>
             <Flex
                 direction='column'
+                justifyContent={'space-between'}
                 as='nav'
                 fontSize='sm'
                 color='gray.500'
                 aria-label='Main Navigation'
-                onClick={onCloseMenu}
-                // my={'16'}
+                height={'calc(100% - 84px)'}
             >
-                <ProfileInfo />
+                <Flex direction='column'>
+                    <ProfileInfo />
 
-                <NavLink to='habits'>
-                    <NavItem icon={Icons.Inbox}>{t('habits:allHabits')}</NavItem>
-                </NavLink>
-                {/*<NavLink to='dashboard'>*/}
-                {/*    <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>*/}
-                {/*</NavLink>*/}
+                    <NavLink to='habits'>
+                        <NavItem icon={Icons.Inbox}>{t('habits:allHabits')}</NavItem>
+                    </NavLink>
+                    {/*<NavLink to='dashboard'>*/}
+                    {/*    <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>*/}
+                    {/*</NavLink>*/}
+                </Flex>
+                <Flex direction='column' pb={6}>
+                    <NavItem icon={Icons.Settings} onClick={onOpenSettingsDialog}>
+                        {t('common:settings')}
+                    </NavItem>
+                    <SettingsDialog isOpen={isOpenSettingsDialog} onClose={onCloseSettingsDialog} />
+                    <NavItem icon={Icons.Logout} onClick={logout}>
+                        {t('common:logout')}
+                    </NavItem>
+                </Flex>
             </Flex>
-
-            {/*<Flex*/}
-            {/*    direction='column'*/}
-            {/*    as='nav'*/}
-            {/*    fontSize='sm'*/}
-            {/*    color='gray.500'*/}
-            {/*    aria-label='Main Navigation'*/}
-            {/*>*/}
-            {/*    <NavLink to='habits'>*/}
-            {/*        <NavItem icon={Icons.Inbox}>All habits</NavItem>*/}
-            {/*    </NavLink>*/}
-
-            {/*    <NavItem>Logout</NavItem>*/}
-            {/*</Flex>*/}
         </Box>
     );
 };

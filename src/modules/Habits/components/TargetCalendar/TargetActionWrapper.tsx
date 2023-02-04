@@ -14,6 +14,7 @@ import { Dayjs } from 'dayjs';
 import React, { PropsWithChildren, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
+import useMobile from '~/common/hooks/useMobile';
 import { SetTargetDialog } from '~/modules/Habits/components/TargetCalendar';
 import { Habit, Target, TargetType } from '~/modules/Habits/types';
 
@@ -65,7 +66,7 @@ export const TargetActionWrapper = ({
             case TargetType.Skip:
                 return t('habits:skipOn', { date: formattedDate });
         }
-    }, [target, formattedDate, habit.goal, habit.goalType, t]);
+    }, [target, formattedDate, habit?.goal, habit?.goalType, t]);
 
     const onComplete = useCallback(() => {
         onChangeTarget(target?.id, date.toDate(), TargetType.Done);
@@ -86,6 +87,8 @@ export const TargetActionWrapper = ({
         onChangeTarget(target?.id, date.toDate(), TargetType.Empty);
     }, [target?.id, date, onChangeTarget]);
 
+    const isMobile = useMobile();
+
     return (
         <>
             <Menu isLazy>
@@ -96,6 +99,11 @@ export const TargetActionWrapper = ({
                 </Tooltip>
 
                 <MenuList p={0}>
+                    {isMobile && (
+                        <Text color='gray.600' p={2} px={3} fontWeight='bold' textAlign={'left'}>
+                            {label}
+                        </Text>
+                    )}
                     {(target?.targetType !== TargetType.Done ||
                         (habit?.allowPartialCompletion && target?.value !== habit?.goal)) && (
                         <TargetCellMenuItem

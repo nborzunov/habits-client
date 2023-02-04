@@ -73,4 +73,6 @@ export const profile = {
     errors: {
         failedToCreate: 'Failed to create user',
     },
+    language: 'Language',
+    selectLanguage: 'Select Language',
 };

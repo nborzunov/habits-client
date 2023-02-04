@@ -31,10 +31,10 @@ export const common = {
     days_one: '{{count}} day',
     days_few: '{{count}} days',
     days_many: '{{count}} days',
+    days_other: '{{count}} days',
     add: 'Add {{count}}',
     reset: 'Reset',
     close: 'Close',
-
     additional: 'Additional',
     update: 'Update',
     create: 'Create',
@@ -55,4 +55,6 @@ export const common = {
         from: 'From {{date}}',
     },
     result: 'Result',
+    settings: 'Settings',
+    logout: 'Logout',
 };

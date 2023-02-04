@@ -54,4 +54,6 @@ export const common = {
         from: 'От {{date}}',
     },
     result: 'Результат',
+    settings: 'Настройки',
+    logout: 'Выйти',
 };

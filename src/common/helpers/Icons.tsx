@@ -1,4 +1,4 @@
-import { FiBarChart2, FiCalendar, MdOutlineArchive } from 'react-icons/all';
+import { FiBarChart2, FiCalendar, FiLogOut, FiSettings, MdOutlineArchive } from 'react-icons/all';
 import {
     FiArrowRight,
     FiCheck,
@@ -55,6 +55,8 @@ const Icons = {
     Reset: FiRotateCcw,
     Stats: FiBarChart2,
     Calendar: FiCalendar,
+    Settings: FiSettings,
+    Logout: FiLogOut,
 };
 
 // TODO: write proxy for icons
