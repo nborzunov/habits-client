@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
@@ -22,20 +23,25 @@ import { setTitle } from '~/common/hooks/useTitle';
 import { habitsState } from '~/common/store/atoms';
 import { EditHabitDialog } from '~/modules/Habits/components/HabitDetails';
 import { CompletedCheckbox } from '~/modules/Habits/components/HabitsList';
-import { GoalType, Habit, HabitData } from '~/modules/Habits/types';
+import { Habit, HabitData } from '~/modules/Habits/types';
 import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
 export const HabitItem = ({ habit }: { habit: Habit }) => {
     const setHabits = useSetRecoilState(habitsState);
     const { habitId: selectedHabitId } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const selected = selectedHabitId && habit.id === selectedHabitId;
 
     if (selected) {
-        setTitle(`${habit.title} - Habits`);
+        setTitle(
+            t('habits:selectedHabit', {
+                title: habit.title,
+            }),
+        );
     } else {
-        setTitle('All Habits');
+        setTitle(t('habits:allHabits'));
     }
     const completed = habit.completedToday;
 
@@ -50,8 +56,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 })
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Successfully created habit!',
+                        title: t('common:success'),
+                        description: t('habits:successfullyUpdated'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -59,9 +65,11 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 )
                 .catch((err) =>
                     toast({
-                        title: 'Error',
+                        title: t('common:error'),
                         description:
-                            err.status === 401 ? 'Invalid credentials' : 'Something went wrong',
+                            err.status === 401
+                                ? t('common:invalidCredentials')
+                                : t('common:serverError'),
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
@@ -116,8 +124,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 })
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Habit data cleaned!',
+                        title: t('common:success'),
+                        description: t('habits:successfullyCleaned.all'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -125,8 +133,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 )
                 .catch(() => {
                     toast({
-                        title: 'Error',
-                        description: 'Something went wrong',
+                        title: t('common:error'),
+                        description: t('common:serverError'),
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
@@ -173,11 +181,18 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         onClose: onCloseConfirmClean,
     } = useDisclosure();
 
+    const ref = useRef<HTMLDivElement>(null);
+
     return (
         <>
             <Box
                 key={habit.id}
-                onClick={() => selectHabit(habit.id)}
+                ref={ref}
+                onClick={(e) => {
+                    if (ref.current === e.target) {
+                        selectHabit(habit.id);
+                    }
+                }}
                 bg={selected ? 'blackAlpha.50' : 'transparent'}
                 transition='all 0.2s ease'
                 _hover={{
@@ -197,7 +212,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         <Text fontSize='lg'>{habit.title}</Text>
 
                         <Text fontSize='sm' color='gray.600'>
-                            {habit.goal} {habit.goalType === GoalType.Times ? 'times' : 'minutes'}
+                            {t(`habits:${habit.goalType}`, { count: habit.goal })}
                         </Text>
                     </Flex>
                 </Flex>
@@ -214,26 +229,26 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         <OperationMenuItem
                             onClick={onOpenEditHabit}
                             icon={Icons.Edit}
-                            label={'Edit'}
+                            label={t('common:edit')}
                         />
 
                         {habit.targets.length > 0 && (
                             <OperationMenuItem
                                 onClick={onOpenCleanConfirm}
                                 icon={Icons.Delete}
-                                label={'Clean Targets'}
+                                label={t('habits:cleanTargets')}
                             />
                         )}
 
                         <OperationMenuItem
                             onClick={handleArchive}
                             icon={Icons.Archive}
-                            label={'Archive'}
+                            label={t('habits:archive')}
                         />
                         <OperationMenuItem
                             onClick={onOpenDeleteConfirm}
                             icon={Icons.TrashBin}
-                            label={'Delete'}
+                            label={t('habits:delete')}
                         />
                     </MenuList>
                 </Menu>
@@ -243,15 +258,39 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 isOpen={isOpenDeleteConfirm}
                 onClose={onCloseDeleteConfirm}
                 cancelRef={cancelRef}
-                title={`Delete Habit &quot;${habit.title}&quot;`}
-                text={'Are you sure? If you delete this habit, you will lose all your progress.'}
+                title={t('habits:deleteHabit', { title: habit.title })}
+                text={t('habits:deleteHabitDescription')}
             >
-                <Button onClick={onCloseDeleteConfirm}>Cancel</Button>
-                <Button colorScheme='blue' onClick={handleArchive} ml={3}>
-                    Archive
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    onClick={onCloseDeleteConfirm}
+                >
+                    Cancel
                 </Button>
-                <Button colorScheme='red' onClick={handleDelete} ml={3}>
-                    Delete
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    colorScheme='blue'
+                    onClick={handleArchive}
+                    ml={3}
+                >
+                    {t('habits:archive')}
+                </Button>
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    colorScheme='red'
+                    onClick={handleDelete}
+                    ml={3}
+                >
+                    {t('habits:delete')}
                 </Button>
             </ConfirmationDialog>
 
@@ -259,12 +298,28 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 isOpen={isOpenCleanConfirm}
                 onClose={onCloseConfirmClean}
                 cancelRef={cancelRef}
-                title={'Confirm Clean Operation'}
-                text={"Are you sure? You can't undo this action."}
+                title={t('common:cleanData')}
+                text={t('common:confirmText')}
             >
-                <Button onClick={onCloseConfirmClean}>Cancel</Button>
-                <Button colorScheme='red' onClick={handleCleanData} ml={3}>
-                    Clean
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    onClick={onCloseConfirmClean}
+                >
+                    {t('common:cancel')}
+                </Button>
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    colorScheme='red'
+                    onClick={handleCleanData}
+                    ml={3}
+                >
+                    {t('common:clean')}
                 </Button>
             </ConfirmationDialog>
 

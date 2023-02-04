@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import useRelativeSize from '~/common/hooks/useRelativeSize';
 import getLoopCallback from '~/common/utils/getLoop';
@@ -43,8 +44,6 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
         [targets],
     );
 
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
     const getLoop = useCallback(getLoopCallback, []);
 
     const daysInMonth = useMemo(
@@ -76,12 +75,13 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
         },
         [monthId, year, setYear, setMonthId],
     );
+    const { t } = useTranslation();
 
     return (
         <Box p='2' textAlign={'center'} height={`${cellSize * 7 + cellGap * 6 + 60}px`}>
             <Flex justifyContent={'space-between'} alignItems={'center'} width={'100%'} pb={'2'}>
                 <HStack spacing={'1'}>
-                    <Tooltip label={'Previous year'} placement={'top'}>
+                    <Tooltip label={t('common:date.previousYear')} placement={'top'}>
                         <IconButton
                             aria-label='left'
                             icon={<Icon as={Icons.LeftDouble} />}
@@ -90,7 +90,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                             size={{ base: 'md', sm: 'sm' }}
                         />
                     </Tooltip>
-                    <Tooltip label={'Previous month'} placement={'top'}>
+                    <Tooltip label={t('common:date.previousMonth')} placement={'top'}>
                         <IconButton
                             aria-label='left'
                             icon={<Icon as={Icons.Left} />}
@@ -109,7 +109,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                     {date.format('MMMM YYYY')}
                 </Text>
                 <HStack spacing={'1'}>
-                    <Tooltip label={'Next month'} placement={'top'}>
+                    <Tooltip label={t('common:date.nextMonth')} placement={'top'}>
                         <IconButton
                             aria-label='right'
                             icon={<Icon as={Icons.Right} />}
@@ -119,7 +119,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                         />
                     </Tooltip>
 
-                    <Tooltip label={'Next year'} placement={'top'}>
+                    <Tooltip label={t('common:date.nextYear')} placement={'top'}>
                         <IconButton
                             aria-label='right'
                             icon={<Icon as={Icons.RightDouble} />}
@@ -136,7 +136,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                         <Box>
                             <Box>
                                 <Text py='2' textAlign='center' fontWeight='bold'>
-                                    {daysOfTheWeek[rowId]}
+                                    {t(`common:weekDays.${rowId}`)}
                                 </Text>
                             </Box>
 

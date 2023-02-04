@@ -1,5 +1,6 @@
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import Icons from '~/common/helpers/Icons';
 import useMobile from '~/common/hooks/useMobile';
@@ -11,6 +12,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
     const isMobile = useMobile();
     const { onCloseMenu } = useContext(LayoutContext);
 
+    const { t } = useTranslation();
     return (
         <Box
             as='nav'
@@ -44,7 +46,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                 <ProfileInfo />
 
                 <NavLink to='habits'>
-                    <NavItem icon={Icons.Inbox}>All habits</NavItem>
+                    <NavItem icon={Icons.Inbox}>{t('habits:allHabits')}</NavItem>
                 </NavLink>
                 {/*<NavLink to='dashboard'>*/}
                 {/*    <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>*/}

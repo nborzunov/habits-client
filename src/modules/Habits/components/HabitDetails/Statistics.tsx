@@ -1,8 +1,8 @@
 import { Flex, Icon, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { IconType } from 'react-icons/lib';
 import Icons from '~/common/helpers/Icons';
-import { formatDays } from '~/common/utils/formatDays';
 
 export const Statistics = ({
     icon,
@@ -19,6 +19,8 @@ export const Statistics = ({
     footerValue?: number;
     startDate?: Date;
 }) => {
+    const { t } = useTranslation();
+
     return (
         <Flex justifyContent='space-between' w='100%'>
             <Flex alignItems='center'>
@@ -31,7 +33,7 @@ export const Statistics = ({
                         </Text>
                     </Flex>
                     <Text fontSize='md' fontWeight='bold' pl={icon ? '1' : '0'} pb={'1'}>
-                        {formatDays(value)}
+                        {t('common:days', { count: value || 0 })}
                     </Text>
                     {footerValue ? (
                         <>
@@ -39,7 +41,7 @@ export const Statistics = ({
                                 <Flex alignItems='center' color='green.500' mb='2'>
                                     <Icon as={Icons.ArrowTop} />
                                     <Text color='inherit' fontSize='12px' fontWeight='semibold'>
-                                        {formatDays(footerValue)}
+                                        {t('common:days', { count: footerValue || 0 })}
                                     </Text>
                                 </Flex>
                             )}
@@ -47,7 +49,7 @@ export const Statistics = ({
                                 <Flex alignItems='center' color='red.500' mb='2'>
                                     <Icon as={Icons.ArrowBottom} />
                                     <Text color='inherit' fontSize='12px' fontWeight='semibold'>
-                                        {formatDays(footerValue)}
+                                        {t('common:days', { count: footerValue || 0 })}
                                     </Text>
                                 </Flex>
                             )}
@@ -69,7 +71,9 @@ export const Statistics = ({
                         borderRadius='8'
                         p='2'
                     >
-                        From {dayjs(startDate).format('MMM DD, YYYY')}
+                        {t('common:date.from', {
+                            date: dayjs(startDate).format('MMM DD, YYYY'),
+                        })}
                     </Text>
                 </Flex>
             )}

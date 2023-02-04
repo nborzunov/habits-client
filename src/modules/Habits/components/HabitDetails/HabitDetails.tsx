@@ -17,6 +17,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -58,6 +59,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
         habit,
         isEditMode,
     );
+    const { t } = useTranslation();
 
     // TODO: вынести мутейшены в отдельный файл
     const createTarget = useMutation({
@@ -71,7 +73,11 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
         },
     });
 
-    setTitle(`${habit.title} - Habits`);
+    setTitle(
+        t('habits:selectedHabit', {
+            title: habit?.title,
+        }),
+    );
 
     const handleSaveLayout = () => {
         save();
@@ -103,7 +109,12 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                     <Flex alignItems={'center'}>
                         {isMobile && (
                             <Link to={'/habits'}>
-                                <Back />
+                                <Back
+                                    size={{
+                                        base: 'lg',
+                                        sm: 'sm',
+                                    }}
+                                />
                             </Link>
                         )}
                         <Heading as='h3' size='md'>
@@ -119,48 +130,94 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                         icon={<Icon as={Icons.Save} />}
                                         onClick={handleSaveLayout}
                                         colorScheme={'purple'}
+                                        size={{
+                                            base: 'md',
+                                            sm: 'sm',
+                                        }}
                                     />
                                 </Tooltip>
 
-                                <Tooltip label={'Add Widget'}>
-                                    <Button
-                                        colorScheme={'purple'}
-                                        variant={'outline'}
-                                        onClick={onOpen}
-                                    >
-                                        Add {widgets.length ? `(${widgets.length})` : ''}
-                                    </Button>
+                                <Tooltip label={t('habits:addWidget')}>
+                                    {!isMobile ? (
+                                        <Button
+                                            colorScheme={'purple'}
+                                            variant={'outline'}
+                                            onClick={onOpen}
+                                        >
+                                            {
+                                                t('common:add', {
+                                                    count: `${
+                                                        widgets.length ? `(${widgets.length})` : ''
+                                                    }`,
+                                                } as any) as unknown as string
+                                            }
+                                        </Button>
+                                    ) : (
+                                        <IconButton
+                                            icon={<Icon as={Icons.Add} />}
+                                            aria-label={'add-widget'}
+                                            colorScheme={'purple'}
+                                            variant={'outline'}
+                                            onClick={onOpen}
+                                            size={{
+                                                base: 'md',
+                                                sm: 'sm',
+                                            }}
+                                        />
+                                    )}
                                 </Tooltip>
-                                <Tooltip label={'Reset'}>
-                                    <Button
-                                        colorScheme={'purple'}
-                                        variant={'outline'}
-                                        onClick={reset}
-                                    >
-                                        Reset
-                                    </Button>
+                                <Tooltip label={t('common:reset')}>
+                                    {!isMobile ? (
+                                        <Button
+                                            colorScheme={'purple'}
+                                            variant={'outline'}
+                                            onClick={reset}
+                                        >
+                                            {t('common:reset')}
+                                        </Button>
+                                    ) : (
+                                        <IconButton
+                                            icon={<Icon as={Icons.Reset} />}
+                                            aria-label={'reset-grid'}
+                                            colorScheme={'purple'}
+                                            variant={'outline'}
+                                            onClick={reset}
+                                            size={{
+                                                base: 'md',
+                                                sm: 'sm',
+                                            }}
+                                        />
+                                    )}
                                 </Tooltip>
 
-                                <Tooltip label={'Close'}>
+                                <Tooltip label={t('common:close')}>
                                     <IconButton
                                         aria-label={'close'}
                                         icon={<Icon as={Icons.Cross} />}
                                         onClick={() => setIsEditMode(!isEditMode)}
                                         colorScheme={'purple'}
                                         variant={'outline'}
+                                        size={{
+                                            base: 'md',
+                                            sm: 'sm',
+                                        }}
                                     />
                                 </Tooltip>
                             </HStack>
                         )}
 
                         {!isEditMode && (
-                            <Tooltip label={'Edit grid'}>
+                            <Tooltip label={t('habits:editGrid')}>
                                 <IconButton
                                     aria-label={'edit grid'}
                                     icon={<Icon as={Icons.Grid} />}
                                     onClick={() => setIsEditMode(!isEditMode)}
                                     colorScheme={'purple'}
                                     variant={'outline'}
+                                    size={{
+                                        base: 'md',
+                                        sm: 'sm',
+                                    }}
                                 />
                             </Tooltip>
                         )}
@@ -190,7 +247,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                             }
                                         >
                                             <Statistics
-                                                title='Current streak'
+                                                title={t('habits:currentStreak.lower')}
                                                 value={habit.currentStreak}
                                                 type='streak'
                                                 startDate={habit.currentStreakStartDate}
@@ -219,7 +276,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                         >
                                             <Statistics
                                                 icon={Icons.Complete}
-                                                title='Complete'
+                                                title={t('habits:completedTargets.short')}
                                                 value={habit.completedTargets}
                                                 type='increase'
                                                 footerValue={habit.completedTargets}
@@ -235,7 +292,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                         >
                                             <Statistics
                                                 icon={Icons.Cross}
-                                                title='Failed'
+                                                title={t('habits:failedTargets.short')}
                                                 value={habit.failedTargets}
                                                 type='decrease'
                                                 footerValue={habit.failedTargets}
@@ -250,7 +307,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                             }
                                         >
                                             <Statistics
-                                                title='Total'
+                                                title={t('habits:totalTargets.short')}
                                                 value={habit.totalTargets}
                                                 type='none'
                                             />
@@ -265,7 +322,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                         >
                                             <Statistics
                                                 icon={Icons.ArrowRight}
-                                                title='Skipped'
+                                                title={t('habits:skippedTargets.short')}
                                                 value={habit.completedTargets}
                                                 type='none'
                                             />
@@ -311,7 +368,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                     <DrawerCloseButton />
                     <DrawerHeader>
                         <Heading as='h3' size='md'>
-                            Widgets
+                            {t('habits:widgets')}
                         </Heading>
                     </DrawerHeader>
                     <Box p={4}>

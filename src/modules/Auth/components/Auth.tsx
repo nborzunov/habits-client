@@ -1,41 +1,58 @@
 import { Button, Grid, GridItem, Heading, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import useTitle from '~/common/hooks/useTitle';
 
 export const Auth = () => {
-    useTitle('Home');
+    const { t } = useTranslation();
+
+    useTitle(t('common:home'));
     return (
         <>
             <Stack align={'center'} pb={8}>
-                <Heading fontSize={'4xl'}>Welcome to Habits</Heading>
-                <Text fontSize={'lg'} color={'gray.600'}>
-                    Sign in to your account and start building good habits.
+                <Heading
+                    fontSize={{
+                        base: '3xl',
+                        sm: '2xl',
+                    }}
+                    textAlign={'center'}
+                >
+                    {t('profile:welcome')}
+                </Heading>
+                <Text fontSize={'lg'} color={'gray.600'} textAlign={'center'}>
+                    {t('profile:welcomeDescription')}
                 </Text>
             </Stack>
             <Grid templateColumns={'repeat(2, 1fr)'} gap={4} mt={2}>
                 <GridItem>
                     <NavLink to='login'>
                         <Button
-                            loadingText='Submitting'
-                            size='lg'
+                            loadingText={t('common:formSubmitting') as string}
+                            size={{
+                                base: 'lg',
+                                sm: 'md',
+                            }}
                             colorScheme={'purple'}
                             variant={'outline'}
                             width={'100%'}
                         >
-                            Sign in
+                            {t('common:signin.lower')}
                         </Button>
                     </NavLink>
                 </GridItem>
                 <GridItem>
                     <NavLink to='signup'>
                         <Button
-                            loadingText='Submitting'
-                            size='lg'
+                            loadingText={t('common:formSubmitting') as string}
+                            size={{
+                                base: 'lg',
+                                sm: 'md',
+                            }}
                             colorScheme={'purple'}
                             width={'100%'}
                         >
-                            Sign up
+                            {t('common:signup.lower')}
                         </Button>
                     </NavLink>
                 </GridItem>

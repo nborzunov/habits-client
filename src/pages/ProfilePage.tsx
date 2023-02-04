@@ -60,7 +60,10 @@ export const ProfilePage = () => {
                     rounded={'lg'}
                     bg={useColorModeValue('white', 'gray.700')}
                     boxShadow={'lg'}
-                    p={8}
+                    p={{
+                        base: 8,
+                        sm: 6,
+                    }}
                 >
                     <Routes>
                         {/*TODO: user profile route*/}

@@ -2,6 +2,7 @@ import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
 import validationRules from '~/common/helpers/validationRules';
@@ -18,11 +19,11 @@ interface Props {
 
 export const EditProfile = ({ initialState }: Props) => {
     const user = useRecoilValue(activeUserState);
-    useTitle(`${user?.name} ${user?.surname} - Edit`);
-
     const toast = useToast();
-
     const setActiveUser = useSetRecoilState(activeUserState);
+    const { t } = useTranslation();
+
+    useTitle(`${user?.name} ${user?.surname} - ${t('common:edit')}`);
 
     const {
         register,
@@ -45,8 +46,8 @@ export const EditProfile = ({ initialState }: Props) => {
                 })
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Profile updated!',
+                        title: t('common:success'),
+                        description: t('profile:successfullyUpdated'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -54,8 +55,11 @@ export const EditProfile = ({ initialState }: Props) => {
                 )
                 .catch((err) =>
                     toast({
-                        title: 'Error',
-                        description: err.message,
+                        title: t('common:error'),
+                        description:
+                            err.status === 401
+                                ? t('common:invalidCredentials')
+                                : t('common:serverError'),
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
@@ -70,8 +74,8 @@ export const EditProfile = ({ initialState }: Props) => {
 
     const onError = () => {
         toast({
-            title: 'Error',
-            description: 'Please check all fields',
+            title: t('common:error'),
+            description: t('common:invalidForm'),
             status: 'error',
             isClosable: true,
         });
@@ -80,22 +84,22 @@ export const EditProfile = ({ initialState }: Props) => {
     const fieldsConfig: FieldsConfig<'name' | 'surname' | 'username' | 'bio'> = [
         {
             field: 'name',
-            label: 'Name',
+            label: t('profile:name'),
             validationProps: register('name', validationRules.text(3)),
         },
         {
             field: 'surname',
-            label: 'Surname',
+            label: t('profile:surname'),
             validationProps: register('surname', validationRules.text(3)),
         },
         {
             field: 'username',
-            label: 'Username',
+            label: t('profile:username.field'),
             validationProps: register('username', validationRules.text(6)),
         },
         {
             field: 'bio',
-            label: 'Profile Bio',
+            label: t('profile:bio.long'),
             validationProps: register('bio', validationRules.longText()),
         },
         //     TODO: avatar image
@@ -104,7 +108,7 @@ export const EditProfile = ({ initialState }: Props) => {
     return (
         <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
             <Heading as='h3' size='md' mb={'6'}>
-                Edit Profile
+                {t('common:editProfile')}
             </Heading>
             <Stack spacing={4}>
                 {fieldsConfig.map(({ field, label, validationProps }) => (
@@ -127,14 +131,14 @@ export const EditProfile = ({ initialState }: Props) => {
 
                 <Stack spacing={10} pt={4}>
                     <Button
-                        loadingText='Submitting'
+                        loadingText={t('common:formSubmitting') as string}
                         size='md'
                         colorScheme={'purple'}
                         width={'160px'}
                         type='submit'
                         isLoading={isSubmitting}
                     >
-                        Save changes
+                        {t('common:saveChanges')}
                     </Button>
                 </Stack>
             </Stack>

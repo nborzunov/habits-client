@@ -3,14 +3,16 @@ import {
     Box,
     Button,
     Flex,
+    FormControl,
+    FormLabel,
     Heading,
     Stack,
-    Text,
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import validationRules from '~/common/helpers/validationRules';
 import useMobile from '~/common/hooks/useMobile';
@@ -27,9 +29,12 @@ interface Props {
 
 export const ChangeEmail = ({ initialState }: Props) => {
     const user = useRecoilValue(activeUserState);
-    useTitle(`${user?.name} ${user?.surname} - Change Email`);
 
     const toast = useToast();
+    const { t } = useTranslation();
+
+    useTitle(`${user?.name} ${user?.surname} - ${t('common:changeEmail')}`);
+
     const {
         register,
         watch,
@@ -47,8 +52,8 @@ export const ChangeEmail = ({ initialState }: Props) => {
 
     const onError = () => {
         toast({
-            title: 'Error',
-            description: 'Please check all fields',
+            title: t('common:error'),
+            description: t('common:invalidForm'),
             status: 'error',
             isClosable: true,
         });
@@ -58,7 +63,7 @@ export const ChangeEmail = ({ initialState }: Props) => {
     const fieldsConfig: FieldsConfig<'email'> = [
         {
             field: 'email',
-            label: !isMobile ? 'Email Address' : 'Email',
+            label: !isMobile ? t('profile:email.long') : t('profile:email.short'),
             validationProps: register('email', validationRules.email()),
         },
     ];
@@ -73,14 +78,26 @@ export const ChangeEmail = ({ initialState }: Props) => {
     return (
         <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
             <Heading as='h3' size='md' mb={'6'}>
-                Change Email
+                {t('common:changeEmail')}
             </Heading>
             <Stack spacing={4}>
                 <Flex justifyContent={'space-between'}>
-                    <Flex alignItems={'center'}>
-                        <Text lineHeight={'40px'} width={'140px'} fontWeight={'semibold'}>
-                            Status:
-                        </Text>
+                    <Flex alignItems={'center'} justifyContent={'space-between'} width={'100%'}>
+                        <FormControl width={'100%'}>
+                            <FormLabel
+                                lineHeight={'40px'}
+                                mr={3}
+                                mb={0}
+                                width='100%'
+                                maxWidth={{
+                                    lg: '200px',
+                                    md: '200px',
+                                    sm: '200px',
+                                }}
+                            >
+                                {t('profile:email.status')}
+                            </FormLabel>
+                        </FormControl>
 
                         {user.emailVerified ? (
                             <Badge
@@ -89,11 +106,12 @@ export const ChangeEmail = ({ initialState }: Props) => {
                                 py={'2'}
                                 px={'4'}
                                 borderRadius={'12'}
+                                width={'50%'}
                             >
-                                Verified
+                                {t('profile:email.verified')}
                             </Badge>
                         ) : (
-                            <Tooltip label={'Click to verify email'}>
+                            <Tooltip label={t('profile:email.verifyAction')}>
                                 <Badge
                                     colorScheme='red'
                                     fontSize={'sm'}
@@ -103,8 +121,9 @@ export const ChangeEmail = ({ initialState }: Props) => {
                                     transition={'all 0.5s ease'}
                                     _hover={{ cursor: 'pointer', opacity: 0.8 }}
                                     onClick={verifyEmail}
+                                    width={'50%'}
                                 >
-                                    Verify
+                                    {t('profile:email.verify')}
                                 </Badge>
                             </Tooltip>
                         )}
@@ -130,14 +149,14 @@ export const ChangeEmail = ({ initialState }: Props) => {
 
                 <Stack spacing={10} pt={4}>
                     <Button
-                        loadingText='Submitting'
+                        loadingText={t('common:formSubmitting') as string}
                         size='md'
                         colorScheme={'purple'}
                         width={'160px'}
                         type='submit'
                         isLoading={isSubmitting}
                     >
-                        Save changes
+                        {t('common:saveChanges')}
                     </Button>
                 </Stack>
             </Stack>

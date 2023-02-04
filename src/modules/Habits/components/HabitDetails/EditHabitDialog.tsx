@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import validationRules from '~/common/helpers/validationRules';
 import { GoalType, HabitData, Periodicity } from '~/modules/Habits/types';
 import FormField from '~/ui/FormField';
@@ -91,6 +92,8 @@ export const EditHabitDialog = ({
         });
     };
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (isOpen) setInitialState();
     }, [isOpen, setInitialState]);
@@ -99,13 +102,17 @@ export const EditHabitDialog = ({
             <ModalOverlay />
             <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <ModalHeader>
-                    {initialState ? `Edit Habit "${initialState.title}"` : 'New Habit'}
+                    {initialState
+                        ? t('habits:editHabit', {
+                              title: initialState.title,
+                          })
+                        : t('habits:newHabit')}
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={3}>
                         <FormField
-                            label={'Title'}
+                            label={t('habits:title')}
                             validationProps={register('title', validationRules.text(2))}
                             validationError={errors.title}
                             field={'title'}
@@ -115,7 +122,7 @@ export const EditHabitDialog = ({
                         />
 
                         <HStack spacing={3}>
-                            <Tooltip label={'Daily Goal'} hasArrow>
+                            <Tooltip label={t('habits:dailyGoal')} hasArrow>
                                 <Box>
                                     <NumericInput
                                         min={form.allowPartialCompletion ? 2 : 1}
@@ -130,35 +137,46 @@ export const EditHabitDialog = ({
                                 </Box>
                             </Tooltip>
 
-                            <Tooltip label={'Goal Type'} hasArrow>
+                            <Tooltip label={t('habits:goalType')} hasArrow>
                                 <Select
                                     value={form.goalType}
                                     onChange={(e) =>
                                         setValue('goalType', e.target.value as GoalType)
                                     }
+                                    size={{
+                                        base: 'md',
+                                        sm: 'sm',
+                                    }}
                                 >
-                                    <option value={GoalType.Times}>Times</option>
-                                    <option value={GoalType.Mins}>Mins</option>
+                                    <option value={GoalType.Times}>{t('habits:timesTitle')}</option>
+                                    <option value={GoalType.Mins}>
+                                        {t('habits:minutesTitle')}
+                                    </option>
                                 </Select>
                             </Tooltip>
 
-                            <Tooltip label={'Periodicity'} hasArrow>
+                            <Tooltip label={t('habits:periodicity')} hasArrow>
                                 <Select
                                     value={form.periodicity}
                                     onChange={(e) =>
                                         setValue('periodicity', e.target.value as Periodicity)
                                     }
+                                    size={{
+                                        base: 'md',
+                                        sm: 'sm',
+                                    }}
                                 >
-                                    <option value={Periodicity.Daily}>Per Day</option>
-                                    <option value={Periodicity.Weekly}>Per Week</option>
-                                    <option value={Periodicity.Monthly}>Per Month</option>
-                                    <option value={Periodicity.Custom}>Custom</option>
+                                    {Object.values(Periodicity).map((key) => (
+                                        <option key={key} value={key}>
+                                            {t(`habits:periodicityOptions.${key}`)}
+                                        </option>
+                                    ))}
                                 </Select>
                             </Tooltip>
                         </HStack>
 
                         <Text mb={2} fontWeight={'semibold'}>
-                            Additional
+                            {t('common:additional')}
                         </Text>
 
                         <FormControl>
@@ -168,14 +186,11 @@ export const EditHabitDialog = ({
                                     setValue('allowOverGoalCompletion', e.target.checked)
                                 }
                             >
-                                Allow overgoal completion
+                                {t('habits:allowOverGoal')}
                             </Checkbox>
                         </FormControl>
 
-                        <Tooltip
-                            label={'Please increase your daily goal'}
-                            isDisabled={form.goal > 1}
-                        >
+                        <Tooltip label={t('habits.increaseDailyGoal')} isDisabled={form.goal > 1}>
                             <FormControl isDisabled={form.goal <= 1}>
                                 <Checkbox
                                     isChecked={form.allowPartialCompletion}
@@ -183,7 +198,7 @@ export const EditHabitDialog = ({
                                         setValue('allowPartialCompletion', e.target.checked)
                                     }
                                 >
-                                    Allow partial completion
+                                    {t('habits:allowPartial')}
                                 </Checkbox>
                             </FormControl>
                         </Tooltip>
@@ -193,20 +208,36 @@ export const EditHabitDialog = ({
                                 isChecked={form.allowSkip}
                                 onChange={(e) => setValue('allowSkip', e.target.checked)}
                             >
-                                Allow skip specific days
+                                {t('habits:allowSkip')}
                             </Checkbox>
 
-                            <FormHelperText>(e.g. if you need some time to rest)</FormHelperText>
+                            <FormHelperText>{t('habits:allowSkipDescription')}</FormHelperText>
                         </FormControl>
                     </Stack>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
+                    <Button
+                        colorScheme='blue'
+                        mr={3}
+                        size={{
+                            base: 'md',
+                            sm: 'sm',
+                        }}
+                        onClick={onClose}
+                    >
+                        {t('common:close')}
                     </Button>
-                    <Button colorScheme='green' type='submit' isLoading={isSubmitting}>
-                        {initialState ? 'Update' : 'Create'}
+                    <Button
+                        colorScheme='green'
+                        type='submit'
+                        size={{
+                            base: 'md',
+                            sm: 'sm',
+                        }}
+                        isLoading={isSubmitting}
+                    >
+                        {initialState ? t('common:update') : t('common:create')}
                     </Button>
                 </ModalFooter>
             </ModalContent>

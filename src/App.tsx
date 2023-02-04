@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Navigate,
     Route,
@@ -50,6 +52,13 @@ function App() {
     const refetchUser = () => {
         refetch();
     };
+
+    const { i18n } = useTranslation();
+
+    // i18n.changeLanguage('ru')
+    useEffect(() => {
+        dayjs.locale(i18n.options.lng);
+    }, [i18n.options.lng]);
 
     const router = createBrowserRouter(
         createRoutesFromElements([

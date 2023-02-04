@@ -1,36 +1,39 @@
 const validationRules = {
     password: () => ({
-        required: { value: true, message: 'Current password is required' },
-        minLength: { value: 8, message: 'Password must be at least 8 characters' },
+        required: { value: true, message: 'profile:password.currentPassword.required' },
+        minLength: { value: 8, message: 'profile:password.errors.minLength' },
     }),
     newPassword: () => ({
-        required: { value: true, message: 'Password is required' },
-        minLength: { value: 8, message: 'Password must be at least 8 characters' },
+        required: { value: true, message: 'profile:password.password.required' },
+        minLength: { value: 8, message: 'profile:password.errors.minLength' },
         pattern: {
             value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            message: 'Password must contain at least one letter and one number',
+            message: 'profile:password.newPassword.format',
         },
     }),
     newPasswordConfirm: () => ({
-        required: { value: true, message: 'Confirm new password is required' },
-        minLength: { value: 8, message: 'Password must be at least 8 characters' },
+        required: { value: true, message: 'profile:password.repeatPassword.required' },
+        minLength: { value: 8, message: 'profile:password.errors.minLength' },
         pattern: {
             value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            message: 'Password must contain at least one letter and one number',
+            message: 'profile:password.newPassword.format',
         },
     }),
     text: (minLength: number) => ({
-        required: 'This is required',
-        minLength: { value: minLength, message: `Minimum length should be ${minLength}` },
+        required: 'profile:field.required',
+        minLength: {
+            value: minLength,
+            message: minLength === 3 ? 'profile:field.minLength.3' : 'profile:field.minLength.6',
+        },
     }),
     longText: () => ({
-        maxLength: { value: 250, message: 'Maximum length should be 250' },
+        maxLength: { value: 250, message: 'profile:field.maxLength' },
     }),
     email: () => ({
-        required: 'This is required',
+        required: 'profile:field.required',
         pattern: {
             value: /\S+@\S+\.\S+/,
-            message: 'Invalid email address',
+            message: 'profile:email.invalid',
         },
     }),
 };

@@ -71,7 +71,7 @@ export const Layout = ({ loading }: { loading: boolean }) => {
                                 w='full'
                                 borderRight='none'
                                 width={{
-                                    sm: '100%',
+                                    sm: '20em',
                                     md: '20em',
                                     lg: '12em',
                                     xl: '14em',
@@ -82,7 +82,7 @@ export const Layout = ({ loading }: { loading: boolean }) => {
                     </Drawer>
                     <Box
                         ml={{
-                            sm: '20em',
+                            sm: '0',
                             md: '20em',
                             lg: '12em',
                             xl: '14em',

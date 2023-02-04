@@ -2,6 +2,7 @@ import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
 import api from '~/common/helpers/api';
@@ -16,6 +17,7 @@ import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
 export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Habit }) => {
     const setHabits = useSetRecoilState(habitsState);
 
+    const { t } = useTranslation();
     const createTarget = useMutation({
         mutationFn: (data: CreateTargetData) => {
             return api
@@ -52,7 +54,7 @@ export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Hab
         [habit.targets],
     );
     return (
-        <Tooltip label={value ? 'Uncheck' : 'Complete'}>
+        <Tooltip label={value ? t('habits:uncheck') : t('habits:complete')}>
             <TargetActionContext.Provider
                 value={{
                     habit,

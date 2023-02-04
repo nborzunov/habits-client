@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex, Stack, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import useTitle from '~/common/hooks/useTitle';
 import { activeUserState } from '~/common/store/atoms';
@@ -7,6 +8,8 @@ import { activeUserState } from '~/common/store/atoms';
 export const ProfileDetails = () => {
     const user = useRecoilValue(activeUserState);
     useTitle(`${user?.name} ${user?.surname}`);
+
+    const { t } = useTranslation();
 
     if (!user) return null;
     return (
@@ -33,21 +36,23 @@ export const ProfileDetails = () => {
                         </Flex>
                     </Flex>
                     <Stack>
-                        <Text fontWeight='semibold' fontSize='md'>{`Joined ${dayjs(
-                            user.createdDate,
-                        ).from(dayjs())}`}</Text>
+                        <Text fontWeight='semibold' fontSize='md' pl={4}>
+                            {t('profile:joined', {
+                                date: dayjs(user.createdDate).from(dayjs()),
+                            })}
+                        </Text>
                     </Stack>
                 </Flex>
 
                 <Stack pt={4}>
                     <Text fontWeight={'semibold'} mt={'2'}>
-                        Bio
+                        {t('profile:bio.short')}
                     </Text>
-                    <Text>{user.bio ? user.bio : 'No bio provided.'}</Text>
+                    <Text>{user.bio ? user.bio : t('profile:bio.noValue')}</Text>
                 </Stack>
                 <Stack>
                     <Text fontWeight={'semibold'} mt={'2'}>
-                        Email
+                        {t('profile:email.short')}
                     </Text>
                     <Text>{user.email}</Text>
                 </Stack>

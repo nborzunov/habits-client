@@ -2,6 +2,7 @@ import { Button, Checkbox, HStack, Heading, Link, Stack, Text, useToast } from '
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import api from '~/common/helpers/api';
 import processError from '~/common/helpers/processError';
@@ -13,8 +14,11 @@ import Back from '~/ui/Layout/components/Back';
 type Fields = 'username' | 'password';
 
 export const Login = ({ refetch }: { refetch: () => void }) => {
-    useTitle('Login');
     const toast = useToast();
+    const { t } = useTranslation();
+
+    useTitle(t('profile:login'));
+
     const login = useMutation({
         mutationFn: (data: { username: string; password: string }) => {
             return api
@@ -26,8 +30,8 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
                 .then(() => refetch())
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Successfully login!',
+                        title: t('common:success'),
+                        description: t('profile:successfullyLogin'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -35,10 +39,11 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
                 )
                 .catch((error) => {
                     processError<Fields>(
+                        t,
                         error,
                         (errorMessage) => {
                             toast({
-                                title: 'Error',
+                                title: t('common:error'),
                                 description: errorMessage,
                                 status: 'error',
                                 duration: 3000,
@@ -76,8 +81,8 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
 
     const onError = () => {
         toast({
-            title: 'Error',
-            description: 'Please check all fields',
+            title: t('common:error'),
+            description: t('common:invalidForm'),
             status: 'error',
             isClosable: true,
         });
@@ -86,13 +91,13 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
     const fieldsConfig: FieldsConfig<Fields> = [
         {
             field: 'username',
-            label: 'Username',
+            label: t('profile:username.field'),
             validationProps: register('username', validationRules.text(6)),
         },
 
         {
             field: 'password',
-            label: 'Password',
+            label: t('profile:password.currentPassword.short'),
             validationProps: register('password', validationRules.password()),
         },
     ];
@@ -100,9 +105,24 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
     return (
         <>
             <Stack align={'center'} pb={8}>
-                <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-                <Text fontSize={'lg'} color={'gray.600'}>
-                    to enjoy all of our cool features ✌️
+                <Heading
+                    fontSize={{
+                        base: '3xl',
+                        sm: '2xl',
+                    }}
+                    textAlign={'center'}
+                >
+                    {t('profile:signInToAccount')}
+                </Heading>
+                <Text
+                    fontSize={{
+                        base: 'lg',
+                        sm: 'md',
+                    }}
+                    color={'gray.600'}
+                    textAlign={'center'}
+                >
+                    {t('profile:signinDescription')}
                 </Text>
             </Stack>
             <Stack spacing={4} as='form' onSubmit={handleSubmit(onSubmit, onError)}>
@@ -127,23 +147,31 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
                         justify={'space-between'}
                     >
                         {/*TODO*/}
-                        <Checkbox>Remember me</Checkbox>
-                        <Link color={'blue.400'}>Forgot password?</Link>
+                        <Checkbox>{t('profile:password.rememberMe')}</Checkbox>
+                        <Link color={'blue.400'}>{t('profile:password.forgot')}</Link>
                     </Stack>
                     <HStack spacing={3}>
                         <NavLink to={'/'}>
-                            <Back size={'lg'} />
+                            <Back
+                                size={{
+                                    base: 'lg',
+                                    sm: 'md',
+                                }}
+                            />
                         </NavLink>
 
                         <Button
-                            loadingText='Submitting'
-                            size='lg'
+                            loadingText={t('common:formSubmitting') as string}
+                            size={{
+                                base: 'lg',
+                                sm: 'md',
+                            }}
                             colorScheme={'purple'}
                             width={'100%'}
                             type={'submit'}
                             isLoading={isSubmitting}
                         >
-                            Sign in
+                            {t('common:signin.lower')}
                         </Button>
                     </HStack>
                 </Stack>

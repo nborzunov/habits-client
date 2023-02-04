@@ -2,6 +2,7 @@ import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import api from '~/common/helpers/api';
 import processError from '~/common/helpers/processError';
@@ -21,9 +22,11 @@ type Fields = keyof FormData;
 
 export const ChangePassword = () => {
     const user = useRecoilValue(activeUserState);
-    useTitle(`${user?.name} ${user?.surname} - Change Password`);
 
     const toast = useToast();
+    const { t } = useTranslation();
+
+    useTitle(`${user?.name} ${user?.surname} - ${t('common:changePassword')}`);
 
     const initialState = {
         currentPassword: '',
@@ -48,8 +51,8 @@ export const ChangePassword = () => {
                 .json()
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Profile updated!',
+                        title: t('common:success'),
+                        description: t('profile:successfullyUpdated'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -57,10 +60,11 @@ export const ChangePassword = () => {
                 )
                 .catch((error) => {
                     processError<Fields>(
+                        t,
                         error,
                         (errorMessage) => {
                             toast({
-                                title: 'Error',
+                                title: t('common:error'),
                                 description: errorMessage,
                                 status: 'error',
                                 duration: 3000,
@@ -87,8 +91,8 @@ export const ChangePassword = () => {
 
     const onError = () => {
         toast({
-            title: 'Error',
-            description: 'Please check all fields',
+            title: t('common:error'),
+            description: t('common:invalidForm'),
             status: 'error',
             isClosable: true,
         });
@@ -99,7 +103,7 @@ export const ChangePassword = () => {
             if (newPasswordConfirm !== newPassword) {
                 setError('newPasswordConfirm', {
                     type: 'custom',
-                    message: 'Passwords do not match',
+                    message: 'profile:password.errors.notMatch',
                 });
             }
 
@@ -107,7 +111,7 @@ export const ChangePassword = () => {
                 setTimeout(() => {
                     setError('newPassword', {
                         type: 'custom',
-                        message: 'New password must be different from current',
+                        message: 'profile:password.errors.similar',
                     });
                 });
             }
@@ -121,37 +125,43 @@ export const ChangePassword = () => {
         () => [
             {
                 field: 'currentPassword',
-                label: !isMobile ? 'Current Password' : 'Password',
+                label: !isMobile
+                    ? t('profile:password.currentPassword.long')
+                    : t('profile:password.currentPassword.short'),
                 validationProps: register('currentPassword', validationRules.password()),
             },
             {
                 field: 'newPassword',
-                label: !isMobile ? 'New Password' : 'New',
+                label: !isMobile
+                    ? t('profile:password.newPassword.long')
+                    : t('profile:password.newPassword.short'),
                 validationProps: register('newPassword', validationRules.newPassword()),
             },
             {
                 field: 'newPasswordConfirm',
-                label: !isMobile ? 'Repeat Password' : 'Repeat',
+                label: !isMobile
+                    ? t('profile:password.repeatPassword.long')
+                    : t('profile:password.repeatPassword.short'),
                 validationProps: register(
                     'newPasswordConfirm',
                     validationRules.newPasswordConfirm(),
                 ),
             },
         ],
-        [register, isMobile],
+        [register, isMobile, t],
     );
 
     return (
         <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
             <Heading as='h3' size='md' mb={'6'}>
-                Change Password
+                {t('common:changePassword')}
             </Heading>
             <Stack spacing={4}>
                 {fieldsConfig.map(({ field, label, validationProps }) => (
                     <FormField
                         isRequired
                         minWidth={{
-                            base: '200px',
+                            md: '240px',
                             sm: '100px',
                         }}
                         key={field}
@@ -166,14 +176,14 @@ export const ChangePassword = () => {
 
                 <Stack spacing={10} pt={4}>
                     <Button
-                        loadingText='Submitting'
+                        loadingText={t('common:formSubmitting') as string}
                         size='md'
                         colorScheme={'purple'}
                         width={'160px'}
                         type='submit'
                         isLoading={isSubmitting}
                     >
-                        Save changes
+                        {t('common:saveChanges')}
                     </Button>
                 </Stack>
             </Stack>

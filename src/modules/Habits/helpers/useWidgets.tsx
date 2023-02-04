@@ -37,7 +37,7 @@ export const WIDGETS: {
     };
 } = {
     CURRENT_STREAK: {
-        title: 'Current Streak',
+        title: 'habits:currentStreak.base',
         icon: Icons.Stats,
         desktop: {
             w: 2,
@@ -53,7 +53,7 @@ export const WIDGETS: {
         },
     },
     COMPLETED_TARGETS: {
-        title: 'Completed Targets',
+        title: 'habits:completedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -69,7 +69,7 @@ export const WIDGETS: {
         },
     },
     FAILED_TARGETS: {
-        title: 'Failed Targets',
+        title: 'habits:failedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -85,7 +85,7 @@ export const WIDGETS: {
         },
     },
     TOTAL_TARGETS: {
-        title: 'Total Targets',
+        title: 'habits:totalTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -101,7 +101,7 @@ export const WIDGETS: {
         },
     },
     SKIPPED_TARGETS: {
-        title: 'Skipped Targets',
+        title: 'habits:skippedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -117,7 +117,7 @@ export const WIDGETS: {
         },
     },
     YEARLY_CALENDAR: {
-        title: 'Yearly Calendar',
+        title: 'habits:yearlyCalendar',
         icon: Icons.Calendar,
         desktop: {
             w: 2,
@@ -134,7 +134,7 @@ export const WIDGETS: {
         isResizable: false,
     },
     COMPLETED_CHART: {
-        title: 'Completed Chart',
+        title: 'habits:completedChart',
         icon: Icons.Chart,
         desktop: {
             w: 1,
@@ -151,7 +151,7 @@ export const WIDGETS: {
         isResizable: false,
     },
     MONTHLY_CALENDAR: {
-        title: 'Monthly Calendar',
+        title: 'habits:monthlyCalendar',
         icon: Icons.Calendar,
         desktop: {
             w: 1,

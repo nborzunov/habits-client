@@ -1,6 +1,7 @@
 import { Box, Button, Heading, Stack, useDisclosure, useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
 import useTitle from '~/common/hooks/useTitle';
@@ -9,11 +10,10 @@ import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
 export const CleanData = () => {
     const user = useRecoilValue(activeUserState);
-    useTitle(`${user?.name} ${user?.surname} - Clean Data`);
-
     const toast = useToast();
-
     const setHabits = useSetRecoilState(habitsState);
+    const { t } = useTranslation();
+    useTitle(`${user?.name} ${user?.surname} - ${t('common:cleanData')}`);
 
     const cleanHabits = useMutation({
         mutationFn: () => {
@@ -29,8 +29,8 @@ export const CleanData = () => {
                 )
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Habits data cleaned!',
+                        title: t('common:success'),
+                        description: t('habits:successfullyCleaned.one'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -38,8 +38,8 @@ export const CleanData = () => {
                 )
                 .catch(() => {
                     toast({
-                        title: 'Error',
-                        description: 'Something went wrong',
+                        title: t('common:error'),
+                        description: t('common:serverError'),
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
@@ -56,8 +56,8 @@ export const CleanData = () => {
                 .then(() => setHabits([]))
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Habits deleted!',
+                        title: t('common:success'),
+                        description: t('habits:successfullyDeleted'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -65,8 +65,8 @@ export const CleanData = () => {
                 )
                 .catch(() => {
                     toast({
-                        title: 'Error',
-                        description: 'Something went wrong',
+                        title: t('common:error'),
+                        description: t('common:serverError'),
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
@@ -102,38 +102,86 @@ export const CleanData = () => {
                 isOpen={isOpenCleanConfirm}
                 onClose={onOpenCleanConfirm}
                 cancelRef={cancelRef}
-                title={'Confirm Clean Operation'}
-                text={"Are you sure? You can't undo this action."}
+                title={t('profile:cleanData')}
+                text={t('common:confirmText')}
             >
-                <Button onClick={onCloseCleanConfirm}>Cancel</Button>
-                <Button colorScheme='red' onClick={handleCleanData} ml={3}>
-                    Clean
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    onClick={onCloseCleanConfirm}
+                >
+                    {t('common:cancel')}
+                </Button>
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    colorScheme='red'
+                    onClick={handleCleanData}
+                    ml={3}
+                >
+                    {t('common:clean')}
                 </Button>
             </ConfirmationDialog>
             <ConfirmationDialog
                 isOpen={isOpenDeleteConfirm}
                 onClose={onCloseDeleteConfirm}
                 cancelRef={cancelRef}
-                title={'Confirm Delete Operation'}
-                text={"Are you sure? You can't undo this action."}
+                title={t('profile:delete')}
+                text={t('common:confirmText')}
             >
-                <Button onClick={onCloseDeleteConfirm}>Cancel</Button>
-                <Button colorScheme='red' onClick={handleDeleteHabits} ml={3}>
-                    Clean
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    onClick={onCloseDeleteConfirm}
+                >
+                    {t('common:cancel')}
+                </Button>
+                <Button
+                    size={{
+                        base: 'md',
+                        sm: 'sm',
+                    }}
+                    colorScheme='red'
+                    onClick={handleDeleteHabits}
+                    ml={3}
+                >
+                    {t('common:delete')}
                 </Button>
             </ConfirmationDialog>
 
             <Box>
                 <Heading as='h3' size='md' mb={'6'}>
-                    Clean Data
+                    {t('common:cleanData')}
                 </Heading>
 
                 <Stack width={'230px'}>
-                    <Button onClick={onOpenCleanConfirm} colorScheme={'purple'} px={'4'}>
-                        Clean All Habits Targets
+                    <Button
+                        size={{
+                            base: 'md',
+                            sm: 'sm',
+                        }}
+                        onClick={onOpenCleanConfirm}
+                        colorScheme={'purple'}
+                        px={'4'}
+                    >
+                        {t('profile:cleanAllHabits')}
                     </Button>
-                    <Button onClick={onOpenDeleteConfirm} colorScheme={'purple'} px={'4'}>
-                        Delete All Habits
+                    <Button
+                        size={{
+                            base: 'md',
+                            sm: 'sm',
+                        }}
+                        onClick={onOpenDeleteConfirm}
+                        colorScheme={'purple'}
+                        px={'4'}
+                    >
+                        {t('profile:deleteAllHabits')}
                     </Button>
                 </Stack>
             </Box>

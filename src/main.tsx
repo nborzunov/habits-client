@@ -1,6 +1,7 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -8,6 +9,7 @@ import { RecoilRoot } from 'recoil';
 import { BREAKPOINTS } from '~/common/constants';
 
 import App from './App';
+import './i18n.ts';
 import './index.css';
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';

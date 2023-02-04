@@ -2,7 +2,7 @@ import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import Icons from '~/common/helpers/Icons';
 
-const Back = ({ size }: { size: 'md' | 'lg' }) => {
+const Back = ({ size }: { size: any }) => {
     return (
         <Tooltip label={'Back'}>
             <IconButton

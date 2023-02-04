@@ -23,7 +23,10 @@ export const AuthPage = ({ refetchUser }: { refetchUser: () => void }) => {
                 maxW={'lg'}
                 width={'100%'}
                 mx={4}
-                p={8}
+                p={{
+                    base: 8,
+                    sm: 6,
+                }}
             >
                 <Routes>
                     <Route path='/' element={<Auth />} />

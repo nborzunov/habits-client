@@ -47,12 +47,11 @@ const FormField = ({
     showPasswordIcon,
 }: FormFieldProps) => {
     const [showPassword, setShowPassword] = useState(false);
-
     return (
         <ErrorWrapper error={validationError}>
             <FormControl isInvalid={validationError} isRequired={isRequired}>
                 <Flex flexDirection={direction} justifyContent={'space-between'}>
-                    <FormLabel mr={'6'} mb={0} lineHeight={'40px'} width={minWidth}>
+                    <FormLabel mr={3} mb={0} lineHeight={'40px'} width='100%' maxWidth={minWidth}>
                         {label}
                         {direction === 'row' && ':'}
                     </FormLabel>
@@ -120,9 +119,9 @@ FormField.defaultProps = {
     hideResetButton: false,
     isRequired: false,
     minWidth: {
-        lg: '140px',
-        md: '100px',
-        sm: '100px',
+        lg: '200px',
+        md: '200px',
+        sm: '200px',
     },
     direction: 'row',
     variant: 'filled',

@@ -11,6 +11,7 @@ import {
     ModalOverlay,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Habit, Target } from '~/modules/Habits/types';
 import NumericInput from '~/ui/NumericInput';
 
@@ -34,15 +35,16 @@ export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Pr
         setResult(1);
         onClose();
     };
+    const { t } = useTranslation();
     return (
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
             <ModalContent mx={4}>
-                <ModalHeader>{habit.title} - Set Today&apos;s Result</ModalHeader>
+                <ModalHeader>{t('habits:setResult', { title: habit.title })}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <FormControl>
-                        <FormLabel htmlFor='result'>Result</FormLabel>
+                        <FormLabel htmlFor='result'>{t('common:result')}</FormLabel>
                         <NumericInput
                             value={result}
                             onChange={(v) => setResult(v)}
@@ -55,8 +57,16 @@ export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Pr
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='purple' width={'100%'} onClick={handleSubmit}>
-                        {'Set'}
+                    <Button
+                        colorScheme='purple'
+                        width={'100%'}
+                        size={{
+                            base: 'md',
+                            sm: 'sm',
+                        }}
+                        onClick={handleSubmit}
+                    >
+                        {t('habits:operations.set')}
                     </Button>
                 </ModalFooter>
             </ModalContent>

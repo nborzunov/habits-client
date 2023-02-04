@@ -1,13 +1,15 @@
 import { useTheme } from '@chakra-ui/react';
 import { ArcElement, Chart, Legend, Title, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
 
 Chart.register(ArcElement, Tooltip, Legend, Title);
 
 export const TargetChart = ({ completed, failed }: { completed: number; failed: number }) => {
     const theme = useTheme();
+    const { t } = useTranslation();
     const data = {
-        labels: ['Completed', 'Failed'],
+        labels: [t('habits:completedTargets.short'), t('habits:failedTargets.short')],
         datasets: [
             {
                 data: [completed, failed],
@@ -21,7 +23,7 @@ export const TargetChart = ({ completed, failed }: { completed: number; failed: 
         plugins: {
             title: {
                 display: true,
-                text: 'Overall Progress',
+                text: t('habits:completedTargets.title'),
             },
             legend: {
                 display: true,
@@ -35,10 +37,11 @@ export const TargetChart = ({ completed, failed }: { completed: number; failed: 
                             0,
                         );
 
-                        const noun = context.parsed === 1 ? 'target' : 'targets';
-                        return `${context.parsed} ${noun} - ${Math.round(
-                            (context.parsed / allTargets) * 100,
-                        )}%`;
+                        return `${
+                            context.dataIndex === 0
+                                ? t('habits:completedCount', { count: context.parsed })
+                                : t('habits:failedCount', { count: context.parsed })
+                        } - ${Math.round((context.parsed / allTargets) * 100)}%`;
                     },
                 },
             },

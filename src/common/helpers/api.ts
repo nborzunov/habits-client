@@ -8,9 +8,19 @@ const api = ky.create({
         beforeRequest: [
             (options) => {
                 const token = localStorage.getItem('authToken');
-                console.log(token);
+
                 if (token) {
                     options.headers.set('Authorization', token);
+                }
+            },
+        ],
+        afterResponse: [
+            async (_request, _options, response) => {
+                if (!response.ok) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    response.data = await response.json();
+                    return response;
                 }
             },
         ],

@@ -2,6 +2,7 @@ import { Button, HStack, Heading, Link, Stack, Text, useToast } from '@chakra-ui
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import api from '~/common/helpers/api';
 import processError from '~/common/helpers/processError';
@@ -14,9 +15,11 @@ import Back from '~/ui/Layout/components/Back';
 type Fields = 'name' | 'surname' | 'username' | 'email' | 'password';
 
 export const Signup = ({ refetch }: { refetch: () => void }) => {
-    useTitle('Sign Up');
-
     const toast = useToast();
+    const { t } = useTranslation();
+
+    useTitle(t('common:signup.base'));
+
     const signup = useMutation({
         mutationFn: (data: ProfileData) => {
             return api
@@ -28,8 +31,8 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
                 .then(() => refetch())
                 .then(() =>
                     toast({
-                        title: 'Success',
-                        description: 'Successfully login!',
+                        title: t('common:success'),
+                        description: t('profile:successfullyLogin'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
@@ -37,10 +40,11 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
                 )
                 .catch((error) => {
                     processError<Fields>(
+                        t,
                         error,
                         (errorMessage) => {
                             toast({
-                                title: 'Error',
+                                title: t('common:error'),
                                 description: errorMessage,
                                 status: 'error',
                                 duration: 3000,
@@ -81,8 +85,8 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
 
     const onError = () => {
         toast({
-            title: 'Error',
-            description: 'Please check all fields',
+            title: t('common:error'),
+            description: t('common:invalidForm'),
             status: 'error',
             isClosable: true,
         });
@@ -91,29 +95,29 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
     const nameFieldsConfig: FieldsConfig<'name' | 'surname'> = [
         {
             field: 'name',
-            label: 'Name',
+            label: t('profile:name'),
             validationProps: register('name', validationRules.text(3)),
         },
         {
             field: 'surname',
-            label: 'Surname',
+            label: t('profile:surname'),
             validationProps: register('surname', validationRules.text(3)),
         },
     ];
     const otherFieldsConfig: FieldsConfig<'username' | 'email' | 'password'> = [
         {
             field: 'username',
-            label: 'Username',
+            label: t('profile:username.field'),
             validationProps: register('username', validationRules.text(6)),
         },
         {
             field: 'email',
-            label: 'Email Address',
+            label: t('profile:email.long'),
             validationProps: register('email', validationRules.email()),
         },
         {
             field: 'password',
-            label: 'Password',
+            label: t('profile:password.currentPassword.short'),
             validationProps: register('password', validationRules.newPassword()),
         },
     ];
@@ -121,11 +125,24 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
     return (
         <>
             <Stack align={'center'} pb={8}>
-                <Heading fontSize={'4xl'} textAlign={'center'}>
-                    Sign up
+                <Heading
+                    fontSize={{
+                        base: '3xl',
+                        sm: '2xl',
+                    }}
+                    textAlign={'center'}
+                >
+                    {t('common:signup.lower')}
                 </Heading>
-                <Text fontSize={'lg'} color={'gray.600'}>
-                    to enjoy all of our cool features ✌️
+                <Text
+                    fontSize={{
+                        base: 'lg',
+                        sm: 'md',
+                    }}
+                    textAlign={'center'}
+                    color={'gray.600'}
+                >
+                    {t('profile:signupDescription')}
                 </Text>
             </Stack>
 
@@ -163,26 +180,36 @@ export const Signup = ({ refetch }: { refetch: () => void }) => {
                 <Stack spacing={10} pt={4}>
                     <HStack spacing={3}>
                         <NavLink to={'/'}>
-                            <Back size={'lg'} />
+                            <Back
+                                size={{
+                                    base: 'lg',
+                                    sm: 'md',
+                                }}
+                            />
                         </NavLink>
 
                         <Button
-                            loadingText='Submitting'
-                            size='lg'
+                            loadingText={t('common:formSubmitting') as string}
+                            size={{
+                                base: 'lg',
+                                sm: 'md',
+                            }}
                             colorScheme={'purple'}
                             width={'100%'}
                             type={'submit'}
                             isLoading={isSubmitting}
                         >
-                            Sign up
+                            {t('common:signup.lower')}
                         </Button>
                     </HStack>
                 </Stack>
                 <Stack pt={1}>
                     <Text align={'center'}>
-                        Already a user?{' '}
+                        <Text pr={1} as={'span'}>
+                            {t('profile:alreadyHaveAccount')}
+                        </Text>
                         <Link as={NavLink} to='/login' color={'blue.400'}>
-                            Login
+                            {t('common:login')}
                         </Link>
                     </Text>
                 </Stack>

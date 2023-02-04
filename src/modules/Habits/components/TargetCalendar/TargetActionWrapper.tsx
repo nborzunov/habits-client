@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Dayjs } from 'dayjs';
 import React, { PropsWithChildren, useCallback, useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import { SetTargetDialog } from '~/modules/Habits/components/TargetCalendar';
 import { Habit, Target, TargetType } from '~/modules/Habits/types';
@@ -47,15 +48,9 @@ export const TargetActionWrapper = ({
         onClose: onCloseSetTarget,
     } = useDisclosure();
 
+    const { t } = useTranslation();
+
     const formattedDate = useMemo(() => date?.format('D MMMM YYYY'), [date]);
-    const periodicity = useMemo(
-        () =>
-            target?.value === 1
-                ? habit?.goalType?.slice(0, habit?.goalType?.length - 1)
-                : habit?.goalType,
-        [target, habit],
-    );
-    const prefix = useMemo(() => `${target?.value} ${periodicity} on `, [target, periodicity]);
 
     const label = useMemo(() => {
         if (!target) {
@@ -63,13 +58,14 @@ export const TargetActionWrapper = ({
         }
         switch (target?.targetType) {
             case TargetType.Done:
-                return `${prefix} ${formattedDate}`;
+                return t('habits:completedOn', {
+                    prefix: t(`habits:${habit.goalType}`, { count: habit.goal }),
+                    date: formattedDate,
+                });
             case TargetType.Skip:
-                return 'Skip on ' + formattedDate;
-            case TargetType.Empty:
-                return 'Failed on ' + formattedDate;
+                return t('habits:skipOn', { date: formattedDate });
         }
-    }, [target, prefix, formattedDate]);
+    }, [target, formattedDate, habit.goal, habit.goalType, t]);
 
     const onComplete = useCallback(() => {
         onChangeTarget(target?.id, date.toDate(), TargetType.Done);
@@ -104,7 +100,7 @@ export const TargetActionWrapper = ({
                         (habit?.allowPartialCompletion && target?.value !== habit?.goal)) && (
                         <TargetCellMenuItem
                             onClick={() => onComplete()}
-                            label={'Complete'}
+                            label={t('habits:operations.complete')}
                             icon={Icons.Complete}
                         />
                     )}
@@ -112,7 +108,7 @@ export const TargetActionWrapper = ({
                         habit?.allowOverGoalCompletion) && (
                         <TargetCellMenuItem
                             onClick={() => onOpenSetTarget()}
-                            label={'Set'}
+                            label={t('habits:operations.set')}
                             icon={Icons.Edit}
                         />
                     )}
@@ -120,14 +116,14 @@ export const TargetActionWrapper = ({
                     {target?.targetType !== TargetType.Skip && habit?.allowSkip && (
                         <TargetCellMenuItem
                             onClick={() => onSkip()}
-                            label={'Skip'}
+                            label={t('habits:operations.skip')}
                             icon={Icons.ArrowRight}
                         />
                     )}
                     {target && (
                         <TargetCellMenuItem
                             onClick={() => onReset()}
-                            label={'Clear'}
+                            label={t('habits:operations.clear')}
                             icon={Icons.Delete}
                         />
                     )}
