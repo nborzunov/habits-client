@@ -21,7 +21,7 @@ export const MobileMenu = () => {
                     cursor={'pointer'}
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                 />
             )}

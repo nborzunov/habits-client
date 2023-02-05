@@ -62,7 +62,7 @@ export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Pr
                         width={'100%'}
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={handleSubmit}
                     >

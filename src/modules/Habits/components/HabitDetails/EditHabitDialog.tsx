@@ -145,7 +145,7 @@ export const EditHabitDialog = ({
                                     }
                                     size={{
                                         base: 'md',
-                                        sm: 'sm',
+                                        sm: 'md',
                                     }}
                                 >
                                     <option value={GoalType.Times}>{t('habits:timesTitle')}</option>
@@ -163,7 +163,7 @@ export const EditHabitDialog = ({
                                     }
                                     size={{
                                         base: 'md',
-                                        sm: 'sm',
+                                        sm: 'md',
                                     }}
                                 >
                                     {Object.values(Periodicity).map((key) => (
@@ -222,7 +222,7 @@ export const EditHabitDialog = ({
                         mr={3}
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={onClose}
                     >
@@ -233,7 +233,7 @@ export const EditHabitDialog = ({
                         type='submit'
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         isLoading={isSubmitting}
                     >

@@ -57,4 +57,5 @@ export const common = {
     result: 'Result',
     settings: 'Settings',
     logout: 'Logout',
+    habits: 'Habits',
 };

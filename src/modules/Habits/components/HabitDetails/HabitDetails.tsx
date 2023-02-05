@@ -29,16 +29,17 @@ import { habitsState } from '~/common/store/atoms';
 import getCorrectDate from '~/common/utils/getCorrectDate';
 import { Widget, WidgetsList } from '~/modules/Habits/components/Grid';
 import { Statistics, TargetChart } from '~/modules/Habits/components/HabitDetails';
-import {
-    MonthlyCalendar,
-    TargetActionContext,
-    YearlyCalendar,
-} from '~/modules/Habits/components/TargetCalendar';
+import { MonthlyCalendar, TargetActionContext } from '~/modules/Habits/components/TargetCalendar';
 import { WidgetIdentifiers, useWidgets } from '~/modules/Habits/helpers';
 import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
 import Back from '~/ui/Layout/components/Back';
+import { Loader } from '~/ui/Layout/components/Loader';
 
 const GridLayout = WidthProvider(Responsive);
+
+const YearlyCalendarLazy = React.lazy(
+    () => import('~/modules/Habits/components/TargetCalendar/YearlyCalendar'),
+);
 
 export const HabitDetails = () => {
     const habits = useRecoilValue(habitsState);
@@ -103,279 +104,293 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
     const isMobile = useMobile();
 
     return (
-        <Flex width={'100%'}>
-            <Box m={0} width='100%' maxWidth={'1600px'}>
-                <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
-                    <Flex alignItems={'center'}>
-                        {isMobile && (
-                            <Link to={'/habits'}>
-                                <Back
-                                    size={{
-                                        base: 'lg',
-                                        sm: 'sm',
-                                    }}
-                                />
-                            </Link>
-                        )}
-                        <Heading as='h3' size='md'>
-                            {habit.title}
-                        </Heading>
-                    </Flex>
-                    <HStack spacing={2}>
-                        {isEditMode && (
-                            <HStack spacing={2}>
-                                <Tooltip label={'Save'}>
-                                    <IconButton
-                                        aria-label={'save widgets'}
-                                        icon={<Icon as={Icons.Save} />}
-                                        onClick={handleSaveLayout}
-                                        colorScheme={'purple'}
+        <Loader>
+            <Flex width={'100%'}>
+                <Box m={0} width='100%' maxWidth={'1600px'}>
+                    <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
+                        <Flex alignItems={'center'}>
+                            {isMobile && (
+                                <Link to={'/habits'}>
+                                    <Back
                                         size={{
-                                            base: 'md',
-                                            sm: 'sm',
+                                            base: 'lg',
+                                            sm: 'md',
                                         }}
                                     />
-                                </Tooltip>
-
-                                <Tooltip label={t('habits:addWidget')}>
-                                    {!isMobile ? (
-                                        <Button
-                                            colorScheme={'purple'}
-                                            variant={'outline'}
-                                            onClick={onOpen}
-                                        >
-                                            {
-                                                t('common:add', {
-                                                    count: `${
-                                                        widgets.length ? `(${widgets.length})` : ''
-                                                    }`,
-                                                } as any) as unknown as string
-                                            }
-                                        </Button>
-                                    ) : (
+                                </Link>
+                            )}
+                            <Heading as='h3' size='md'>
+                                {habit.title}
+                            </Heading>
+                        </Flex>
+                        <HStack spacing={2}>
+                            {isEditMode && (
+                                <HStack spacing={2}>
+                                    <Tooltip label={'Save'}>
                                         <IconButton
-                                            icon={<Icon as={Icons.Add} />}
-                                            aria-label={'add-widget'}
+                                            aria-label={'save widgets'}
+                                            icon={<Icon as={Icons.Save} />}
+                                            onClick={handleSaveLayout}
                                             colorScheme={'purple'}
-                                            variant={'outline'}
-                                            onClick={onOpen}
                                             size={{
                                                 base: 'md',
-                                                sm: 'sm',
+                                                sm: 'md',
                                             }}
                                         />
-                                    )}
-                                </Tooltip>
-                                <Tooltip label={t('common:reset')}>
-                                    {!isMobile ? (
-                                        <Button
-                                            colorScheme={'purple'}
-                                            variant={'outline'}
-                                            onClick={reset}
-                                        >
-                                            {t('common:reset')}
-                                        </Button>
-                                    ) : (
+                                    </Tooltip>
+
+                                    <Tooltip label={t('habits:addWidget')}>
+                                        {!isMobile ? (
+                                            <Button
+                                                colorScheme={'purple'}
+                                                variant={'outline'}
+                                                onClick={onOpen}
+                                                size={{
+                                                    base: 'md',
+                                                    sm: 'md',
+                                                }}
+                                            >
+                                                {
+                                                    t('common:add', {
+                                                        count: `${
+                                                            widgets.length
+                                                                ? `(${widgets.length})`
+                                                                : ''
+                                                        }`,
+                                                    } as any) as unknown as string
+                                                }
+                                            </Button>
+                                        ) : (
+                                            <IconButton
+                                                icon={<Icon as={Icons.Add} />}
+                                                aria-label={'add-widget'}
+                                                colorScheme={'purple'}
+                                                variant={'outline'}
+                                                onClick={onOpen}
+                                                size={{
+                                                    base: 'md',
+                                                    sm: 'md',
+                                                }}
+                                            />
+                                        )}
+                                    </Tooltip>
+                                    <Tooltip label={t('common:reset')}>
+                                        {!isMobile ? (
+                                            <Button
+                                                colorScheme={'purple'}
+                                                variant={'outline'}
+                                                onClick={reset}
+                                                size={{
+                                                    base: 'md',
+                                                    sm: 'md',
+                                                }}
+                                            >
+                                                {t('common:reset')}
+                                            </Button>
+                                        ) : (
+                                            <IconButton
+                                                icon={<Icon as={Icons.Reset} />}
+                                                aria-label={'reset-grid'}
+                                                colorScheme={'purple'}
+                                                variant={'outline'}
+                                                onClick={reset}
+                                                size={{
+                                                    base: 'md',
+                                                    sm: 'md',
+                                                }}
+                                            />
+                                        )}
+                                    </Tooltip>
+
+                                    <Tooltip label={t('common:close')}>
                                         <IconButton
-                                            icon={<Icon as={Icons.Reset} />}
-                                            aria-label={'reset-grid'}
+                                            aria-label={'close'}
+                                            icon={<Icon as={Icons.Cross} />}
+                                            onClick={() => setIsEditMode(!isEditMode)}
                                             colorScheme={'purple'}
                                             variant={'outline'}
-                                            onClick={reset}
                                             size={{
                                                 base: 'md',
-                                                sm: 'sm',
+                                                sm: 'md',
                                             }}
                                         />
-                                    )}
-                                </Tooltip>
+                                    </Tooltip>
+                                </HStack>
+                            )}
 
-                                <Tooltip label={t('common:close')}>
+                            {!isEditMode && (
+                                <Tooltip label={t('habits:editGrid')}>
                                     <IconButton
-                                        aria-label={'close'}
-                                        icon={<Icon as={Icons.Cross} />}
+                                        aria-label={'edit grid'}
+                                        icon={<Icon as={Icons.Grid} />}
                                         onClick={() => setIsEditMode(!isEditMode)}
                                         colorScheme={'purple'}
                                         variant={'outline'}
                                         size={{
                                             base: 'md',
-                                            sm: 'sm',
+                                            sm: 'md',
                                         }}
                                     />
                                 </Tooltip>
-                            </HStack>
-                        )}
-
-                        {!isEditMode && (
-                            <Tooltip label={t('habits:editGrid')}>
-                                <IconButton
-                                    aria-label={'edit grid'}
-                                    icon={<Icon as={Icons.Grid} />}
-                                    onClick={() => setIsEditMode(!isEditMode)}
-                                    colorScheme={'purple'}
-                                    variant={'outline'}
-                                    size={{
-                                        base: 'md',
-                                        sm: 'sm',
-                                    }}
-                                />
-                            </Tooltip>
-                        )}
-                    </HStack>
-                </Flex>
-                <Box userSelect={isEditMode ? 'none' : 'auto'}>
-                    <TargetActionContext.Provider
-                        value={{
-                            habit,
-                            onChangeTarget,
+                            )}
+                        </HStack>
+                    </Flex>
+                    <Box userSelect={isEditMode ? 'none' : 'auto'}>
+                        <TargetActionContext.Provider
+                            value={{
+                                habit,
+                                onChangeTarget,
+                            }}
+                        >
+                            <GridLayout {...props}>
+                                {layout.map((widget) => (
+                                    <Box
+                                        key={widget.i}
+                                        onDragStart={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        {widget.i === WidgetIdentifiers.CURRENT_STREAK && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.CURRENT_STREAK)
+                                                }
+                                            >
+                                                <Statistics
+                                                    title={t('habits:currentStreak.lower')}
+                                                    value={habit.currentStreak}
+                                                    type='streak'
+                                                    startDate={habit.currentStreakStartDate}
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.COMPLETED_CHART && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.COMPLETED_CHART)
+                                                }
+                                            >
+                                                <TargetChart
+                                                    completed={habit.completedTargets}
+                                                    failed={habit.failedTargets}
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.COMPLETED_TARGETS && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(
+                                                        WidgetIdentifiers.COMPLETED_TARGETS,
+                                                    )
+                                                }
+                                            >
+                                                <Statistics
+                                                    icon={Icons.Complete}
+                                                    title={t('habits:completedTargets.short')}
+                                                    value={habit.completedTargets}
+                                                    type='increase'
+                                                    footerValue={habit.completedTargets}
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.FAILED_TARGETS && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.FAILED_TARGETS)
+                                                }
+                                            >
+                                                <Statistics
+                                                    icon={Icons.Cross}
+                                                    title={t('habits:failedTargets.short')}
+                                                    value={habit.failedTargets}
+                                                    type='decrease'
+                                                    footerValue={habit.failedTargets}
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.TOTAL_TARGETS && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.TOTAL_TARGETS)
+                                                }
+                                            >
+                                                <Statistics
+                                                    title={t('habits:totalTargets.short')}
+                                                    value={habit.totalTargets}
+                                                    type='none'
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.SKIPPED_TARGETS && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.SKIPPED_TARGETS)
+                                                }
+                                            >
+                                                <Statistics
+                                                    icon={Icons.ArrowRight}
+                                                    title={t('habits:skippedTargets.short')}
+                                                    value={habit.completedTargets}
+                                                    type='none'
+                                                />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.YEARLY_CALENDAR && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.YEARLY_CALENDAR)
+                                                }
+                                            >
+                                                <YearlyCalendarLazy targets={habit.targets} />
+                                            </Widget>
+                                        )}
+                                        {widget.i === WidgetIdentifiers.MONTHLY_CALENDAR && (
+                                            <Widget
+                                                isEditMode={isEditMode}
+                                                remove={() =>
+                                                    removeWidget(WidgetIdentifiers.MONTHLY_CALENDAR)
+                                                }
+                                            >
+                                                <MonthlyCalendar targets={habit.targets} />
+                                            </Widget>
+                                        )}
+                                    </Box>
+                                ))}
+                            </GridLayout>
+                        </TargetActionContext.Provider>
+                    </Box>
+                </Box>
+                <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
+                    <DrawerOverlay />
+                    <DrawerContent
+                        width={{
+                            sm: '20em',
+                            md: '20em',
+                            lg: '12em',
+                            xl: '14em',
+                            '2xl': '15.5em',
                         }}
                     >
-                        <GridLayout {...props}>
-                            {layout.map((widget) => (
-                                <Box
-                                    key={widget.i}
-                                    onDragStart={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                >
-                                    {widget.i === WidgetIdentifiers.CURRENT_STREAK && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.CURRENT_STREAK)
-                                            }
-                                        >
-                                            <Statistics
-                                                title={t('habits:currentStreak.lower')}
-                                                value={habit.currentStreak}
-                                                type='streak'
-                                                startDate={habit.currentStreakStartDate}
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.COMPLETED_CHART && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.COMPLETED_CHART)
-                                            }
-                                        >
-                                            <TargetChart
-                                                completed={habit.completedTargets}
-                                                failed={habit.failedTargets}
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.COMPLETED_TARGETS && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.COMPLETED_TARGETS)
-                                            }
-                                        >
-                                            <Statistics
-                                                icon={Icons.Complete}
-                                                title={t('habits:completedTargets.short')}
-                                                value={habit.completedTargets}
-                                                type='increase'
-                                                footerValue={habit.completedTargets}
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.FAILED_TARGETS && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.FAILED_TARGETS)
-                                            }
-                                        >
-                                            <Statistics
-                                                icon={Icons.Cross}
-                                                title={t('habits:failedTargets.short')}
-                                                value={habit.failedTargets}
-                                                type='decrease'
-                                                footerValue={habit.failedTargets}
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.TOTAL_TARGETS && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.TOTAL_TARGETS)
-                                            }
-                                        >
-                                            <Statistics
-                                                title={t('habits:totalTargets.short')}
-                                                value={habit.totalTargets}
-                                                type='none'
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.SKIPPED_TARGETS && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.SKIPPED_TARGETS)
-                                            }
-                                        >
-                                            <Statistics
-                                                icon={Icons.ArrowRight}
-                                                title={t('habits:skippedTargets.short')}
-                                                value={habit.completedTargets}
-                                                type='none'
-                                            />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.YEARLY_CALENDAR && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.YEARLY_CALENDAR)
-                                            }
-                                        >
-                                            <YearlyCalendar targets={habit.targets} />
-                                        </Widget>
-                                    )}
-                                    {widget.i === WidgetIdentifiers.MONTHLY_CALENDAR && (
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={() =>
-                                                removeWidget(WidgetIdentifiers.MONTHLY_CALENDAR)
-                                            }
-                                        >
-                                            <MonthlyCalendar targets={habit.targets} />
-                                        </Widget>
-                                    )}
-                                </Box>
-                            ))}
-                        </GridLayout>
-                    </TargetActionContext.Provider>
-                </Box>
-            </Box>
-            <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
-                <DrawerOverlay />
-                <DrawerContent
-                    width={{
-                        sm: '20em',
-                        md: '20em',
-                        lg: '12em',
-                        xl: '14em',
-                        '2xl': '15.5em',
-                    }}
-                >
-                    <DrawerCloseButton />
-                    <DrawerHeader>
-                        <Heading as='h3' size='md'>
-                            {t('habits:widgets')}
-                        </Heading>
-                    </DrawerHeader>
-                    <Box p={4}>
-                        <WidgetsList widgets={widgets} addWidget={addWidget} />
-                    </Box>
-                </DrawerContent>
-            </Drawer>
-        </Flex>
+                        <DrawerCloseButton />
+                        <DrawerHeader>
+                            <Heading as='h3' size='md'>
+                                {t('habits:widgets')}
+                            </Heading>
+                        </DrawerHeader>
+                        <Box p={4}>
+                            <WidgetsList widgets={widgets} addWidget={addWidget} />
+                        </Box>
+                    </DrawerContent>
+                </Drawer>
+            </Flex>
+        </Loader>
     );
 };

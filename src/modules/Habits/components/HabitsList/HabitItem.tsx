@@ -181,15 +181,18 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         onClose: onCloseConfirmClean,
     } = useDisclosure();
 
-    const ref = useRef<HTMLDivElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    const textRef = useRef<HTMLDivElement>(null);
 
     return (
         <>
             <Box
-                key={habit.id}
-                ref={ref}
+                width={'100%'}
+                ref={wrapperRef}
                 onClick={(e) => {
-                    if (ref.current === e.target) {
+                    console.log(e);
+                    if (wrapperRef.current === e.target || textRef.current === e.target) {
                         selectHabit(habit.id);
                     }
                 }}
@@ -208,7 +211,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
             >
                 <Flex alignItems={'center'} justifyContent={'center'}>
                     <CompletedCheckbox value={completed} habit={habit}></CompletedCheckbox>
-                    <Flex flexDir='column' justifyContent='center'>
+                    <Flex flexDir='column' justifyContent='center' ref={textRef}>
                         <Text fontSize='lg'>{habit.title}</Text>
 
                         <Text fontSize='sm' color='gray.600'>
@@ -216,6 +219,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         </Text>
                     </Flex>
                 </Flex>
+
                 <Menu>
                     <MenuButton
                         as={IconButton}
@@ -264,7 +268,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     onClick={onCloseDeleteConfirm}
                 >
@@ -273,7 +277,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     colorScheme='blue'
                     onClick={handleArchive}
@@ -284,7 +288,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     colorScheme='red'
                     onClick={handleDelete}
@@ -304,7 +308,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     onClick={onCloseConfirmClean}
                 >
@@ -313,7 +317,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     colorScheme='red'
                     onClick={handleCleanData}

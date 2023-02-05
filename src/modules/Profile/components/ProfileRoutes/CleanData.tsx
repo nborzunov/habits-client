@@ -108,7 +108,7 @@ export const CleanData = () => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     onClick={onCloseCleanConfirm}
                 >
@@ -117,7 +117,7 @@ export const CleanData = () => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     colorScheme='red'
                     onClick={handleCleanData}
@@ -136,7 +136,7 @@ export const CleanData = () => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     onClick={onCloseDeleteConfirm}
                 >
@@ -145,7 +145,7 @@ export const CleanData = () => {
                 <Button
                     size={{
                         base: 'md',
-                        sm: 'sm',
+                        sm: 'md',
                     }}
                     colorScheme='red'
                     onClick={handleDeleteHabits}
@@ -164,7 +164,7 @@ export const CleanData = () => {
                     <Button
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={onOpenCleanConfirm}
                         colorScheme={'purple'}
@@ -175,7 +175,7 @@ export const CleanData = () => {
                     <Button
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={onOpenDeleteConfirm}
                         colorScheme={'purple'}

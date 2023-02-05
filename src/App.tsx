@@ -54,8 +54,6 @@ function App() {
     };
 
     const { i18n } = useTranslation();
-
-    // i18n.changeLanguage('ru')
     useEffect(() => {
         dayjs.locale(i18n.options.lng);
     }, [i18n.options.lng]);

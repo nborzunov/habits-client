@@ -1,5 +1,6 @@
-import { Box, Heading, List, Skeleton, Stack } from '@chakra-ui/react';
+import { Box, Heading, List, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
@@ -21,7 +22,9 @@ export const HabitsList = () => {
 
     const { t } = useTranslation();
 
-    const { isLoading } = useQuery<Habit[]>({
+    const [isLoading, setIsLoading] = useState(true);
+
+    useQuery<Habit[]>({
         queryKey: ['habits'],
         queryFn: () =>
             api
@@ -29,6 +32,7 @@ export const HabitsList = () => {
                 .json<Habit[]>()
                 .then((data) => {
                     setHabits(data);
+                    setIsLoading(false);
                     return data;
                 }),
         initialData: [],
@@ -39,8 +43,6 @@ export const HabitsList = () => {
 
     const isMobile = useMobile();
 
-    if (isLoading) return <div>Loading...</div>;
-
     return (
         <Box
             borderRightColor='gray.200'
@@ -48,33 +50,36 @@ export const HabitsList = () => {
             h='100vh'
             width={isMobile ? '100%' : '360px'}
         >
-            <Skeleton isLoaded={!isLoading}>
-                <HabitsListHeader />
-                <Box>
-                    {noHabits && (
-                        <Heading p={2} py={4} size={'md'} textAlign={'center'}>
-                            {t('habits:noHabits')}
+            <HabitsListHeader />
+            <Box width={'100%'}>
+                {/*{isLoading && (*/}
+                {/*    <Center width={'100%'} height={'50%'}>*/}
+                {/*        <Spinner size='xl' color={`purple.500`} />*/}
+                {/*    </Center>*/}
+                {/*)}*/}
+                {noHabits && !isLoading && (
+                    <Heading p={2} py={4} size={'md'} textAlign={'center'}>
+                        {t('habits:noHabits')}
+                    </Heading>
+                )}
+                <Stack spacing={0}>
+                    {uncompletedHabits.map((habit) => (
+                        <HabitItem key={habit.id} habit={habit} />
+                    ))}
+                </Stack>
+                {completedHabits.length > 0 && (
+                    <Box mt={4}>
+                        <Heading as='h3' size='md' mb={'12px'} py='8px' px={2}>
+                            {t('habits:completedToday')}
                         </Heading>
-                    )}
-                    <Stack spacing={0}>
-                        {uncompletedHabits.map((habit) => (
-                            <HabitItem key={habit.id} habit={habit} />
-                        ))}
-                    </Stack>
-                    {completedHabits.length > 0 && (
-                        <Box mt={4}>
-                            <Heading as='h3' size='md' mb={'12px'} py='8px' px={2}>
-                                {t('habits:completedToday')}
-                            </Heading>
-                            <List styleType='none'>
-                                {completedHabits.map((habit) => (
-                                    <HabitItem key={habit.id} habit={habit} />
-                                ))}
-                            </List>
-                        </Box>
-                    )}
-                </Box>
-            </Skeleton>
+                        <List styleType='none'>
+                            {completedHabits.map((habit) => (
+                                <HabitItem key={habit.id} habit={habit} />
+                            ))}
+                        </List>
+                    </Box>
+                )}
+            </Box>
         </Box>
     );
 };

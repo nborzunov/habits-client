@@ -7,9 +7,11 @@ import {
     Skeleton,
     useDisclosure,
 } from '@chakra-ui/react';
-import { createContext } from 'react';
+import { createContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import useMobile from '~/common/hooks/useMobile';
+import { setTitle } from '~/common/hooks/useTitle';
 import { Sidebar } from '~/ui/Layout/components/Sidebar';
 
 interface LayoutContext {
@@ -29,6 +31,11 @@ export const Layout = ({ loading }: { loading: boolean }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const isMobile = useMobile();
+
+    const { t } = useTranslation();
+    useEffect(() => {
+        setTitle(t('common:habits'));
+    }, [t]);
 
     return (
         <Skeleton isLoaded={!loading}>

@@ -42,35 +42,22 @@ export const YearlyCalendar = ({ targets }: { targets: Target[] }) => {
 
     const isMobile = useMobile();
 
+    console.log(isMobile);
     return (
         <Box>
             <Flex p='2'>
-                {isMobile ? (
-                    <Grid gridTemplateColumns={'repeat(4, 1fr)'}>
-                        {getLoop(12).map((i) => (
-                            <GridItem key={i}>
-                                <Month
-                                    monthId={i}
-                                    gap={cellGap}
-                                    size={cellSize}
-                                    targetsMap={targetsMap}
-                                />
-                            </GridItem>
-                        ))}
-                    </Grid>
-                ) : (
-                    <>
-                        {getLoop(12).map((i) => (
+                <Grid gridTemplateColumns={`repeat(${isMobile ? 4 : 12}, 1fr) `}>
+                    {getLoop(12).map((i) => (
+                        <GridItem key={i}>
                             <Month
-                                key={i}
                                 monthId={i}
                                 gap={cellGap}
                                 size={cellSize}
                                 targetsMap={targetsMap}
                             />
-                        ))}
-                    </>
-                )}
+                        </GridItem>
+                    ))}
+                </Grid>
             </Flex>
         </Box>
     );
@@ -176,3 +163,5 @@ const Cell = ({
         </Box>
     );
 };
+
+export default YearlyCalendar;

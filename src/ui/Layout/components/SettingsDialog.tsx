@@ -56,7 +56,7 @@ export const SettingsDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
                         mr={3}
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={onClose}
                     >
@@ -67,7 +67,7 @@ export const SettingsDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
                         type='submit'
                         size={{
                             base: 'md',
-                            sm: 'sm',
+                            sm: 'md',
                         }}
                         onClick={handleSave}
                     >

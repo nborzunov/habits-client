@@ -87,7 +87,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                             icon={<Icon as={Icons.LeftDouble} />}
                             onClick={() => setYear(year - 1)}
                             isDisabled={year <= 2022}
-                            size={{ base: 'md', sm: 'sm' }}
+                            size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
                     <Tooltip label={t('common:date.previousMonth')} placement={'top'}>
@@ -96,7 +96,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                             icon={<Icon as={Icons.Left} />}
                             onClick={() => handleSetMonth(monthId - 1)}
                             isDisabled={year <= 2022 && monthId === 0}
-                            size={{ base: 'md', sm: 'sm' }}
+                            size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
                 </HStack>
@@ -115,7 +115,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                             icon={<Icon as={Icons.Right} />}
                             onClick={() => handleSetMonth(monthId + 1)}
                             isDisabled={year > 2023 && monthId === 11}
-                            size={{ base: 'md', sm: 'sm' }}
+                            size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
 
@@ -125,7 +125,7 @@ export const MonthlyCalendar = ({ targets }: { targets: Target[] }) => {
                             icon={<Icon as={Icons.RightDouble} />}
                             onClick={() => setYear(year + 1)}
                             isDisabled={year > 2023}
-                            size={{ base: 'md', sm: 'sm' }}
+                            size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
                 </HStack>
