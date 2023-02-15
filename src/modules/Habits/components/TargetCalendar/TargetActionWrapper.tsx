@@ -11,7 +11,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { Dayjs } from 'dayjs';
-import React, { PropsWithChildren, useCallback, useContext, useMemo } from 'react';
+import React, { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import useMobile from '~/common/hooks/useMobile';
@@ -26,6 +26,7 @@ interface Props {
 
 interface TargetActionContext {
     habit: Habit;
+    targets: Target[];
     onChangeTarget: (
         id: string | undefined,
         date: Date,
@@ -36,7 +37,7 @@ interface TargetActionContext {
 
 export const TargetActionContext = React.createContext<TargetActionContext>({} as any);
 
-export const TargetActionWrapper = ({
+const TargetActionWrapperRaw = ({
     date,
     target,
     showTooltip,
@@ -148,37 +149,36 @@ export const TargetActionWrapper = ({
     );
 };
 
-TargetActionWrapper.defaultProps = {
+TargetActionWrapperRaw.defaultProps = {
     showTooltip: true,
 };
-const TargetCellMenuItem = ({
-    onClick,
-    icon,
-    label,
-}: {
-    onClick: () => void;
-    icon: any;
-    label: string;
-}) => {
-    return (
-        <MenuItem
-            onClick={onClick}
-            rounded='md'
-            cursor='pointer'
-            color='gray.600'
-            role='group'
-            fontWeight='semibold'
-            transition='.15s ease'
-            onMouseOver={(e) => e.stopPropagation()}
-            _hover={{
-                bg: 'purple.300',
-                color: 'whiteAlpha.900',
-            }}
-        >
-            <Flex alignItems={'center'} align='center'>
-                <Icon as={icon} mr={2} />
-                <Text>{label}</Text>
-            </Flex>
-        </MenuItem>
-    );
-};
+
+export const TargetActionWrapper = memo(TargetActionWrapperRaw);
+
+const TargetCellMenuItem = memo(
+    ({ onClick, icon, label }: { onClick: () => void; icon: any; label: string }) => {
+        return (
+            <MenuItem
+                onClick={onClick}
+                rounded='md'
+                cursor='pointer'
+                color='gray.600'
+                role='group'
+                fontWeight='semibold'
+                transition='.15s ease'
+                onMouseOver={(e) => e.stopPropagation()}
+                _hover={{
+                    bg: 'purple.300',
+                    color: 'whiteAlpha.900',
+                }}
+            >
+                <Flex alignItems={'center'} align='center'>
+                    <Icon as={icon} mr={2} />
+                    <Text>{label}</Text>
+                </Flex>
+            </MenuItem>
+        );
+    },
+);
+
+TargetCellMenuItem.displayName = 'TargetCellMenuItem';

@@ -59,6 +59,7 @@ export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Hab
                 value={{
                     habit,
                     onChangeTarget,
+                    targets: habit.targets,
                 }}
             >
                 <TargetActionWrapper

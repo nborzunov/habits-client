@@ -88,4 +88,5 @@ export const habits = {
     skipOn: 'Пропущено {{date}}',
     targets_one: '1 выполнение',
     targets_other: '{{count}} выполнений',
+    currentWeek: 'Текущая неделя',
 };

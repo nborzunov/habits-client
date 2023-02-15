@@ -13,7 +13,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-import React, { useRef } from 'react';
+import React, { MouseEventHandler, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { useSetRecoilState } from 'recoil';
@@ -43,7 +43,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     } else {
         setTitle(t('habits:allHabits'));
     }
-    const completed = habit.completedToday;
+    const completed = habit.statistics.completedToday;
 
     const toast = useToast();
     const editHabit = useMutation({
@@ -181,18 +181,12 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         onClose: onCloseConfirmClean,
     } = useDisclosure();
 
-    const wrapperRef = useRef<HTMLDivElement>(null);
-
-    const textRef = useRef<HTMLDivElement>(null);
-
     return (
         <>
             <Box
                 width={'100%'}
-                ref={wrapperRef}
                 onClick={(e) => {
-                    console.log(e);
-                    if (wrapperRef.current === e.target || textRef.current === e.target) {
+                    if (e.target === e.currentTarget) {
                         selectHabit(habit.id);
                     }
                 }}
@@ -211,7 +205,11 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
             >
                 <Flex alignItems={'center'} justifyContent={'center'}>
                     <CompletedCheckbox value={completed} habit={habit}></CompletedCheckbox>
-                    <Flex flexDir='column' justifyContent='center' ref={textRef}>
+                    <Flex
+                        flexDir='column'
+                        justifyContent='center'
+                        onClick={() => selectHabit(habit.id)}
+                    >
                         <Text fontSize='lg'>{habit.title}</Text>
 
                         <Text fontSize='sm' color='gray.600'>
@@ -342,7 +340,7 @@ export const OperationMenuItem = ({
     icon,
     label,
 }: {
-    onClick?: () => void;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
     icon?: any;
     label: string;
 }) => {

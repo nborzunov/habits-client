@@ -8,12 +8,15 @@ import { WIDGETS, WidgetIdentifiers } from '~/modules/Habits/helpers';
 export const WidgetsList = ({
     widgets,
     addWidget,
+    onClose,
 }: {
     widgets: WidgetIdentifiers[];
     addWidget: (id: WidgetIdentifiers) => void;
+    onClose: () => void;
 }) => {
     const addAll = () => {
         widgets.forEach((widget) => addWidget(widget));
+        onClose();
     };
 
     const isMobile = useMobile();

@@ -7,17 +7,32 @@ export interface Habit {
     goalType: GoalType;
     createDate: Date;
     startDate: Date;
-    completedToday: boolean;
-
-    currentStreak: number;
-    currentStreakStartDate: Date;
-    completedTargets: number;
-    failedTargets: number;
-    totalTargets: number;
     allowSkip: boolean;
     allowPartialCompletion: boolean;
     allowOverGoalCompletion: boolean;
+    statistics: TargetStatistics;
     targets: Target[];
+}
+
+export interface TargetStatistics {
+    currentStreakStartDate?: Date;
+    currentStreakCount: number;
+    currentStreakCountThisWeek: number;
+    currentStreakValues: number;
+    currentStreakValuesThisWeek: number;
+    failedCount: number;
+    failedCountThisWeek: number;
+    skippedCount: number;
+    skippedCountThisWeek: number;
+    totalCount: number;
+    totalCountThisWeek: number;
+    totalValuesCount: number;
+    totalValuesCountThisWeek: number;
+    completedCount: number;
+    completedCountThisWeek: number;
+    completedValues: number;
+    completedValuesThisWeek: number;
+    completedToday: boolean;
 }
 
 export type HabitData = Pick<

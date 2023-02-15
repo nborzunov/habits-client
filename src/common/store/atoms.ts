@@ -13,7 +13,7 @@ export const uncompletedHabitsState = selector({
     get: ({ get }) => {
         const list = get(habitsState);
 
-        return list.filter((habit) => !habit.completedToday);
+        return list.filter((habit) => !habit.statistics.completedToday);
     },
 });
 
@@ -22,7 +22,7 @@ export const completedHabitsState = selector({
     get: ({ get }) => {
         const list = get(habitsState);
 
-        return list.filter((habit) => habit.completedToday);
+        return list.filter((habit) => habit.statistics.completedToday);
     },
 });
 

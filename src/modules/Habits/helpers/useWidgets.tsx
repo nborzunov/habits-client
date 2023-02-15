@@ -207,8 +207,8 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
             }
 
             return !(
-                !habit.completedTargets &&
-                !habit.failedTargets &&
+                !habit.statistics.completedCount &&
+                !habit.statistics.failedCount &&
                 widget === WidgetIdentifiers.COMPLETED_CHART
             );
         },
@@ -244,7 +244,7 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
 
             return initial;
         },
-        [filterWidget, setNewLayout, setNewMobileLayout],
+        [filterWidget],
     );
 
     const getWidgetConfiguration = (id: WidgetIdentifiers, dimension: 'desktop' | 'mobile') => {
@@ -267,24 +267,18 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
                 setNewLayout(newLayout.map((item) => item));
             }
         },
-        [isMobile, setNewLayout, setNewMobileLayout],
+        [isMobile],
     );
 
-    const removeWidget = useCallback(
-        (id: WidgetIdentifiers) => {
-            setNewLayout((layout) => layout.filter((item) => item.i !== id));
-            setNewMobileLayout((layout) => layout.filter((item) => item.i !== id));
-        },
-        [setNewMobileLayout],
-    );
+    const removeWidget = useCallback((id: WidgetIdentifiers) => {
+        setNewLayout((layout) => layout.filter((item) => item.i !== id));
+        setNewMobileLayout((layout) => layout.filter((item) => item.i !== id));
+    }, []);
 
-    const addWidget = useCallback(
-        (id: WidgetIdentifiers) => {
-            setNewLayout((layout) => [...layout, getWidgetConfiguration(id, 'desktop')]);
-            setNewMobileLayout((layout) => [...layout, getWidgetConfiguration(id, 'mobile')]);
-        },
-        [setNewLayout, setNewMobileLayout],
-    );
+    const addWidget = useCallback((id: WidgetIdentifiers) => {
+        setNewLayout((layout) => [...layout, getWidgetConfiguration(id, 'desktop')]);
+        setNewMobileLayout((layout) => [...layout, getWidgetConfiguration(id, 'mobile')]);
+    }, []);
 
     const saveLayout = useCallback(() => {
         setLayout(newLayout, 'desktop');
@@ -322,7 +316,6 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
         widgets,
         layout: currentWidgetLayout || [],
         props: {
-            className: 'layout',
             margin: [16, 16] as [number, number],
             rowHeight: 94,
             isDraggable: isEditMode,

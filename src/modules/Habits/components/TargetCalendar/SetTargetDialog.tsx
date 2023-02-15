@@ -10,7 +10,7 @@ import {
     ModalHeader,
     ModalOverlay,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Habit, Target } from '~/modules/Habits/types';
 import NumericInput from '~/ui/NumericInput';
@@ -23,19 +23,19 @@ interface Props {
     onSubmit: (value: number) => void;
 }
 
-export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Props) => {
+export const SetTargetDialog = memo(({ target, habit, isOpen, onClose, onSubmit }: Props) => {
     const [result, setResult] = useState(target?.value ?? 1);
 
-    const handleSubmit = () => {
-        onSubmit(result);
-        handleClose();
-    };
-
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setResult(1);
         onClose();
-    };
+    }, [onClose]);
     const { t } = useTranslation();
+
+    const handleSubmit = useCallback(() => {
+        onSubmit(result);
+        handleClose();
+    }, [onSubmit, handleClose, result]);
     return (
         <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
@@ -72,4 +72,6 @@ export const SetTargetDialog = ({ target, habit, isOpen, onClose, onSubmit }: Pr
             </ModalContent>
         </Modal>
     );
-};
+});
+
+SetTargetDialog.displayName = 'SetTargetDialog';
