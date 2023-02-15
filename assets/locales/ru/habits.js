@@ -6,6 +6,7 @@ export const habits = {
     allHabits: 'Все привычки',
     successfullyCreated: 'Привычка создана!',
     successfullyUpdated: 'Привычка обновлена!',
+    successfullyDeletedOne: 'Привычка удалена!',
     successfullyDeleted: 'Привычки удалены!',
     successfullyCleaned: {
         one: 'Данные привычки очищены!',

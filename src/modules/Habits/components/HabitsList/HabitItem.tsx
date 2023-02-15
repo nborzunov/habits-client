@@ -10,24 +10,22 @@ import {
     MenuList,
     Text,
     useDisclosure,
-    useToast,
 } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import React, { MouseEventHandler, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
-import api from '~/common/helpers/api';
 import { setTitle } from '~/common/hooks/useTitle';
-import { habitsState } from '~/common/store/atoms';
+import { useArchiveHabit } from '~/modules/Habits/api/useArchiveHabit';
+import { useCleanData } from '~/modules/Habits/api/useCleanData';
+import { useDeleteHabit } from '~/modules/Habits/api/useDeleteHabit';
+import { useEditHabit } from '~/modules/Habits/api/useEditHabit';
 import { EditHabitDialog } from '~/modules/Habits/components/HabitDetails';
 import { CompletedCheckbox } from '~/modules/Habits/components/HabitsList';
-import { Habit, HabitData } from '~/modules/Habits/types';
+import { Habit } from '~/modules/Habits/types';
 import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
 export const HabitItem = ({ habit }: { habit: Habit }) => {
-    const setHabits = useSetRecoilState(habitsState);
     const { habitId: selectedHabitId } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -44,123 +42,6 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         setTitle(t('habits:allHabits'));
     }
     const completed = habit.statistics.completedToday;
-
-    const toast = useToast();
-    const editHabit = useMutation({
-        mutationFn: (data: HabitData) => {
-            return api
-                .put(`habits/${habit.id}`, { json: data })
-                .json<Habit>()
-                .then((newHabit) => {
-                    setHabits((prev) => prev.map((h) => (h.id === habit.id ? newHabit : h)));
-                })
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('habits:successfullyUpdated'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((err) =>
-                    toast({
-                        title: t('common:error'),
-                        description:
-                            err.status === 401
-                                ? t('common:invalidCredentials')
-                                : t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    }),
-                )
-                .finally(() => onCloseEditHabit());
-        },
-    });
-
-    const deleteHabit = useMutation({
-        mutationFn: () => {
-            return api
-                .delete(`habits/${habit.id}`)
-                .json<Habit>()
-                .then(() => {
-                    setHabits((prev) => prev.filter((h) => h.id !== habit.id));
-                    if (selectedHabitId === habit.id) {
-                        navigate('/habits');
-                    }
-                })
-                .finally(() => onCloseDeleteConfirm());
-        },
-    });
-
-    const archiveHabit = useMutation({
-        mutationFn: () => {
-            return api
-                .put(`habits/${habit.id}/archive/`)
-                .json<Habit>()
-                .then(() => {
-                    setHabits((prev) => prev.filter((h) => h.id !== habit.id));
-                    if (selectedHabitId === habit.id) {
-                        navigate('/habits');
-                    }
-                })
-                .finally(() => onCloseDeleteConfirm());
-        },
-    });
-
-    const cleanData = useMutation({
-        mutationFn: () => {
-            return api
-                .put(`habits/${habit.id}/clean`)
-                .then(() => {
-                    setHabits((prev) =>
-                        prev.map((h) => ({
-                            ...h,
-                            targets: h.id === habit.id ? [] : h.targets,
-                        })),
-                    );
-                    onCloseConfirmClean();
-                })
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('habits:successfullyCleaned.all'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch(() => {
-                    toast({
-                        title: t('common:error'),
-                        description: t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
-                });
-        },
-    });
-
-    const handleEdit = (h: HabitData) => {
-        editHabit.mutate(h);
-    };
-
-    const handleDelete = () => {
-        deleteHabit.mutate();
-    };
-    const handleArchive = () => {
-        archiveHabit.mutate();
-    };
-
-    const selectHabit = (habitId: string) => {
-        navigate(`/habits/${habitId}`);
-    };
-
-    const handleCleanData = () => {
-        cleanData.mutate();
-    };
 
     const {
         isOpen: isOpenDeleteConfirm,
@@ -180,6 +61,15 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         onOpen: onOpenCleanConfirm,
         onClose: onCloseConfirmClean,
     } = useDisclosure();
+
+    const { mutate: editHabit } = useEditHabit(habit.id, onCloseEditHabit);
+    const { mutate: deleteHabit } = useDeleteHabit(habit.id, onCloseDeleteConfirm);
+    const { mutate: archiveHabit } = useArchiveHabit(habit.id, onCloseDeleteConfirm);
+    const { mutate: cleanData } = useCleanData(habit.id, onCloseConfirmClean);
+
+    const selectHabit = (habitId: string) => {
+        navigate(`/habits/${habitId}`);
+    };
 
     return (
         <>
@@ -243,7 +133,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         )}
 
                         <OperationMenuItem
-                            onClick={handleArchive}
+                            onClick={() => cleanData()}
                             icon={Icons.Archive}
                             label={t('habits:archive')}
                         />
@@ -278,7 +168,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         sm: 'md',
                     }}
                     colorScheme='blue'
-                    onClick={handleArchive}
+                    onClick={() => archiveHabit()}
                     ml={3}
                 >
                     {t('habits:archive')}
@@ -289,7 +179,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         sm: 'md',
                     }}
                     colorScheme='red'
-                    onClick={handleDelete}
+                    onClick={() => deleteHabit()}
                     ml={3}
                 >
                     {t('habits:delete')}
@@ -318,7 +208,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         sm: 'md',
                     }}
                     colorScheme='red'
-                    onClick={handleCleanData}
+                    onClick={() => cleanData()}
                     ml={3}
                 >
                     {t('common:clean')}
@@ -328,7 +218,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
             <EditHabitDialog
                 isOpen={isOpenEditHabit}
                 onClose={onCloseEditHabit}
-                onSubmit={handleEdit}
+                onSubmit={editHabit}
                 initialState={habit}
             />
         </>

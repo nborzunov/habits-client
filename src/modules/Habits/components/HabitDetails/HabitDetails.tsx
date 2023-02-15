@@ -9,23 +9,22 @@ import {
     Heading,
     useDisclosure,
 } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import React, { useCallback, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import api from '~/common/helpers/api';
+import { useRecoilValue } from 'recoil';
 import useMobile from '~/common/hooks/useMobile';
 import { setTitle } from '~/common/hooks/useTitle';
 import { habitsState } from '~/common/store/atoms';
 import getCorrectDate from '~/common/utils/getCorrectDate';
+import { useCreateTarget } from '~/modules/Habits/api/useCreateTarget';
 import { Widget, WidgetsList } from '~/modules/Habits/components/Grid';
 import { WidgetsToolbar } from '~/modules/Habits/components/Grid/WidgetsToolbar';
 import { TargetActionContext } from '~/modules/Habits/components/TargetCalendar';
 import { WidgetIdentifiers, useWidgets } from '~/modules/Habits/helpers';
-import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
+import { Habit, TargetType } from '~/modules/Habits/types';
 import Back from '~/ui/Layout/components/Back';
 import { Loader } from '~/ui/Layout/components/Loader';
 
@@ -44,25 +43,14 @@ export const HabitDetails = () => {
 };
 
 export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
-    const setHabits = useSetRecoilState(habitsState);
     const [isEditMode, setIsEditMode] = useState(false);
     const { save, reset, removeWidget, addWidget, widgets, layout, props } = useWidgets(
         habit,
         isEditMode,
     );
     const { t } = useTranslation();
-
-    // TODO: вынести мутейшены в отдельный файл
-    const createTarget = useMutation({
-        mutationFn: (data: CreateTargetData) => {
-            return api
-                .post('targets/', { json: data })
-                .json<Habit>()
-                .then((newHabit) =>
-                    setHabits((prev) => prev.map((h) => (h.id !== newHabit.id ? h : newHabit))),
-                );
-        },
-    });
+    const { mutate: createTarget } = useCreateTarget();
+    const isMobile = useMobile();
 
     setTitle(
         t('habits:selectedHabit', {
@@ -77,7 +65,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
 
     const onChangeTarget = useCallback(
         (id: string | undefined, date: Date, targetType: TargetType, value?: number) => {
-            createTarget.mutate({
+            createTarget({
                 id: id,
                 habitId: habit.id,
                 date: getCorrectDate(date),
@@ -93,7 +81,6 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
         onOpen: onOpenWidgetsDrawer,
         onClose: onCloseWidgetsDrawer,
     } = useDisclosure();
-    const isMobile = useMobile();
 
     return (
         <Loader>

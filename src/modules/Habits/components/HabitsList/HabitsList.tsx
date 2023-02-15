@@ -1,47 +1,21 @@
-import { Box, Heading, List, Stack } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import { Box, Center, Heading, List, Spinner, Stack } from '@chakra-ui/react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import api from '~/common/helpers/api';
+import { useRecoilValue } from 'recoil';
 import useMobile from '~/common/hooks/useMobile';
-import {
-    activeUserState,
-    completedHabitsState,
-    habitsState,
-    uncompletedHabitsState,
-} from '~/common/store/atoms';
+import { completedHabitsState, uncompletedHabitsState } from '~/common/store/atoms';
+import { useHabitsList } from '~/modules/Habits/api/useHabitsList';
 import { HabitItem, HabitsListHeader } from '~/modules/Habits/components/HabitsList';
-import { Habit } from '~/modules/Habits/types';
 
 export const HabitsList = () => {
-    const activeUser = useRecoilValue(activeUserState);
-    const setHabits = useSetRecoilState(habitsState);
     const uncompletedHabits = useRecoilValue(uncompletedHabitsState);
     const completedHabits = useRecoilValue(completedHabitsState);
 
     const { t } = useTranslation();
-
-    const [isLoading, setIsLoading] = useState(true);
-
-    useQuery<Habit[]>({
-        queryKey: ['habits'],
-        queryFn: () =>
-            api
-                .get('habits/')
-                .json<Habit[]>()
-                .then((data) => {
-                    setHabits(data);
-                    setIsLoading(false);
-                    return data;
-                }),
-        initialData: [],
-        enabled: !!activeUser,
-    });
+    const isMobile = useMobile();
+    const { isLoading } = useHabitsList();
 
     const noHabits = uncompletedHabits.length === 0 && completedHabits.length === 0;
-
-    const isMobile = useMobile();
 
     return (
         <Box
@@ -52,11 +26,11 @@ export const HabitsList = () => {
         >
             <HabitsListHeader />
             <Box width={'100%'}>
-                {/*{isLoading && (*/}
-                {/*    <Center width={'100%'} height={'50%'}>*/}
-                {/*        <Spinner size='xl' color={`purple.500`} />*/}
-                {/*    </Center>*/}
-                {/*)}*/}
+                {isLoading && (
+                    <Center width={'100%'} height={'50%'}>
+                        <Spinner size='xl' color={`purple.500`} />
+                    </Center>
+                )}
                 {noHabits && !isLoading && (
                     <Heading p={2} py={4} size={'md'} textAlign={'center'}>
                         {t('habits:noHabits')}

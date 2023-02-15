@@ -3,7 +3,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Auth, Login, Signup } from '~/modules/Auth';
 
-export const AuthPage = ({ refetchUser }: { refetchUser: () => void }) => {
+export const AuthPage = () => {
     return (
         <Box
             as='section'
@@ -30,8 +30,8 @@ export const AuthPage = ({ refetchUser }: { refetchUser: () => void }) => {
             >
                 <Routes>
                     <Route path='/' element={<Auth />} />
-                    <Route path='signup' element={<Signup refetch={refetchUser} />} />
-                    <Route path='login' element={<Login refetch={refetchUser} />} />
+                    <Route path='signup' element={<Signup />} />
+                    <Route path='login' element={<Login />} />
                     <Route path='*' element={<Navigate to='/login' replace />} />
                 </Routes>
             </Box>

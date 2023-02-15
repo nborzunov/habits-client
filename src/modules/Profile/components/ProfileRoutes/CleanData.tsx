@@ -1,88 +1,17 @@
-import { Box, Button, Heading, Stack, useDisclosure, useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
+import { Box, Button, Heading, Stack, useDisclosure } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import api from '~/common/helpers/api';
+import { useRecoilValue } from 'recoil';
 import useTitle from '~/common/hooks/useTitle';
-import { activeUserState, habitsState } from '~/common/store/atoms';
+import { activeUserState } from '~/common/store/atoms';
+import { useCleanData } from '~/modules/Profile/api/useCleanData';
+import { useDeleteHabits } from '~/modules/Profile/api/useDeleteHabits';
 import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
 export const CleanData = () => {
     const user = useRecoilValue(activeUserState);
-    const toast = useToast();
-    const setHabits = useSetRecoilState(habitsState);
     const { t } = useTranslation();
     useTitle(`${user?.name} ${user?.surname} - ${t('common:cleanData')}`);
-
-    const cleanHabits = useMutation({
-        mutationFn: () => {
-            return api
-                .post(`habits/clean`)
-                .then(() =>
-                    setHabits((prev) =>
-                        prev.map((h) => ({
-                            ...h,
-                            targets: [],
-                        })),
-                    ),
-                )
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('habits:successfullyCleaned.one'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch(() => {
-                    toast({
-                        title: t('common:error'),
-                        description: t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
-                })
-                .finally(() => onCloseCleanConfirm());
-        },
-    });
-
-    const deleteHabits = useMutation({
-        mutationFn: () => {
-            return api
-                .delete(`habits/`)
-                .then(() => setHabits([]))
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('habits:successfullyDeleted'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch(() => {
-                    toast({
-                        title: t('common:error'),
-                        description: t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
-                })
-                .finally(() => onCloseDeleteConfirm());
-        },
-    });
-
-    const handleCleanData = () => {
-        cleanHabits.mutate();
-    };
-
-    const handleDeleteHabits = () => {
-        deleteHabits.mutate();
-    };
 
     const {
         isOpen: isOpenCleanConfirm,
@@ -94,6 +23,10 @@ export const CleanData = () => {
         onOpen: onOpenDeleteConfirm,
         onClose: onCloseDeleteConfirm,
     } = useDisclosure();
+
+    const { mutate: cleanHabits } = useCleanData(onCloseCleanConfirm);
+    const { mutate: deleteHabits } = useDeleteHabits(onCloseDeleteConfirm);
+
     const cancelRef = useRef();
 
     return (
@@ -120,7 +53,7 @@ export const CleanData = () => {
                         sm: 'md',
                     }}
                     colorScheme='red'
-                    onClick={handleCleanData}
+                    onClick={() => cleanHabits()}
                     ml={3}
                 >
                     {t('common:clean')}
@@ -148,7 +81,7 @@ export const CleanData = () => {
                         sm: 'md',
                     }}
                     colorScheme='red'
-                    onClick={handleDeleteHabits}
+                    onClick={() => deleteHabits()}
                     ml={3}
                 >
                     {t('common:delete')}

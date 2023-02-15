@@ -1,65 +1,19 @@
 import { Button, Checkbox, HStack, Heading, Link, Stack, Text, useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import api from '~/common/helpers/api';
-import processError from '~/common/helpers/processError';
 import validationRules from '~/common/helpers/validationRules';
 import useTitle from '~/common/hooks/useTitle';
+import { Fields, useLogin } from '~/modules/Auth/api/useLogin';
 import FormField, { FieldsConfig } from '~/ui/FormField';
 import Back from '~/ui/Layout/components/Back';
 
-type Fields = 'username' | 'password';
-
-export const Login = ({ refetch }: { refetch: () => void }) => {
+export const Login = () => {
     const toast = useToast();
     const { t } = useTranslation();
 
     useTitle(t('profile:login'));
-
-    const login = useMutation({
-        mutationFn: (data: { username: string; password: string }) => {
-            return api
-                .post('auth/', { json: data })
-                .json<{
-                    token: string;
-                }>()
-                .then((data) => localStorage.setItem('authToken', data.token))
-                .then(() => refetch())
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('profile:successfullyLogin'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((error) => {
-                    processError<Fields>(
-                        t,
-                        error,
-                        (errorMessage) => {
-                            toast({
-                                title: t('common:error'),
-                                description: errorMessage,
-                                status: 'error',
-                                duration: 3000,
-                                isClosable: true,
-                            });
-                        },
-                        (field, message) => {
-                            setError(field, {
-                                type: 'custom',
-                                message: message,
-                            });
-                        },
-                    );
-                });
-        },
-    });
 
     const {
         register,
@@ -75,9 +29,7 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
         },
     });
 
-    const onSubmit = (data: { username: string; password: string }) => {
-        login.mutate(data);
-    };
+    const { mutate: onSubmit } = useLogin(setError);
 
     const onError = () => {
         toast({
@@ -125,7 +77,7 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
                     {t('profile:signinDescription')}
                 </Text>
             </Stack>
-            <Stack spacing={4} as='form' onSubmit={handleSubmit(onSubmit, onError)}>
+            <Stack spacing={4} as='form' onSubmit={handleSubmit((data) => onSubmit(data), onError)}>
                 {fieldsConfig.map(({ field, label, validationProps }) => (
                     <FormField
                         key={field}

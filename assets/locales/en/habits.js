@@ -6,6 +6,7 @@ export const habits = {
     allHabits: 'All Habits',
     successfullyCreated: 'Habit created!',
     successfullyUpdated: 'Habit updated!',
+    successfullyDeletedOne: 'Habit deleted!',
     successfullyDeleted: 'Habits deleted!',
     successfullyCleaned: {
         one: 'Habit data cleaned!',

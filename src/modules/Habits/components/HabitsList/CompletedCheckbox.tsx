@@ -1,33 +1,19 @@
 import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
 import Icons from '~/common/helpers/Icons';
-import api from '~/common/helpers/api';
-import { habitsState } from '~/common/store/atoms';
 import getCorrectDate from '~/common/utils/getCorrectDate';
+import { useCreateTarget } from '~/modules/Habits/api/useCreateTarget';
 import {
     TargetActionContext,
     TargetActionWrapper,
 } from '~/modules/Habits/components/TargetCalendar';
-import { CreateTargetData, Habit, TargetType } from '~/modules/Habits/types';
+import { Habit, TargetType } from '~/modules/Habits/types';
 
 export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Habit }) => {
-    const setHabits = useSetRecoilState(habitsState);
-
     const { t } = useTranslation();
-    const createTarget = useMutation({
-        mutationFn: (data: CreateTargetData) => {
-            return api
-                .post('targets/', { json: data })
-                .json<Habit>()
-                .then((newHabit) =>
-                    setHabits((prev) => prev.map((h) => (h.id !== newHabit.id ? h : newHabit))),
-                );
-        },
-    });
+    const { mutate: createTarget } = useCreateTarget();
 
     const onChangeTarget = (
         id: string | undefined,
@@ -35,7 +21,7 @@ export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Hab
         targetType: TargetType,
         value?: number,
     ) => {
-        createTarget.mutate({
+        createTarget({
             id: id,
             habitId: habit.id,
             date: getCorrectDate(date),

@@ -1,17 +1,13 @@
 import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import api from '~/common/helpers/api';
+import { useRecoilValue } from 'recoil';
 import validationRules from '~/common/helpers/validationRules';
 import useTitle from '~/common/hooks/useTitle';
 import { activeUserState } from '~/common/store/atoms';
-import { EditProfileFields, User } from '~/modules/Profile/types';
+import { EditProFileData, useEditProfile } from '~/modules/Profile/api/useEditProfile';
 import FormField, { FieldsConfig } from '~/ui/FormField';
-
-type EditProFileData = Required<Pick<User, EditProfileFields>>;
 
 interface Props {
     initialState: EditProFileData;
@@ -20,7 +16,6 @@ interface Props {
 export const EditProfile = ({ initialState }: Props) => {
     const user = useRecoilValue(activeUserState);
     const toast = useToast();
-    const setActiveUser = useSetRecoilState(activeUserState);
     const { t } = useTranslation();
 
     useTitle(`${user?.name} ${user?.surname} - ${t('common:edit')}`);
@@ -36,43 +31,9 @@ export const EditProfile = ({ initialState }: Props) => {
         defaultValues: initialState,
     });
 
-    const editProfile = useMutation({
-        mutationFn: (formData: EditProFileData) => {
-            return api
-                .put(`users/me`, { json: formData })
-                .json<User>()
-                .then((newUserData) => {
-                    setActiveUser(newUserData);
-                })
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('profile:successfullyUpdated'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((err) =>
-                    toast({
-                        title: t('common:error'),
-                        description:
-                            err.status === 401
-                                ? t('common:invalidCredentials')
-                                : t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    }),
-                );
-        },
-    });
+    const { mutate: editProfile } = useEditProfile();
 
-    const onSubmit = (data: EditProFileData) => {
-        editProfile.mutate(data);
-    };
-
-    const onError = () => {
+    const onFormError = () => {
         toast({
             title: t('common:error'),
             description: t('common:invalidForm'),
@@ -106,7 +67,7 @@ export const EditProfile = ({ initialState }: Props) => {
     ];
 
     return (
-        <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
+        <Box as={'form'} onSubmit={handleSubmit((data) => editProfile(data), onFormError)}>
             <Heading as='h3' size='md' mb={'6'}>
                 {t('common:editProfile')}
             </Heading>

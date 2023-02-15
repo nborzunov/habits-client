@@ -1,28 +1,17 @@
 import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import api from '~/common/helpers/api';
-import processError from '~/common/helpers/processError';
 import validationRules from '~/common/helpers/validationRules';
 import useMobile from '~/common/hooks/useMobile';
 import useTitle from '~/common/hooks/useTitle';
 import { activeUserState } from '~/common/store/atoms';
+import { Fields, useChangePassword } from '~/modules/Profile/api/useChangePassword';
 import FormField, { FieldsConfig } from '~/ui/FormField';
-
-interface FormData {
-    currentPassword: string;
-    newPassword: string;
-    newPasswordConfirm: string;
-}
-
-type Fields = keyof FormData;
 
 export const ChangePassword = () => {
     const user = useRecoilValue(activeUserState);
-
     const toast = useToast();
     const { t } = useTranslation();
 
@@ -44,52 +33,9 @@ export const ChangePassword = () => {
         defaultValues: initialState,
     });
 
-    const changePassword = useMutation({
-        mutationFn: (data: { currentPassword: string; newPassword: string }) => {
-            return api
-                .post('users/me/change-password', { json: data })
-                .json()
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('profile:successfullyUpdated'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((error) => {
-                    processError<Fields>(
-                        t,
-                        error,
-                        (errorMessage) => {
-                            toast({
-                                title: t('common:error'),
-                                description: errorMessage,
-                                status: 'error',
-                                duration: 3000,
-                                isClosable: true,
-                            });
-                        },
-                        (field, message) => {
-                            setError(field, {
-                                type: 'custom',
-                                message: message,
-                            });
-                        },
-                    );
-                });
-        },
-    });
+    const { mutate: changePassword } = useChangePassword(setError);
 
-    const onSubmit = (data: FormData) => {
-        changePassword.mutate({
-            currentPassword: data.currentPassword,
-            newPassword: data.newPassword,
-        });
-    };
-
-    const onError = () => {
+    const onFormError = () => {
         toast({
             title: t('common:error'),
             description: t('common:invalidForm'),
@@ -152,7 +98,7 @@ export const ChangePassword = () => {
     );
 
     return (
-        <Box as={'form'} onSubmit={handleSubmit(onSubmit, onError)}>
+        <Box as={'form'} onSubmit={handleSubmit((data) => changePassword(data), onFormError)}>
             <Heading as='h3' size='md' mb={'6'}>
                 {t('common:changePassword')}
             </Heading>
