@@ -16,14 +16,6 @@ export const habits = {
     selectedHabit: `{{title}} - Привычки`,
     deleteHabit: 'Удалить привычку "{{title}}"',
     deleteHabitDescription: 'Вы уверены? Если вы удалите привычку, вы потеряете весь прогресс.',
-    times_zero: '{{count}} повторений',
-    times_one: '{{count}} повторение',
-    times_few: '{{count}} повторений',
-    times_many: '{{count}} повторений',
-    mins_zero: '{{count}} минут',
-    mins_one: '{{count}} минута',
-    mins_few: '{{count}} минуты',
-    mins_many: '{{count}} минуты',
     completedCount: '{{count}} выполнено',
     failedCount: '{{count}} провалено',
     cleanTargets: 'Очистить',
@@ -42,9 +34,14 @@ export const habits = {
         long: 'Проваленные цели',
         short: 'Провалено',
     },
-    totalTargets: {
-        long: 'Общее количество целей',
-        short: 'Всего',
+    totalDays: 'Дней выполнено',
+    totalValues: {
+        mins: 'Всего минут',
+        times: 'Всего повторений',
+    },
+    completedValues: {
+        mins: 'Выполнено минут',
+        times: 'Выполнено повторений',
     },
     skippedTargets: {
         long: 'Пропущенные цели',

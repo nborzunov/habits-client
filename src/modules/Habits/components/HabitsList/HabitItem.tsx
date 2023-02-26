@@ -105,7 +105,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                         <Text fontSize='lg'>{habit.title}</Text>
 
                         <Text fontSize='sm' color='gray.600'>
-                            {t(`habits:${habit.goalType}`, { count: habit.goal })}
+                            {t(`common:${habit.goalType}`, { count: habit.goal })}
                         </Text>
                     </Flex>
                 </Flex>

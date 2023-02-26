@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import { Statistics, TargetChart } from '~/modules/Habits/components/HabitDetails';
 import { WidgetIdentifiers } from '~/modules/Habits/helpers';
-import { TargetStatistics } from '~/modules/Habits/types';
+import { Habit } from '~/modules/Habits/types';
 
 const YearlyCalendarLazy = lazy(() =>
     import('~/modules/Habits/components/TargetCalendar').then((m) => ({
@@ -23,14 +23,15 @@ export const Widget = memo(
         isEditMode,
         remove,
         id,
-        statistics,
+        habit,
     }: {
         isEditMode: boolean;
         remove: (id: WidgetIdentifiers) => void;
         id: WidgetIdentifiers;
-        statistics: TargetStatistics;
+        habit: Habit;
     }) => {
         const { t } = useTranslation();
+        const statistics = habit.statistics;
 
         return (
             <Box
@@ -93,10 +94,28 @@ export const Widget = memo(
                 )}
                 {id === WidgetIdentifiers.TOTAL_TARGETS && (
                     <Statistics
-                        title={t('habits:totalTargets.short')}
+                        title={t('habits:totalDays')}
                         value={statistics.totalCount}
                         type='none'
                         footerValue={statistics.totalCountThisWeek}
+                    />
+                )}
+                {id === WidgetIdentifiers.TOTAL_VALUES && (
+                    <Statistics
+                        title={t(`habits:totalValues.${habit.goalType}`)}
+                        value={statistics.totalValuesCount}
+                        type='none'
+                        footerValue={statistics.totalValuesCountThisWeek}
+                        unit={habit.goalType}
+                    />
+                )}
+                {id === WidgetIdentifiers.COMPLETED_VALUES && (
+                    <Statistics
+                        title={t(`habits:completedValues.${habit.goalType}`)}
+                        value={statistics.completedValues}
+                        type='none'
+                        footerValue={statistics.completedValuesThisWeek}
+                        unit={habit.goalType}
                     />
                 )}
                 {id === WidgetIdentifiers.SKIPPED_TARGETS && (

@@ -132,7 +132,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                                             isEditMode={isEditMode}
                                             remove={removeWidget}
                                             id={widget.i as WidgetIdentifiers}
-                                            statistics={habit.statistics}
+                                            habit={habit}
                                         />
                                     </Box>
                                 ))}
@@ -165,6 +165,7 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
                             <WidgetsList
                                 widgets={widgets}
                                 addWidget={addWidget}
+                                habit={habit}
                                 onClose={onCloseWidgetsDrawer}
                             />
                         </Box>

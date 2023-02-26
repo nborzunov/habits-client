@@ -17,16 +17,6 @@ export const habits = {
     deleteHabit: 'Delete Habit "{{title}}"',
     deleteHabitDescription:
         'Are you sure? If you delete this habit, you will lose all your progress.',
-    times_zero: '{{count}} times',
-    times_one: '{{count}} time',
-    times_few: '{{count}} times',
-    times_many: '{{count}} times',
-    times_other: '{{count}} times',
-    mins_zero: '{{count}} minutes',
-    mins_one: '{{count}} minute',
-    mins_few: '{{count}} minutes',
-    mins_many: '{{count}} minutes',
-    mins_other: '{{count}} minutes',
     completedCount: '{{count}} completed',
     failedCount: '{{count}} failed',
     cleanTargets: 'Clean Targets',
@@ -45,9 +35,14 @@ export const habits = {
         long: 'Failed Targets',
         short: 'Failed',
     },
-    totalTargets: {
-        long: 'Total Targets',
-        short: 'Total',
+    totalDays: 'Total Days',
+    totalValues: {
+        mins: 'Total Minutes',
+        times: 'Total Times',
+    },
+    completedValues: {
+        mins: 'Completed Minutes',
+        times: 'Completed Times',
     },
     skippedTargets: {
         long: 'Skipped Targets',
@@ -67,8 +62,8 @@ export const habits = {
     dailyGoal: 'Daily Goal',
     increaseDailyGoal: 'Please increase your daily goal',
     goalType: 'Goal Type',
-    timesTitle: 'Повторения',
-    minutesTitle: 'Минуты',
+    timesTitle: 'Times',
+    minutesTitle: 'Minutes',
     periodicity: 'Periodicity',
     periodicityOptions: {
         [Periodicity.Daily]: 'Per Day',

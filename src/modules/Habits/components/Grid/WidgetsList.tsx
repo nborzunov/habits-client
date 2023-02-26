@@ -4,14 +4,17 @@ import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import useMobile from '~/common/hooks/useMobile';
 import { WIDGETS, WidgetIdentifiers } from '~/modules/Habits/helpers';
+import { Habit } from '~/modules/Habits/types';
 
 export const WidgetsList = ({
     widgets,
     addWidget,
+    habit,
     onClose,
 }: {
     widgets: WidgetIdentifiers[];
     addWidget: (id: WidgetIdentifiers) => void;
+    habit: Habit;
     onClose: () => void;
 }) => {
     const addAll = () => {
@@ -45,7 +48,7 @@ export const WidgetsList = ({
                                         />
                                         <Box>
                                             <Text fontWeight={'semibold'}>
-                                                {t(WIDGETS[widget].title)}
+                                                {t(WIDGETS[widget].getTitle(habit))}
                                             </Text>
                                             <Text color={'gray.500'} fontSize={'sm'}>
                                                 {WIDGETS[widget][isMobile ? 'mobile' : 'desktop'].w}

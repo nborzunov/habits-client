@@ -15,11 +15,13 @@ export enum WidgetIdentifiers {
     SKIPPED_TARGETS = 'SKIPPED_TARGETS',
     YEARLY_CALENDAR = 'YEARLY_CALENDAR',
     MONTHLY_CALENDAR = 'MONTHLY_CALENDAR',
+    TOTAL_VALUES = 'TOTAL_VALUES',
+    COMPLETED_VALUES = 'COMPLETED_VALUES',
 }
 
 export const WIDGETS: {
     [key in WidgetIdentifiers]: {
-        title: string;
+        getTitle: (habit: Habit) => string;
         icon: any;
         desktop: {
             w: number;
@@ -37,7 +39,7 @@ export const WIDGETS: {
     };
 } = {
     CURRENT_STREAK: {
-        title: 'habits:currentStreak.base',
+        getTitle: () => 'habits:currentStreak.base',
         icon: Icons.Stats,
         desktop: {
             w: 2,
@@ -53,7 +55,7 @@ export const WIDGETS: {
         },
     },
     COMPLETED_TARGETS: {
-        title: 'habits:completedTargets.long',
+        getTitle: () => 'habits:completedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -69,7 +71,7 @@ export const WIDGETS: {
         },
     },
     FAILED_TARGETS: {
-        title: 'habits:failedTargets.long',
+        getTitle: () => 'habits:failedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -85,7 +87,7 @@ export const WIDGETS: {
         },
     },
     TOTAL_TARGETS: {
-        title: 'habits:totalTargets.long',
+        getTitle: () => 'habits:totalDays',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -101,7 +103,7 @@ export const WIDGETS: {
         },
     },
     SKIPPED_TARGETS: {
-        title: 'habits:skippedTargets.long',
+        getTitle: () => 'habits:skippedTargets.long',
         icon: Icons.Stats,
         desktop: {
             w: 1,
@@ -116,25 +118,57 @@ export const WIDGETS: {
             y: 2,
         },
     },
+    TOTAL_VALUES: {
+        getTitle: (habit) => `habits:totalValues.${habit.goalType}`,
+        icon: Icons.Stats,
+        desktop: {
+            w: 1,
+            h: 1,
+            x: 0,
+            y: 3,
+        },
+        mobile: {
+            w: 1,
+            h: 1,
+            x: 0,
+            y: 3,
+        },
+    },
+    COMPLETED_VALUES: {
+        getTitle: (habit) => `habits:completedValues.${habit.goalType}`,
+        icon: Icons.Stats,
+        desktop: {
+            w: 1,
+            h: 1,
+            x: 1,
+            y: 3,
+        },
+        mobile: {
+            w: 1,
+            h: 1,
+            x: 1,
+            y: 3,
+        },
+    },
     YEARLY_CALENDAR: {
-        title: 'habits:yearlyCalendar',
+        getTitle: () => 'habits:yearlyCalendar',
         icon: Icons.Calendar,
         desktop: {
             w: 2,
             h: 1.5,
             x: 0,
-            y: 3,
+            y: 4,
         },
         mobile: {
             w: 2,
             h: 4,
             x: 0,
-            y: 3,
+            y: 4,
         },
         isResizable: false,
     },
     COMPLETED_CHART: {
-        title: 'habits:completedChart',
+        getTitle: () => 'habits:completedChart',
         icon: Icons.Chart,
         desktop: {
             w: 1,
@@ -146,24 +180,24 @@ export const WIDGETS: {
             w: 2,
             h: 3,
             x: 0,
-            y: 7,
+            y: 8,
         },
         isResizable: false,
     },
     MONTHLY_CALENDAR: {
-        title: 'habits:monthlyCalendar',
+        getTitle: () => 'habits:monthlyCalendar',
         icon: Icons.Calendar,
         desktop: {
             w: 1,
             h: 4,
             x: 2,
-            y: 4,
+            y: 5,
         },
         mobile: {
             w: 2,
             h: 3.5,
             x: 0,
-            y: 12,
+            y: 13,
         },
         isResizable: false,
     },
@@ -200,8 +234,14 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
         (widget: WidgetIdentifiers) => {
             if (
                 !habit.allowSkip &&
-                (widget === WidgetIdentifiers.TOTAL_TARGETS ||
-                    widget === WidgetIdentifiers.SKIPPED_TARGETS)
+                widget in [WidgetIdentifiers.SKIPPED_TARGETS, WidgetIdentifiers.TOTAL_TARGETS]
+            ) {
+                return false;
+            }
+
+            if (
+                !(habit.allowPartialCompletion && habit.allowOverGoalCompletion) &&
+                widget in [WidgetIdentifiers.TOTAL_VALUES, WidgetIdentifiers.COMPLETED_VALUES]
             ) {
                 return false;
             }
