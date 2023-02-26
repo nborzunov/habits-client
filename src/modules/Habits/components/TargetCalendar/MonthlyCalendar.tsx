@@ -81,6 +81,7 @@ export const MonthlyCalendar = memo(() => {
         [monthId, year, setYear, setMonthId],
     );
     const { t } = useTranslation();
+    const today = dayjs();
 
     return (
         <Box p='2' textAlign={'center'} height={`${cellSize * 7 + cellGap * 6 + 60}px`}>
@@ -119,7 +120,10 @@ export const MonthlyCalendar = memo(() => {
                             aria-label='right'
                             icon={<Icon as={Icons.Right} />}
                             onClick={() => handleSetMonth(monthId + 1)}
-                            isDisabled={year > 2023 && monthId === 11}
+                            isDisabled={
+                                (year > 2023 && monthId === 11) ||
+                                dayjs(`${year}-${monthId + 2}-1`) > today
+                            }
                             size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
@@ -129,7 +133,9 @@ export const MonthlyCalendar = memo(() => {
                             aria-label='right'
                             icon={<Icon as={Icons.RightDouble} />}
                             onClick={() => setYear(year + 1)}
-                            isDisabled={year > 2023}
+                            isDisabled={
+                                year > 2023 || dayjs(`${year + 1}-${monthId + 1}-1`) > today
+                            }
                             size={{ base: 'md', sm: 'md' }}
                         />
                     </Tooltip>
@@ -242,48 +248,54 @@ const Cell = memo(
                 return prevDate.daysInMonth() + day;
             }
         }, [columnId, rowId, firstDay, daysInMonth, prevDate]);
-        const day = useMemo(
-            () => dayjs(`${year}-${monthId + 1}-${dayId + 1}`).startOf('day'),
-            [dayId, monthId, year],
-        );
-        const target = useMemo(() => targetsMap[day.format('DD/MM/YYYY')], [targetsMap, day]);
+        const date = dayjs(`${year}-${monthId + 1}-${dayId + 1}`);
+        const day = date.startOf('day');
+        const target = targetsMap[day.format('DD/MM/YYYY')];
 
+        const today = dayjs();
+
+        const styles = {
+            width: sizePx,
+            height: sizePx,
+            lineHeight: sizePx,
+            borderRadius: '50%',
+            bg:
+                target && target.targetType === TargetType.Skip
+                    ? 'green.100'
+                    : target
+                    ? 'green.500'
+                    : 'transparent',
+            color:
+                target && target.targetType === TargetType.Skip
+                    ? 'black'
+                    : target
+                    ? 'white'
+                    : monthId !== rawMonthId || day > today
+                    ? 'blackAlpha.600'
+                    : 'black',
+
+            transition: 'all 0.2s',
+        };
+        const hoverStyles = {
+            bg:
+                target && target.targetType === TargetType.Skip
+                    ? 'green.200'
+                    : target
+                    ? 'green.600'
+                    : 'gray.200',
+        };
         return (
             <Box cursor='pointer'>
-                <TargetActionWrapper date={day} target={target}>
-                    <Box
-                        width={sizePx}
-                        height={sizePx}
-                        lineHeight={sizePx}
-                        borderRadius='50%'
-                        bg={
-                            target && target.targetType === TargetType.Skip
-                                ? 'green.100'
-                                : target
-                                ? 'green.500'
-                                : 'transparent'
-                        }
-                        color={
-                            target && target.targetType === TargetType.Skip
-                                ? 'black'
-                                : target
-                                ? 'white'
-                                : monthId !== rawMonthId
-                                ? 'blackAlpha.600'
-                                : 'black'
-                        }
-                        _hover={{
-                            bg:
-                                target && target.targetType === TargetType.Skip
-                                    ? 'green.200'
-                                    : target
-                                    ? 'green.600'
-                                    : 'gray.200',
-                        }}
-                        transition={'all 0.2s'}
-                    >
-                        {day.format('D')}
-                    </Box>
+                <TargetActionWrapper
+                    date={day}
+                    target={target}
+                    styles={{
+                        ...styles,
+                        _hover: hoverStyles,
+                    }}
+                    disabled={date > today}
+                >
+                    <Box {...styles}>{day.format('D')}</Box>
                 </TargetActionWrapper>
             </Box>
         );

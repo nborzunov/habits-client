@@ -11,7 +11,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, { MouseEventHandler, useRef } from 'react';
+import React, { MouseEventHandler, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import Icons from '~/common/helpers/Icons';
@@ -32,15 +32,17 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
 
     const selected = selectedHabitId && habit.id === selectedHabitId;
 
-    if (selected) {
-        setTitle(
-            t('habits:selectedHabit', {
-                title: habit.title,
-            }),
-        );
-    } else {
-        setTitle(t('habits:allHabits'));
-    }
+    useEffect(() => {
+        if (selected) {
+            setTitle(
+                t('habits:selectedHabit', {
+                    title: habit.title,
+                }),
+            );
+        } else {
+            setTitle(t('habits:allHabits'));
+        }
+    }, [selected, habit.title, t]);
     const completed = habit.statistics.completedToday;
 
     const {

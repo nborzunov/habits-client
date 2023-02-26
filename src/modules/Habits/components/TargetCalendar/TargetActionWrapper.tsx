@@ -10,7 +10,7 @@ import {
     Tooltip,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
@@ -22,6 +22,8 @@ interface Props {
     date: Dayjs;
     target?: Target;
     showTooltip?: boolean;
+    disabled?: boolean;
+    styles?: any;
 }
 
 interface TargetActionContext {
@@ -41,6 +43,8 @@ const TargetActionWrapperRaw = ({
     date,
     target,
     showTooltip,
+    styles,
+    disabled,
     children,
 }: PropsWithChildren<Props>) => {
     const { habit, onChangeTarget } = useContext(TargetActionContext);
@@ -90,61 +94,76 @@ const TargetActionWrapperRaw = ({
 
     const isMobile = useMobile();
 
+    const today = dayjs();
     return (
         <>
-            <Menu isLazy>
-                <Tooltip label={label} isDisabled={!showTooltip}>
-                    <MenuButton as={Box} onClick={(e) => e.stopPropagation()} userSelect={'none'}>
-                        {children}
-                    </MenuButton>
-                </Tooltip>
+            {date > today ? (
+                children
+            ) : (
+                <>
+                    <Menu isLazy>
+                        <Tooltip label={label} isDisabled={!showTooltip}>
+                            <MenuButton as={Box} {...styles} disabled={disabled ?? true}>
+                                {children}
+                            </MenuButton>
+                        </Tooltip>
 
-                <MenuList p={0}>
-                    {isMobile && (
-                        <Text color='gray.600' p={2} px={3} fontWeight='bold' textAlign={'left'}>
-                            {label}
-                        </Text>
-                    )}
-                    {(target?.targetType !== TargetType.Done ||
-                        (habit?.allowPartialCompletion && target?.value !== habit?.goal)) && (
-                        <TargetCellMenuItem
-                            onClick={() => onComplete()}
-                            label={t('habits:operations.complete')}
-                            icon={Icons.Complete}
-                        />
-                    )}
-                    {((habit?.allowPartialCompletion && Number(target?.value) <= habit?.goal) ||
-                        habit?.allowOverGoalCompletion) && (
-                        <TargetCellMenuItem
-                            onClick={() => onOpenSetTarget()}
-                            label={t('habits:operations.set')}
-                            icon={Icons.Edit}
-                        />
-                    )}
+                        <MenuList p={0}>
+                            {isMobile && (
+                                <Text
+                                    color='gray.600'
+                                    p={2}
+                                    px={3}
+                                    fontWeight='bold'
+                                    textAlign={'left'}
+                                >
+                                    {label}
+                                </Text>
+                            )}
+                            {(target?.targetType !== TargetType.Done ||
+                                (habit?.allowPartialCompletion &&
+                                    target?.value !== habit?.goal)) && (
+                                <TargetCellMenuItem
+                                    onClick={() => onComplete()}
+                                    label={t('habits:operations.complete')}
+                                    icon={Icons.Complete}
+                                />
+                            )}
+                            {((habit?.allowPartialCompletion &&
+                                Number(target?.value) <= habit?.goal) ||
+                                habit?.allowOverGoalCompletion) && (
+                                <TargetCellMenuItem
+                                    onClick={() => onOpenSetTarget()}
+                                    label={t('habits:operations.set')}
+                                    icon={Icons.Edit}
+                                />
+                            )}
 
-                    {target?.targetType !== TargetType.Skip && habit?.allowSkip && (
-                        <TargetCellMenuItem
-                            onClick={() => onSkip()}
-                            label={t('habits:operations.skip')}
-                            icon={Icons.ArrowRight}
-                        />
-                    )}
-                    {target && (
-                        <TargetCellMenuItem
-                            onClick={() => onReset()}
-                            label={t('habits:operations.clear')}
-                            icon={Icons.Delete}
-                        />
-                    )}
-                </MenuList>
-            </Menu>
-            <SetTargetDialog
-                habit={habit}
-                target={target}
-                isOpen={isSetTargetOpened}
-                onClose={onCloseSetTarget}
-                onSubmit={(value) => onSetValue(value)}
-            />
+                            {target?.targetType !== TargetType.Skip && habit?.allowSkip && (
+                                <TargetCellMenuItem
+                                    onClick={() => onSkip()}
+                                    label={t('habits:operations.skip')}
+                                    icon={Icons.ArrowRight}
+                                />
+                            )}
+                            {target && (
+                                <TargetCellMenuItem
+                                    onClick={() => onReset()}
+                                    label={t('habits:operations.clear')}
+                                    icon={Icons.Delete}
+                                />
+                            )}
+                        </MenuList>
+                    </Menu>
+                    <SetTargetDialog
+                        habit={habit}
+                        target={target}
+                        isOpen={isSetTargetOpened}
+                        onClose={onCloseSetTarget}
+                        onSubmit={(value) => onSetValue(value)}
+                    />
+                </>
+            )}
         </>
     );
 };

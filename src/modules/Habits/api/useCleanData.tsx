@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import api from '~/common/helpers/api';
 import { habitsState } from '~/common/store/atoms';
+import { Habit } from '~/modules/Habits/types';
 
 export const useCleanData = (habitId: string, onClose: () => void) => {
     const setHabits = useSetRecoilState(habitsState);
@@ -14,13 +15,9 @@ export const useCleanData = (habitId: string, onClose: () => void) => {
         mutationFn: () => {
             return api
                 .put(`habits/${habitId}/clean`)
-                .then(() => {
-                    setHabits((prev) =>
-                        prev.map((h) => ({
-                            ...h,
-                            targets: h.id === habitId ? [] : h.targets,
-                        })),
-                    );
+                .json<Habit>()
+                .then((updatedHabit) => {
+                    setHabits((prev) => prev.map((h) => (h.id === habitId ? updatedHabit : h)));
                     onClose();
                 })
                 .then(() =>
