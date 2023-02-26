@@ -10,6 +10,8 @@ export interface Habit {
     allowSkip: boolean;
     allowPartialCompletion: boolean;
     allowOverGoalCompletion: boolean;
+    canBeFinished: boolean;
+    totalGoal: number;
     statistics: TargetStatistics;
     targets: Target[];
 }
@@ -35,17 +37,7 @@ export interface TargetStatistics {
     completedToday: boolean;
 }
 
-export type HabitData = Pick<
-    Habit,
-    | 'title'
-    | 'periodicity'
-    | 'periodicityValue'
-    | 'goal'
-    | 'goalType'
-    | 'allowSkip'
-    | 'allowPartialCompletion'
-    | 'allowOverGoalCompletion'
->;
+export type HabitData = Omit<Habit, 'id' | 'statistics' | 'targets' | 'createDate' | 'startDate'>;
 
 export interface Target {
     id: string;

@@ -22,6 +22,7 @@ import { useDeleteHabit } from '~/modules/Habits/api/useDeleteHabit';
 import { useEditHabit } from '~/modules/Habits/api/useEditHabit';
 import { EditHabitDialog } from '~/modules/Habits/components/HabitDetails';
 import { CompletedCheckbox } from '~/modules/Habits/components/HabitsList';
+import { ProgressBar } from '~/modules/Habits/components/HabitsList/ProgressBar';
 import { Habit } from '~/modules/Habits/types';
 import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
@@ -90,62 +91,68 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                 }}
                 p={2}
                 px={4}
-                h='64px'
                 display='flex'
+                flexDir={'column'}
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <Flex alignItems={'center'} justifyContent={'center'}>
-                    <CompletedCheckbox value={completed} habit={habit}></CompletedCheckbox>
-                    <Flex
-                        flexDir='column'
-                        justifyContent='center'
-                        onClick={() => selectHabit(habit.id)}
-                    >
-                        <Text fontSize='lg'>{habit.title}</Text>
+                <Box w={'100%'} display='flex' justifyContent='space-between' alignItems='center'>
+                    <Flex alignItems={'center'} justifyContent={'center'}>
+                        <CompletedCheckbox value={completed} habit={habit}></CompletedCheckbox>
+                        <Flex
+                            flexDir='column'
+                            justifyContent='center'
+                            onClick={() => selectHabit(habit.id)}
+                        >
+                            <Text fontSize='lg'>{habit.title}</Text>
 
-                        <Text fontSize='sm' color='gray.600'>
-                            {t(`common:${habit.goalType}`, { count: habit.goal })}
-                        </Text>
+                            <Text fontSize='sm' color='gray.600'>
+                                {t(`common:${habit.goalType}`, { count: habit.goal })}
+                            </Text>
+                        </Flex>
                     </Flex>
-                </Flex>
 
-                <Menu>
-                    <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        icon={<Icon as={Icons.Menu} />}
-                        variant='ghost'
-                        size='sm'
-                        onClick={(e) => e.stopPropagation()}
-                    />
-                    <MenuList p={0}>
-                        <OperationMenuItem
-                            onClick={onOpenEditHabit}
-                            icon={Icons.Edit}
-                            label={t('common:edit')}
+                    <Menu>
+                        <MenuButton
+                            as={IconButton}
+                            aria-label='Options'
+                            icon={<Icon as={Icons.Menu} />}
+                            variant='ghost'
+                            size='sm'
+                            onClick={(e) => e.stopPropagation()}
                         />
-
-                        {habit.targets.length > 0 && (
+                        <MenuList p={0}>
                             <OperationMenuItem
-                                onClick={onOpenCleanConfirm}
-                                icon={Icons.Delete}
-                                label={t('habits:cleanTargets')}
+                                onClick={onOpenEditHabit}
+                                icon={Icons.Edit}
+                                label={t('common:edit')}
                             />
-                        )}
 
-                        <OperationMenuItem
-                            onClick={() => cleanData()}
-                            icon={Icons.Archive}
-                            label={t('habits:archive')}
-                        />
-                        <OperationMenuItem
-                            onClick={onOpenDeleteConfirm}
-                            icon={Icons.TrashBin}
-                            label={t('habits:delete')}
-                        />
-                    </MenuList>
-                </Menu>
+                            {habit.targets.length > 0 && (
+                                <OperationMenuItem
+                                    onClick={onOpenCleanConfirm}
+                                    icon={Icons.Delete}
+                                    label={t('habits:cleanTargets')}
+                                />
+                            )}
+
+                            <OperationMenuItem
+                                onClick={() => cleanData()}
+                                icon={Icons.Archive}
+                                label={t('habits:archive')}
+                            />
+                            <OperationMenuItem
+                                onClick={onOpenDeleteConfirm}
+                                icon={Icons.TrashBin}
+                                label={t('habits:delete')}
+                            />
+                        </MenuList>
+                    </Menu>
+                </Box>
+
+                <Box width={'100%'} onClick={() => selectHabit(habit.id)}>
+                    <ProgressBar habit={habit} />
+                </Box>
             </Box>
 
             <ConfirmationDialog

@@ -24,7 +24,7 @@ export const HabitsListHeader = () => {
                     <Icon as={Icons.Add} fontSize={'20px'} /> {t('habits:addHabit')}
                 </Button>
             </Flex>
-            <EditHabitDialog onSubmit={createHabit} isOpen={isOpen} onClose={onClose} />
+            <EditHabitDialog onSubmit={createHabit} isOpen={isOpen} onClose={onClose} createMode />
         </>
     );
 };

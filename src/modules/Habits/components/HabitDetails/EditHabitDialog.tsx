@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Flex,
     FormControl,
     FormHelperText,
     HStack,
@@ -33,16 +34,20 @@ const defaultState = {
     allowSkip: false,
     allowPartialCompletion: false,
     allowOverGoalCompletion: false,
+    canBeFinished: false,
+    totalGoal: 1,
 };
 export const EditHabitDialog = ({
     isOpen,
     onClose,
     initialState,
+    createMode,
     onSubmit,
 }: {
     isOpen: boolean;
     onClose: () => void;
     initialState?: HabitData;
+    createMode?: boolean;
     onSubmit: (h: HabitData) => void;
 }) => {
     const [form, setForm] = useState(defaultState);
@@ -71,6 +76,8 @@ export const EditHabitDialog = ({
                 initialState?.allowPartialCompletion ?? defaultState.allowPartialCompletion,
             allowOverGoalCompletion:
                 initialState?.allowOverGoalCompletion ?? defaultState.allowPartialCompletion,
+            canBeFinished: initialState?.canBeFinished ?? defaultState.canBeFinished,
+            totalGoal: initialState?.totalGoal ?? defaultState.totalGoal,
         });
     }, [initialState]);
 
@@ -110,109 +117,163 @@ export const EditHabitDialog = ({
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Stack spacing={3}>
-                        <FormField
-                            label={t('habits:title')}
-                            validationProps={register('title', validationRules.text(2))}
-                            validationError={errors.title}
-                            field={'title'}
-                            direction={'column'}
-                            variant={'outline'}
-                            isRequired
-                        />
+                    <Stack spacing={6}>
+                        {/* MAIN SETTINGS */}
+                        <Stack spacing={3}>
+                            <FormField
+                                label={t('habits:title')}
+                                validationProps={register('title', validationRules.text(2))}
+                                validationError={errors.title}
+                                field={'title'}
+                                direction={'column'}
+                                variant={'outline'}
+                                isRequired
+                            />
 
-                        <HStack spacing={3}>
-                            <Tooltip label={t('habits:dailyGoal')} hasArrow>
-                                <Box>
-                                    <NumericInput
-                                        min={form.allowPartialCompletion ? 2 : 1}
-                                        value={form.goal}
+                            <HStack spacing={3}>
+                                <Tooltip label={t('habits:dailyGoal')} hasArrow>
+                                    <Box>
+                                        <NumericInput
+                                            min={form.allowPartialCompletion ? 2 : 1}
+                                            value={form.goal}
+                                            onChange={(e) =>
+                                                setValue(
+                                                    'goal',
+                                                    !Number.isNaN(Number(e)) ? Number(e) : 1,
+                                                )
+                                            }
+                                        />
+                                    </Box>
+                                </Tooltip>
+
+                                <Tooltip label={t('habits:goalType')} hasArrow>
+                                    <Select
+                                        value={form.goalType}
                                         onChange={(e) =>
-                                            setValue(
-                                                'goal',
-                                                !Number.isNaN(Number(e)) ? Number(e) : 1,
-                                            )
+                                            setValue('goalType', e.target.value as GoalType)
                                         }
-                                    />
-                                </Box>
-                            </Tooltip>
-
-                            <Tooltip label={t('habits:goalType')} hasArrow>
-                                <Select
-                                    value={form.goalType}
-                                    onChange={(e) =>
-                                        setValue('goalType', e.target.value as GoalType)
-                                    }
-                                    size={{
-                                        base: 'md',
-                                        sm: 'md',
-                                    }}
-                                >
-                                    <option value={GoalType.Times}>{t('habits:timesTitle')}</option>
-                                    <option value={GoalType.Mins}>
-                                        {t('habits:minutesTitle')}
-                                    </option>
-                                </Select>
-                            </Tooltip>
-
-                            <Tooltip label={t('habits:periodicity')} hasArrow>
-                                <Select
-                                    value={form.periodicity}
-                                    onChange={(e) =>
-                                        setValue('periodicity', e.target.value as Periodicity)
-                                    }
-                                    size={{
-                                        base: 'md',
-                                        sm: 'md',
-                                    }}
-                                >
-                                    {Object.values(Periodicity).map((key) => (
-                                        <option key={key} value={key}>
-                                            {t(`habits:periodicityOptions.${key}`)}
+                                        size={{
+                                            base: 'md',
+                                            sm: 'md',
+                                        }}
+                                    >
+                                        <option value={GoalType.Times}>
+                                            {t('habits:timesTitle')}
                                         </option>
-                                    ))}
-                                </Select>
-                            </Tooltip>
-                        </HStack>
+                                        <option value={GoalType.Mins}>
+                                            {t('habits:minutesTitle')}
+                                        </option>
+                                    </Select>
+                                </Tooltip>
 
-                        <Text mb={2} fontWeight={'semibold'}>
-                            {t('common:additional')}
-                        </Text>
+                                <Tooltip label={t('habits:periodicity')} hasArrow>
+                                    <Select
+                                        value={form.periodicity}
+                                        onChange={(e) =>
+                                            setValue('periodicity', e.target.value as Periodicity)
+                                        }
+                                        size={{
+                                            base: 'md',
+                                            sm: 'md',
+                                        }}
+                                    >
+                                        {Object.values(Periodicity).map((key) => (
+                                            <option key={key} value={key}>
+                                                {t(`habits:periodicityOptions.${key}`)}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </Tooltip>
+                            </HStack>
+                        </Stack>
 
-                        <FormControl>
-                            <Checkbox
-                                isChecked={form.allowOverGoalCompletion}
-                                onChange={(e) =>
-                                    setValue('allowOverGoalCompletion', e.target.checked)
-                                }
-                            >
-                                {t('habits:allowOverGoal')}
-                            </Checkbox>
-                        </FormControl>
+                        {/* GOAL COMPLETION */}
+                        <Stack spacing={3}>
+                            <Text fontWeight={'semibold'}>{t('habits:goal')}</Text>
 
-                        <Tooltip label={t('habits.increaseDailyGoal')} isDisabled={form.goal > 1}>
-                            <FormControl isDisabled={form.goal <= 1}>
+                            <FormControl>
                                 <Checkbox
-                                    isChecked={form.allowPartialCompletion}
-                                    onChange={(e) =>
-                                        setValue('allowPartialCompletion', e.target.checked)
-                                    }
+                                    isChecked={form.canBeFinished}
+                                    isDisabled={!createMode}
+                                    onChange={(e) => setValue('canBeFinished', e.target.checked)}
                                 >
-                                    {t('habits:allowPartial')}
+                                    {t('habits:canBeFinished')}
                                 </Checkbox>
                             </FormControl>
-                        </Tooltip>
 
-                        <FormControl>
-                            <Checkbox
-                                isChecked={form.allowSkip}
-                                onChange={(e) => setValue('allowSkip', e.target.checked)}
+                            <Flex
+                                gap={2}
+                                flexDir={'row'}
+                                alignItems='center'
+                                justify='space-between'
+                                color={!createMode || !form.canBeFinished ? 'gray.500' : ''}
                             >
-                                {t('habits:allowSkip')}
-                            </Checkbox>
+                                <Text whiteSpace={'nowrap'}>{t('habits:finishIf')}</Text>
+                                <Tooltip label={t('habits:goal')} hasArrow>
+                                    <Box>
+                                        <NumericInput
+                                            min={form.goal}
+                                            isDisabled={!createMode || !form.canBeFinished}
+                                            value={form.totalGoal}
+                                            onChange={(e) =>
+                                                setValue(
+                                                    'totalGoal',
+                                                    !Number.isNaN(Number(e)) ? Number(e) : 1,
+                                                )
+                                            }
+                                        />
+                                    </Box>
+                                </Tooltip>
+                                <Text>
+                                    {t('common:daysShort', {
+                                        count: form.totalGoal,
+                                    })}
+                                </Text>
+                            </Flex>
+                        </Stack>
 
-                            <FormHelperText>{t('habits:allowSkipDescription')}</FormHelperText>
-                        </FormControl>
+                        {/* ADDITIONAL */}
+                        <Stack spacing={3}>
+                            <Text fontWeight={'semibold'}>{t('common:additional')}</Text>
+
+                            <FormControl>
+                                <Checkbox
+                                    isChecked={form.allowOverGoalCompletion}
+                                    onChange={(e) =>
+                                        setValue('allowOverGoalCompletion', e.target.checked)
+                                    }
+                                >
+                                    {t('habits:allowOverGoal')}
+                                </Checkbox>
+                            </FormControl>
+
+                            <Tooltip
+                                label={t('habits.increaseDailyGoal')}
+                                isDisabled={form.goal > 1}
+                            >
+                                <FormControl isDisabled={form.goal <= 1}>
+                                    <Checkbox
+                                        isChecked={form.allowPartialCompletion}
+                                        onChange={(e) =>
+                                            setValue('allowPartialCompletion', e.target.checked)
+                                        }
+                                    >
+                                        {t('habits:allowPartial')}
+                                    </Checkbox>
+                                </FormControl>
+                            </Tooltip>
+
+                            <FormControl>
+                                <Checkbox
+                                    isChecked={form.allowSkip}
+                                    onChange={(e) => setValue('allowSkip', e.target.checked)}
+                                >
+                                    {t('habits:allowSkip')}
+                                </Checkbox>
+
+                                <FormHelperText>{t('habits:allowSkipDescription')}</FormHelperText>
+                            </FormControl>
+                        </Stack>
                     </Stack>
                 </ModalBody>
 

@@ -86,4 +86,7 @@ export const habits = {
     completedOn: '{{prefix}} on {{date}}',
     skipOn: 'Skip on {{date}}',
     currentWeek: 'Current week',
+    goal: 'Goal',
+    canBeFinished: 'Can be finished',
+    finishIf: 'Finish if ',
 };

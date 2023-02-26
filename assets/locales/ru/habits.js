@@ -87,4 +87,7 @@ export const habits = {
     targets_one: '1 выполнение',
     targets_other: '{{count}} выполнений',
     currentWeek: 'Текущая неделя',
+    goal: 'Цель',
+    canBeFinished: 'Можно завершить',
+    finishIf: 'Завершить, если ',
 };

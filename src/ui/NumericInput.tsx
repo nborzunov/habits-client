@@ -10,11 +10,13 @@ const NumericInput = ({
     min,
     max,
     value,
+    isDisabled,
     onChange,
 }: {
     min?: number;
     max?: number;
     value: number;
+    isDisabled?: boolean;
     onChange: (value: number) => void;
 }) => {
     return (
@@ -28,6 +30,7 @@ const NumericInput = ({
                 base: 'md',
                 sm: 'md',
             }}
+            isDisabled={isDisabled ?? false}
         >
             <NumberInputField />
             <NumberInputStepper>
