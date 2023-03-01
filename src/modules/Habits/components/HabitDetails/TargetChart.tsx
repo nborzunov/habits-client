@@ -1,4 +1,4 @@
-import { Box, useTheme } from '@chakra-ui/react';
+import { Box, Heading, useTheme } from '@chakra-ui/react';
 import { ArcElement, Chart, Legend, Title, Tooltip } from 'chart.js';
 import { memo, useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
@@ -25,7 +25,6 @@ export const TargetChart = memo(({ completed, failed }: { completed: number; fai
 
     const options = useMemo(
         () => ({
-            animation: false,
             plugins: {
                 title: {
                     display: true,
@@ -56,6 +55,13 @@ export const TargetChart = memo(({ completed, failed }: { completed: number; fai
         [t],
     );
 
+    if (!completed && !failed) {
+        return (
+            <Box>
+                <Heading size={'md'}>{t('habits:chartNoData')}</Heading>
+            </Box>
+        );
+    }
     return (
         <Box>
             <Doughnut data={data} options={options as any} />

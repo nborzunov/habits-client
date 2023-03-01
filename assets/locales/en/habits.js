@@ -89,4 +89,5 @@ export const habits = {
     goal: 'Goal',
     canBeFinished: 'Can be finished',
     finishIf: 'Finish if ',
+    chartNoData: 'No data to show',
 };

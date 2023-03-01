@@ -90,4 +90,5 @@ export const habits = {
     goal: 'Цель',
     canBeFinished: 'Можно завершить',
     finishIf: 'Завершить, если ',
+    chartNoData: 'Нет данных для отображения',
 };

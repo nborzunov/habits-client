@@ -43,7 +43,7 @@ export const common = {
     mins_one: '{{count}} минута',
     mins_few: '{{count}} минуты',
     mins_many: '{{count}} минуты',
-    add: 'Добавить {{count}}',
+    add: 'Добавить {{value}}',
     reset: 'Сброс',
     close: 'Закрыть',
     additional: 'Дополнительно',

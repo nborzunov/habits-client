@@ -1,6 +1,6 @@
-import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
+import { Box, Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import getCorrectDate from '~/common/utils/getCorrectDate';
@@ -11,7 +11,15 @@ import {
 } from '~/modules/Habits/components/TargetCalendar';
 import { Habit, TargetType } from '~/modules/Habits/types';
 
-export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Habit }) => {
+export const CompletedCheckbox = ({
+    value,
+    habit,
+    innerRef,
+}: {
+    value: boolean;
+    habit: Habit;
+    innerRef: any;
+}) => {
     const { t } = useTranslation();
     const { mutate: createTarget } = useCreateTarget();
 
@@ -40,31 +48,33 @@ export const CompletedCheckbox = ({ value, habit }: { value: boolean; habit: Hab
         [habit.targets],
     );
     return (
-        <Tooltip label={value ? t('habits:uncheck') : t('habits:complete')}>
-            <TargetActionContext.Provider
-                value={{
-                    habit,
-                    onChangeTarget,
-                    targets: habit.targets,
-                }}
-            >
-                <TargetActionWrapper
-                    date={dayjs().startOf('day')}
-                    showTooltip={false}
-                    target={target}
+        <Box ref={innerRef}>
+            <Tooltip label={value ? t('habits:uncheck') : t('habits:complete')}>
+                <TargetActionContext.Provider
+                    value={{
+                        habit,
+                        onChangeTarget,
+                        targets: habit.targets,
+                    }}
                 >
-                    <IconButton
-                        borderRadius={'full'}
-                        borderWidth={'2px'}
-                        variant={value ? 'solid' : 'outline'}
-                        colorScheme={'purple'}
-                        size={'sm'}
-                        icon={<Icon as={Icons.Complete} />}
-                        aria-label={'complete'}
-                        mr={'2'}
-                    />
-                </TargetActionWrapper>
-            </TargetActionContext.Provider>
-        </Tooltip>
+                    <TargetActionWrapper
+                        date={dayjs().startOf('day')}
+                        showTooltip={false}
+                        target={target}
+                    >
+                        <IconButton
+                            borderRadius={'full'}
+                            borderWidth={'2px'}
+                            variant={value ? 'solid' : 'outline'}
+                            colorScheme={'purple'}
+                            size={'sm'}
+                            icon={<Icon as={Icons.Complete} />}
+                            aria-label={'complete'}
+                            mr={'2'}
+                        />
+                    </TargetActionWrapper>
+                </TargetActionContext.Provider>
+            </Tooltip>
+        </Box>
     );
 };

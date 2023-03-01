@@ -239,17 +239,9 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
                 return false;
             }
 
-            if (
+            return !(
                 !(habit.allowPartialCompletion && habit.allowOverGoalCompletion) &&
                 widget in [WidgetIdentifiers.TOTAL_VALUES, WidgetIdentifiers.COMPLETED_VALUES]
-            ) {
-                return false;
-            }
-
-            return !(
-                !habit.statistics.completedCount &&
-                !habit.statistics.failedCount &&
-                widget === WidgetIdentifiers.COMPLETED_CHART
             );
         },
         [habit],

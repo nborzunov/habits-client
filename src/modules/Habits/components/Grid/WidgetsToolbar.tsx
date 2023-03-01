@@ -1,5 +1,4 @@
 import { Button, HStack, Icon, IconButton, Tooltip } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
@@ -22,26 +21,13 @@ export const WidgetsToolbar = ({
 }) => {
     const { t } = useTranslation();
     const isMobile = useMobile();
-
-    const MotionButton = motion(Button);
-    const MotionIconButton = motion(IconButton);
-
-    const animationProps = {
-        transition: { duration: 0.1 },
-        initial: { opacity: 0, scale: 0 },
-        animate: {
-            opacity: 1,
-            scale: 1,
-        },
-        // exit: { opacity: 0, scale: 0 },
-    };
     return (
         <HStack spacing={2}>
             <HStack spacing={2}>
                 {isEditMode && (
                     <>
                         <Tooltip label={'Save'}>
-                            <MotionIconButton
+                            <IconButton
                                 aria-label={'save widgets'}
                                 icon={<Icon as={Icons.Save} />}
                                 onClick={handleSaveLayout}
@@ -50,13 +36,12 @@ export const WidgetsToolbar = ({
                                     base: 'md',
                                     sm: 'md',
                                 }}
-                                {...animationProps}
                             />
                         </Tooltip>
 
                         <Tooltip label={t('habits:addWidget')}>
                             {!isMobile ? (
-                                <MotionButton
+                                <Button
                                     colorScheme={'purple'}
                                     variant={'outline'}
                                     onClick={onOpenWidgetsDrawer}
@@ -64,14 +49,13 @@ export const WidgetsToolbar = ({
                                         base: 'md',
                                         sm: 'md',
                                     }}
-                                    {...animationProps}
                                 >
                                     {t('common:add', {
-                                        count: `${widgets.length ? `(${widgets.length})` : ''}`,
-                                    } as any)}
-                                </MotionButton>
+                                        value: `${widgets.length ? `(${widgets.length})` : ''}`,
+                                    })}
+                                </Button>
                             ) : (
-                                <MotionIconButton
+                                <IconButton
                                     icon={<Icon as={Icons.Add} />}
                                     aria-label={'add-widget'}
                                     colorScheme={'purple'}
@@ -81,13 +65,12 @@ export const WidgetsToolbar = ({
                                         base: 'md',
                                         sm: 'md',
                                     }}
-                                    {...animationProps}
                                 />
                             )}
                         </Tooltip>
                         <Tooltip label={t('common:reset')}>
                             {!isMobile ? (
-                                <MotionButton
+                                <Button
                                     colorScheme={'purple'}
                                     variant={'outline'}
                                     onClick={resetLayout}
@@ -95,12 +78,11 @@ export const WidgetsToolbar = ({
                                         base: 'md',
                                         sm: 'md',
                                     }}
-                                    {...animationProps}
                                 >
                                     {t('common:reset')}
-                                </MotionButton>
+                                </Button>
                             ) : (
-                                <MotionIconButton
+                                <IconButton
                                     icon={<Icon as={Icons.Reset} />}
                                     aria-label={'reset-grid'}
                                     colorScheme={'purple'}
@@ -110,7 +92,6 @@ export const WidgetsToolbar = ({
                                         base: 'md',
                                         sm: 'md',
                                     }}
-                                    {...animationProps}
                                 />
                             )}
                         </Tooltip>
@@ -118,7 +99,7 @@ export const WidgetsToolbar = ({
                 )}
 
                 <Tooltip label={isEditMode ? t('common:close') : t('habits:editGrid')}>
-                    <MotionIconButton
+                    <IconButton
                         aria-label={isEditMode ? 'close' : 'edit grid'}
                         icon={<Icon as={isEditMode ? Icons.Cross : Icons.Grid} />}
                         onClick={() => setIsEditMode(!isEditMode)}
@@ -128,7 +109,6 @@ export const WidgetsToolbar = ({
                             base: 'md',
                             sm: 'md',
                         }}
-                        {...animationProps}
                     />
                 </Tooltip>
             </HStack>

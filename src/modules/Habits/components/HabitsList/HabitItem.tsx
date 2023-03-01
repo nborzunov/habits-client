@@ -74,15 +74,29 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
         navigate(`/habits/${habitId}`);
     };
 
+    const menuRef = useRef<HTMLDivElement>(null);
+    const completedRef = useRef<HTMLDivElement>(null);
+
+    const onHabitClick: MouseEventHandler<HTMLDivElement> = (e) => {
+        if (
+            !e.target ||
+            !menuRef.current ||
+            !completedRef.current ||
+            e.target === menuRef.current ||
+            menuRef.current.contains(e.target as Node) ||
+            e.target === completedRef.current ||
+            completedRef.current.contains(e.target as Node)
+        ) {
+            return;
+        }
+
+        selectHabit(habit.id);
+    };
     return (
         <>
             <Box
                 width={'100%'}
-                onClick={(e) => {
-                    if (e.target === e.currentTarget) {
-                        selectHabit(habit.id);
-                    }
-                }}
+                onClick={onHabitClick}
                 bg={selected ? 'blackAlpha.50' : 'transparent'}
                 transition='all 0.2s ease'
                 _hover={{
@@ -98,12 +112,12 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
             >
                 <Box w={'100%'} display='flex' justifyContent='space-between' alignItems='center'>
                     <Flex alignItems={'center'} justifyContent={'center'}>
-                        <CompletedCheckbox value={completed} habit={habit}></CompletedCheckbox>
-                        <Flex
-                            flexDir='column'
-                            justifyContent='center'
-                            onClick={() => selectHabit(habit.id)}
-                        >
+                        <CompletedCheckbox
+                            value={completed}
+                            habit={habit}
+                            innerRef={completedRef}
+                        ></CompletedCheckbox>
+                        <Flex flexDir='column' justifyContent='center' onClick={onHabitClick}>
                             <Text fontSize='lg'>{habit.title}</Text>
 
                             <Text fontSize='sm' color='gray.600'>
@@ -121,7 +135,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                             size='sm'
                             onClick={(e) => e.stopPropagation()}
                         />
-                        <MenuList p={0}>
+                        <MenuList p={0} ref={menuRef}>
                             <OperationMenuItem
                                 onClick={onOpenEditHabit}
                                 icon={Icons.Edit}
@@ -150,7 +164,7 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                     </Menu>
                 </Box>
 
-                <Box width={'100%'} onClick={() => selectHabit(habit.id)}>
+                <Box width={'100%'}>
                     <ProgressBar habit={habit} />
                 </Box>
             </Box>

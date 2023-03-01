@@ -47,7 +47,7 @@ export const common = {
     mins_few: '{{count}} minutes',
     mins_many: '{{count}} minutes',
     mins_other: '{{count}} minutes',
-    add: 'Add {{count}}',
+    add: 'Add {{value}}',
     reset: 'Reset',
     close: 'Close',
     additional: 'Additional',
