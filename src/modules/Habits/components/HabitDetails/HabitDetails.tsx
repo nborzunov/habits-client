@@ -84,93 +84,91 @@ export const HabitDetailsInner = ({ habit }: { habit: Habit }) => {
 
     return (
         <Loader>
-            <Flex width={'100%'}>
-                <Box m={0} width='100%' maxWidth={'1600px'}>
-                    <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
-                        <Flex alignItems={'center'}>
-                            {isMobile && (
-                                <Link to={'/habits'}>
-                                    <Back
-                                        size={{
-                                            base: 'lg',
-                                            sm: 'md',
-                                        }}
-                                    />
-                                </Link>
-                            )}
-                            <Heading as='h3' size='md'>
-                                {habit.title}
-                            </Heading>
-                        </Flex>
-                        <WidgetsToolbar
-                            handleSaveLayout={handleSaveLayout}
-                            resetLayout={reset}
-                            isEditMode={isEditMode}
-                            onOpenWidgetsDrawer={onOpenWidgetsDrawer}
-                            setIsEditMode={setIsEditMode}
-                            widgets={widgets}
-                        />
+            <Flex m={0} width='100%' maxWidth={'1600px'} flexDir={'column'}>
+                <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
+                    <Flex alignItems={'center'}>
+                        {isMobile && (
+                            <Link to={'/habits'}>
+                                <Back
+                                    size={{
+                                        base: 'lg',
+                                        sm: 'md',
+                                    }}
+                                />
+                            </Link>
+                        )}
+                        <Heading as='h3' size='md'>
+                            {habit.title}
+                        </Heading>
                     </Flex>
-                    <Box userSelect={isEditMode ? 'none' : 'auto'}>
-                        <TargetActionContext.Provider
-                            value={{
-                                habit,
-                                onChangeTarget,
-                                targets: habit.targets,
+                    <WidgetsToolbar
+                        handleSaveLayout={handleSaveLayout}
+                        resetLayout={reset}
+                        isEditMode={isEditMode}
+                        onOpenWidgetsDrawer={onOpenWidgetsDrawer}
+                        setIsEditMode={setIsEditMode}
+                        widgets={widgets}
+                    />
+                    <Drawer
+                        isOpen={isOpenWidgetsDrawer}
+                        placement='right'
+                        onClose={onCloseWidgetsDrawer}
+                    >
+                        <DrawerOverlay />
+                        <DrawerContent
+                            width={{
+                                sm: '20em',
+                                md: '20em',
+                                lg: '12em',
+                                xl: '14em',
+                                '2xl': '15.5em',
                             }}
                         >
-                            <GridLayout {...props}>
-                                {layout.map((widget) => (
-                                    <Box
-                                        key={widget.i}
-                                        onDragStart={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                        }}
-                                    >
-                                        <Widget
-                                            isEditMode={isEditMode}
-                                            remove={removeWidget}
-                                            id={widget.i as WidgetIdentifiers}
-                                            habit={habit}
-                                        />
-                                    </Box>
-                                ))}
-                            </GridLayout>
-                        </TargetActionContext.Provider>
-                    </Box>
-                </Box>
-                <Drawer
-                    isOpen={isOpenWidgetsDrawer}
-                    placement='right'
-                    onClose={onCloseWidgetsDrawer}
-                >
-                    <DrawerOverlay />
-                    <DrawerContent
-                        width={{
-                            sm: '20em',
-                            md: '20em',
-                            lg: '12em',
-                            xl: '14em',
-                            '2xl': '15.5em',
+                            <DrawerCloseButton />
+                            <DrawerHeader>
+                                <Heading as='h3' size='md'>
+                                    {t('habits:widgets')}
+                                </Heading>
+                            </DrawerHeader>
+                            <Box p={4}>
+                                <WidgetsList
+                                    widgets={widgets}
+                                    addWidget={addWidget}
+                                    habit={habit}
+                                    onClose={onCloseWidgetsDrawer}
+                                />
+                            </Box>
+                        </DrawerContent>
+                    </Drawer>
+                </Flex>
+                <Box userSelect={isEditMode ? 'none' : 'auto'}>
+                    <TargetActionContext.Provider
+                        value={{
+                            habit,
+                            onChangeTarget,
+                            targets: habit.targets,
                         }}
                     >
-                        <DrawerCloseButton />
-                        <DrawerHeader>
-                            <Heading as='h3' size='md'>
-                                {t('habits:widgets')}
-                            </Heading>
-                        </DrawerHeader>
-                        <Box p={4}>
-                            <WidgetsList
-                                widgets={widgets}
-                                addWidget={addWidget}
-                                habit={habit}
-                                onClose={onCloseWidgetsDrawer}
-                            />
-                        </Box>
-                    </DrawerContent>
-                </Drawer>
+                        <GridLayout {...props}>
+                            {layout.map((widget) => (
+                                <Box
+                                    key={widget.i}
+                                    onDragStart={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    <Widget
+                                        isEditMode={isEditMode}
+                                        remove={removeWidget}
+                                        id={widget.i as WidgetIdentifiers}
+                                        habit={habit}
+                                    />
+                                </Box>
+                            ))}
+                        </GridLayout>
+                    </TargetActionContext.Provider>
+                </Box>
             </Flex>
         </Loader>
     );

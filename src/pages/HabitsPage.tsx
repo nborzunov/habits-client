@@ -28,5 +28,3 @@ export const HabitsPage = () => {
         </Box>
     );
 };
-
-export default HabitsPage;

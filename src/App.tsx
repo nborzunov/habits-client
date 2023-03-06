@@ -11,8 +11,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { activeUserState } from '~/common/store/atoms';
 import { useActiveUser } from '~/modules/Auth/api/useActiveUser';
-import { Dashboard } from '~/modules/Dashboard';
-import { AuthPage, HabitsPage, ProfilePage } from '~/pages';
+import { AchievementsPage, AuthPage, DashboardPage, HabitsPage, ProfilePage } from '~/pages';
 import { Layout } from '~/ui/Layout/components/Layout';
 
 function App() {
@@ -32,7 +31,8 @@ function App() {
                 {(!!activeUser || isLoading) && (
                     <Route path='/' element={<Layout loading={isLoading} />}>
                         <Route path='habits/*' element={<HabitsPage />} />
-                        <Route path='dashboard' element={<Dashboard />} />
+                        <Route path='achievements' element={<AchievementsPage />} />
+                        <Route path='dashboard' element={<DashboardPage />} />
                         <Route path='me/*' element={<ProfilePage />} />
                         <Route path='*' element={<Navigate to='/habits' replace />} />
                     </Route>

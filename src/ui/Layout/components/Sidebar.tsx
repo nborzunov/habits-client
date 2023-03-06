@@ -69,6 +69,9 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                     <NavLink to='habits'>
                         <NavItem icon={Icons.Inbox}>{t('habits:allHabits')}</NavItem>
                     </NavLink>
+                    <NavLink to='achievements'>
+                        <NavItem icon={Icons.Award}>{t('achievements:achievements')}</NavItem>
+                    </NavLink>
                     {/*<NavLink to='dashboard'>*/}
                     {/*    <NavItem icon={Icons.Dashboard}>Dashboard</NavItem>*/}
                     {/*</NavLink>*/}

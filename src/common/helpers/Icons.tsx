@@ -1,4 +1,25 @@
-import { FiBarChart2, FiCalendar, FiLogOut, FiSettings, MdOutlineArchive } from 'react-icons/all';
+import {
+    AiOutlineArrowLeft,
+    AiOutlineCheckCircle,
+    AiOutlineFire,
+    FaFighterJet,
+    FiAward,
+    FiBarChart2,
+    FiCalendar,
+    FiLogOut,
+    FiSettings,
+    GiBrain,
+    GiLaurelsTrophy,
+    GiRunningShoe,
+    IoIosTimer,
+    IoIosTrophy,
+    IoMdFitness,
+    MdFlashOn,
+    MdOutlineArchive,
+    MdSchool,
+    MdStars,
+    MdTimer,
+} from 'react-icons/all';
 import {
     FiArrowRight,
     FiCheck,
@@ -57,6 +78,23 @@ const Icons = {
     Calendar: FiCalendar,
     Settings: FiSettings,
     Logout: FiLogOut,
+    Award: FiAward,
+    Trophy: GiLaurelsTrophy,
+    achievements: {
+        streakStarter: AiOutlineFire,
+        habitFormed: AiOutlineCheckCircle,
+        consistencyChampion: IoIosTrophy,
+        habitualHero: IoMdFitness,
+        habitMaster: MdSchool,
+        habitProdigy: GiBrain,
+        habitLegend: MdStars,
+        steadyEddie: IoIosTimer,
+        relentless: MdTimer,
+        unstoppable: GiRunningShoe,
+        surpassingLimits: MdFlashOn,
+        perseverance: FaFighterJet,
+        comebackKid: AiOutlineArrowLeft,
+    },
 };
 
 // TODO: write proxy for icons

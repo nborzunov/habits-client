@@ -14,7 +14,7 @@ localStorage.setItem('lang', lang);
 i18next.use(initReactI18next).init({
     lng: lang,
     fallbackLng: 'en',
-    ns: ['common', 'habits', 'profile'],
+    ns: ['common', 'habits', 'profile', 'achievements'],
     defaultNS: 'common',
     resources: {
         en: en,

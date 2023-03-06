@@ -6,6 +6,7 @@ import useMobile from '~/common/hooks/useMobile';
 import { completedHabitsState, uncompletedHabitsState } from '~/common/store/atoms';
 import { useHabitsList } from '~/modules/Habits/api/useHabitsList';
 import { HabitItem, HabitsListHeader } from '~/modules/Habits/components/HabitsList';
+import { Habit } from '~/modules/Habits/types';
 
 export const HabitsList = () => {
     const uncompletedHabits = useRecoilValue(uncompletedHabitsState);
@@ -17,6 +18,13 @@ export const HabitsList = () => {
 
     const noHabits = uncompletedHabits.length === 0 && completedHabits.length === 0;
 
+    const getProgress = (habit: Habit) => {
+        return {
+            count: (habit.statistics.completedCount / habit.totalGoal) * 100,
+            start: habit.statistics.completedCount,
+            end: habit.totalGoal,
+        };
+    };
     return (
         <Box
             borderRightColor='gray.200'
@@ -38,7 +46,7 @@ export const HabitsList = () => {
                 )}
                 <Stack spacing={0}>
                     {uncompletedHabits.map((habit) => (
-                        <HabitItem key={habit.id} habit={habit} />
+                        <HabitItem key={habit.id} habit={habit} progress={getProgress(habit)} />
                     ))}
                 </Stack>
                 {completedHabits.length > 0 && (
@@ -48,7 +56,12 @@ export const HabitsList = () => {
                         </Heading>
                         <List styleType='none'>
                             {completedHabits.map((habit) => (
-                                <HabitItem key={habit.id} habit={habit} />
+                                <HabitItem
+                                    key={habit.id}
+                                    habit={habit}
+                                    progress={getProgress(habit)}
+                                    completed
+                                />
                             ))}
                         </List>
                     </Box>

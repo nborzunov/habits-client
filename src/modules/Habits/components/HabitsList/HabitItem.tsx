@@ -26,7 +26,19 @@ import { ProgressBar } from '~/modules/Habits/components/HabitsList/ProgressBar'
 import { Habit } from '~/modules/Habits/types';
 import ConfirmationDialog from '~/ui/ConfirmationDialog';
 
-export const HabitItem = ({ habit }: { habit: Habit }) => {
+export const HabitItem = ({
+    habit,
+    progress,
+    completed,
+}: {
+    habit: Habit;
+    completed: boolean;
+    progress: {
+        count: number;
+        start?: number;
+        end?: number;
+    };
+}) => {
     const { habitId: selectedHabitId } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -44,7 +56,6 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
             setTitle(t('habits:allHabits'));
         }
     }, [selected, habit.title, t]);
-    const completed = habit.statistics.completedToday;
 
     const {
         isOpen: isOpenDeleteConfirm,
@@ -116,7 +127,8 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                             value={completed}
                             habit={habit}
                             innerRef={completedRef}
-                        ></CompletedCheckbox>
+                        />
+
                         <Flex flexDir='column' justifyContent='center' onClick={onHabitClick}>
                             <Text fontSize='lg'>{habit.title}</Text>
 
@@ -164,9 +176,11 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
                     </Menu>
                 </Box>
 
-                <Box width={'100%'}>
-                    <ProgressBar habit={habit} />
-                </Box>
+                {habit.totalGoal > 1 && (
+                    <Box width={'100%'}>
+                        <ProgressBar {...progress} />
+                    </Box>
+                )}
             </Box>
 
             <ConfirmationDialog
@@ -248,6 +262,9 @@ export const HabitItem = ({ habit }: { habit: Habit }) => {
     );
 };
 
+HabitItem.defaultProps = {
+    completed: false,
+};
 export const OperationMenuItem = ({
     onClick,
     icon,
