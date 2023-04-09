@@ -2,6 +2,7 @@ import { Button, Checkbox, HStack, Heading, Link, Stack, Text, useToast } from '
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import validationRules from '~/common/helpers/validationRules';
 import useTitle from '~/common/hooks/useTitle';
@@ -12,6 +13,7 @@ import Back from '~/ui/Layout/components/Back';
 export const Login = () => {
     const toast = useToast();
     const { t } = useTranslation();
+    const location = useLocation();
 
     useTitle(t('profile:login'));
 
@@ -103,7 +105,12 @@ export const Login = () => {
                         <Link color={'blue.400'}>{t('profile:password.forgot')}</Link>
                     </Stack>
                     <HStack spacing={3}>
-                        <NavLink to={'/'}>
+                        <NavLink
+                            to={{
+                                pathname: '/auth',
+                                search: location.search,
+                            }}
+                        >
                             <Back
                                 size={{
                                     base: 'lg',

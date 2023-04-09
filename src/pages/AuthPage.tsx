@@ -1,9 +1,7 @@
 import { Box, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { Auth, Login, Signup } from '~/modules/Auth';
+import React, { PropsWithChildren } from 'react';
 
-export const AuthPage = () => {
+export const AuthPage = ({ children }: PropsWithChildren) => {
     return (
         <Box
             as='section'
@@ -28,12 +26,7 @@ export const AuthPage = () => {
                     sm: 6,
                 }}
             >
-                <Routes>
-                    <Route path='/' element={<Auth />} />
-                    <Route path='signup' element={<Signup />} />
-                    <Route path='login' element={<Login />} />
-                    <Route path='*' element={<Navigate to='/login' replace />} />
-                </Routes>
+                {children}
             </Box>
         </Box>
     );

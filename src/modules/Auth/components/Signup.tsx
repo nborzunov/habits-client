@@ -2,6 +2,7 @@ import { Button, HStack, Heading, Link, Stack, Text, useToast } from '@chakra-ui
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import validationRules from '~/common/helpers/validationRules';
 import useTitle from '~/common/hooks/useTitle';
@@ -12,6 +13,7 @@ import Back from '~/ui/Layout/components/Back';
 export const Signup = () => {
     const toast = useToast();
     const { t } = useTranslation();
+    const location = useLocation();
 
     useTitle(t('common:signup.base'));
 
@@ -134,7 +136,7 @@ export const Signup = () => {
 
                 <Stack spacing={10} pt={4}>
                     <HStack spacing={3}>
-                        <NavLink to={'/'}>
+                        <NavLink to={{ pathname: '/auth', search: location.search }}>
                             <Back
                                 size={{
                                     base: 'lg',

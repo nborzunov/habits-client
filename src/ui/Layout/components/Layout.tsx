@@ -9,9 +9,12 @@ import {
 } from '@chakra-ui/react';
 import { createContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { useLocation } from 'react-router';
+import { Navigate, Outlet } from 'react-router-dom';
 import useMobile from '~/common/hooks/useMobile';
 import { setTitle } from '~/common/hooks/useTitle';
+import { useAchievementsWS } from '~/modules/Achievements/api/useAchievementsWS';
+import { useActiveUser } from '~/modules/Auth/api/useActiveUser';
 import { Sidebar } from '~/ui/Layout/components/Sidebar';
 
 interface LayoutContext {
@@ -27,18 +30,34 @@ export const LayoutContext = createContext<LayoutContext>({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCloseMenu: () => {},
 });
-export const Layout = ({ loading }: { loading: boolean }) => {
+export const Layout = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
-    const isMobile = useMobile();
-
+    const { isFetched, data } = useActiveUser();
     const { t } = useTranslation();
+    const isMobile = useMobile();
+    const location = useLocation();
+    useAchievementsWS();
+
     useEffect(() => {
         setTitle(t('common:habits'));
     }, [t]);
 
+    if (isFetched && !data) {
+        return (
+            <Navigate
+                to={{
+                    pathname: '/login',
+                    search: location.pathname ? `?from=${location.pathname}` : '',
+                }}
+            />
+        );
+    }
+
+    if (location.pathname === '/') {
+        return <Navigate to='/habits' />;
+    }
     return (
-        <Skeleton isLoaded={!loading}>
+        <Skeleton isLoaded={isFetched}>
             <Box
                 as='section'
                 bg='blue.50'

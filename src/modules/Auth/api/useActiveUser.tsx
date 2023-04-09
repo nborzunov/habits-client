@@ -13,7 +13,7 @@ export const useActiveUser = () => {
             const token = localStorage.getItem('authToken');
             if (!token) {
                 setActiveUser(null);
-                return Promise.resolve(null);
+                return Promise.reject(null);
             }
 
             return await api

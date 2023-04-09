@@ -49,8 +49,10 @@ export const profile = {
     },
     username: {
         field: 'Username',
-        notFound: 'User with this username does not exist',
-        alreadyExists: 'User with this username already exists',
+        errors: {
+            notFound: 'User with this username does not exist',
+            alreadyExists: 'User with this username already exists',
+        },
     },
     name: 'Name',
     surname: 'Surname',
