@@ -1,9 +1,8 @@
 import { useToast } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { AchievementCard } from '~/modules/Achievements/components/AchievementCard';
 import { achievementsData } from '~/modules/Achievements/const';
 import { AchievementKey } from '~/modules/Achievements/types';
-
-import { AchievementCard } from '../components/AchievementCard';
 
 export const useAchievementsWS = () => {
     const toast = useToast();

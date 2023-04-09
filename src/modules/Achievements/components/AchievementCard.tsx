@@ -39,6 +39,7 @@ export const AchievementCard = ({
         <Box
             as={GridItem}
             h={alertView ? '120px' : '160px'}
+            w={alertView ? '450px' : '100%'}
             bg={achievement.completed ? 'yellow.100' : 'white'}
             borderRadius={'2xl'}
             p={4}

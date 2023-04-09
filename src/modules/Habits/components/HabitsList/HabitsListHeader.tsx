@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Icon, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, Heading, Icon, IconButton, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import { useCreateHabit } from '~/modules/Habits/api/useCreateHabit';
@@ -20,9 +20,19 @@ export const HabitsListHeader = () => {
                     </Heading>
                 </Flex>
 
-                <Button colorScheme='blue' variant='solid' size='sm' onClick={onOpen}>
-                    <Icon as={Icons.Add} fontSize={'20px'} /> {t('habits:addHabit')}
-                </Button>
+                <Flex gap={2}>
+                    <Button colorScheme='blue' variant='solid' size='sm' onClick={onOpen}>
+                        <Icon as={Icons.Add} fontSize={'20px'} /> {t('habits:addHabit')}
+                    </Button>
+                    <IconButton
+                        icon={<Icon as={Icons.Settings} />}
+                        aria-label={'settings'}
+                        colorScheme='blue'
+                        variant='solid'
+                        size='sm'
+                        onClick={() => alert('TODO')}
+                    />
+                </Flex>
             </Flex>
             <EditHabitDialog onSubmit={createHabit} isOpen={isOpen} onClose={onClose} createMode />
         </>
