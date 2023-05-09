@@ -2,15 +2,23 @@ import {
     AiOutlineArrowLeft,
     AiOutlineCheckCircle,
     AiOutlineFire,
+    BiArrowToBottom,
+    BiArrowToTop,
+    BiTransfer,
+    BsFillPiggyBankFill,
     FaFighterJet,
+    FaMoneyCheckAlt,
     FiAward,
     FiBarChart2,
     FiCalendar,
     FiLogOut,
+    FiSearch,
     FiSettings,
     GiBrain,
     GiLaurelsTrophy,
     GiRunningShoe,
+    IoCardOutline,
+    IoCashOutline,
     IoIosTimer,
     IoIosTrophy,
     IoMdFitness,
@@ -19,6 +27,7 @@ import {
     MdSchool,
     MdStars,
     MdTimer,
+    RiBankLine,
 } from 'react-icons/all';
 import {
     FiArrowRight,
@@ -80,6 +89,8 @@ const Icons = {
     Logout: FiLogOut,
     Award: FiAward,
     Trophy: GiLaurelsTrophy,
+    Finance: FaMoneyCheckAlt,
+    Search: FiSearch,
     achievements: {
         streakStarter: AiOutlineFire,
         habitFormed: AiOutlineCheckCircle,
@@ -94,6 +105,18 @@ const Icons = {
         surpassingLimits: MdFlashOn,
         perseverance: FaFighterJet,
         comebackKid: AiOutlineArrowLeft,
+    },
+    transactionTypes: {
+        transfer: BiTransfer,
+        income: BiArrowToBottom,
+        expense: BiArrowToTop,
+    },
+
+    accountTypes: {
+        cash: IoCashOutline,
+        card: IoCardOutline,
+        deposit: RiBankLine,
+        loan: BsFillPiggyBankFill,
     },
 };
 

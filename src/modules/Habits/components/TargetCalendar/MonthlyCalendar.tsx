@@ -1,14 +1,4 @@
-import {
-    Box,
-    Flex,
-    Grid,
-    GridItem,
-    HStack,
-    Icon,
-    IconButton,
-    Text,
-    Tooltip,
-} from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -86,67 +76,49 @@ export const MonthlyCalendar = memo(() => {
     return (
         <Box p='2' textAlign={'center'} height={`${cellSize * 7 + cellGap * 6 + 60}px`}>
             <Flex justifyContent={'space-between'} alignItems={'center'} width={'100%'} pb={'2'}>
-                <HStack spacing={'1'}>
-                    <Tooltip label={t('common:date.previousYear')} placement={'top'}>
-                        <IconButton
-                            aria-label='left'
-                            icon={<Icon as={Icons.LeftDouble} />}
-                            onClick={() => setYear(year - 1)}
-                            isDisabled={year <= 2022}
-                            size={{ base: 'md', sm: 'md' }}
-                        />
-                    </Tooltip>
+                <Flex alignItems={'center'}>
                     <Tooltip label={t('common:date.previousMonth')} placement={'top'}>
                         <IconButton
                             aria-label='left'
                             icon={<Icon as={Icons.Left} />}
                             onClick={() => handleSetMonth(monthId - 1)}
                             isDisabled={year <= 2022 && monthId === 0}
-                            size={{ base: 'md', sm: 'md' }}
-                        />
-                    </Tooltip>
-                </HStack>
-                <Text
-                    px={{
-                        base: 2,
-                        sm: 1,
-                    }}
-                >
-                    {date.format('MMMM YYYY')}
-                </Text>
-                <HStack spacing={'1'}>
-                    <Tooltip label={t('common:date.nextMonth')} placement={'top'}>
-                        <IconButton
-                            aria-label='right'
-                            icon={<Icon as={Icons.Right} />}
-                            onClick={() => handleSetMonth(monthId + 1)}
-                            isDisabled={
-                                (year > 2023 && monthId === 11) ||
-                                dayjs(`${year}-${monthId + 2}-1`) > today
-                            }
-                            size={{ base: 'md', sm: 'md' }}
+                            size={'sm'}
                         />
                     </Tooltip>
 
-                    <Tooltip label={t('common:date.nextYear')} placement={'top'}>
-                        <IconButton
-                            aria-label='right'
-                            icon={<Icon as={Icons.RightDouble} />}
-                            onClick={() => setYear(year + 1)}
-                            isDisabled={
-                                year > 2023 || dayjs(`${year + 1}-${monthId + 1}-1`) > today
-                            }
-                            size={{ base: 'md', sm: 'md' }}
-                        />
-                    </Tooltip>
-                </HStack>
+                    <Text
+                        px={{
+                            base: 2,
+                            sm: 1,
+                        }}
+                        fontSize={'lg'}
+                        fontWeight={'bold'}
+                        ml={'2'}
+                    >
+                        {date.format('MMMM YYYY')}
+                    </Text>
+                </Flex>
+
+                <Tooltip label={t('common:date.nextMonth')} placement={'top'}>
+                    <IconButton
+                        aria-label='right'
+                        icon={<Icon as={Icons.Right} />}
+                        onClick={() => handleSetMonth(monthId + 1)}
+                        isDisabled={
+                            (year > 2023 && monthId === 11) ||
+                            dayjs(`${year}-${monthId + 2}-1`) > today
+                        }
+                        size={'sm'}
+                    />
+                </Tooltip>
             </Flex>
-            <Grid templateColumns={`repeat(7, ${cellSize}px)`} gap={`${cellGap}px`}>
+            <Grid templateColumns={`repeat(7, ${cellSize}px)`} columnGap={`18px`} rowGap={'12px'}>
                 {getLoop(7).map((rowId) => (
                     <GridItem key={'grid-column' + monthId + rowId}>
                         <Box>
                             <Box>
-                                <Text py='2' textAlign='center' fontWeight='bold'>
+                                <Text py='2' textAlign='center' fontWeight='semibold' color='black'>
                                     {t(`common:weekDays.${rowId}`)}
                                 </Text>
                             </Box>
@@ -267,11 +239,11 @@ const Cell = memo(
                     : 'transparent',
             color:
                 target && target.targetType === TargetType.Skip
-                    ? 'black'
+                    ? 'gray.500'
                     : target
                     ? 'white'
                     : monthId !== rawMonthId || day > today
-                    ? 'blackAlpha.600'
+                    ? 'gray.400'
                     : 'black',
 
             transition: 'all 0.2s',
@@ -285,7 +257,7 @@ const Cell = memo(
                     : 'gray.200',
         };
         return (
-            <Box cursor='pointer'>
+            <Box cursor={date > today ? 'default' : 'pointer'}>
                 <TargetActionWrapper
                     date={day}
                     target={target}
@@ -295,7 +267,9 @@ const Cell = memo(
                     }}
                     disabled={date > today}
                 >
-                    <Box {...styles}>{day.format('D')}</Box>
+                    <Box {...styles} fontWeight={'semibold'}>
+                        {day.format('D')}
+                    </Box>
                 </TargetActionWrapper>
             </Box>
         );

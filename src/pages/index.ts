@@ -3,3 +3,4 @@ export { HabitsPage } from '~/pages/HabitsPage';
 export { ProfilePage } from '~/pages/ProfilePage';
 export { DashboardPage } from '~/pages/DashboardPage';
 export { AchievementsPage } from '~/pages/AchievementsPage';
+export { FinancePage } from '~/pages/FinancePage';

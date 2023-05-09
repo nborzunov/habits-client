@@ -29,9 +29,11 @@ interface FormFieldProps {
     direction: 'row' | 'column';
     variant: 'outline' | 'filled';
     showPasswordIcon: boolean;
+    type?: string;
 }
 
 const FormField = ({
+    type,
     field,
     label,
     initialValue,
@@ -60,7 +62,9 @@ const FormField = ({
                             <Input
                                 id={field}
                                 type={
-                                    !showPasswordIcon || showPassword
+                                    type
+                                        ? type
+                                        : !showPasswordIcon || showPassword
                                         ? field === 'email'
                                             ? 'email'
                                             : 'text'

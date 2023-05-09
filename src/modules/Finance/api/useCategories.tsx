@@ -1,0 +1,37 @@
+import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import api from '~/common/helpers/api';
+import { Category } from '~/modules/Finance/types';
+
+export const useCategories = () => {
+    const { t } = useTranslation();
+
+    return useQuery<{
+        income: Category[];
+        expense: Category[];
+    }>({
+        queryKey: ['categories'],
+        queryFn: () =>
+            api
+                .get('finance/category')
+                .json<{
+                    income: Category[];
+                    expense: Category[];
+                }>()
+                .then(({ income, expense }) => {
+                    income.forEach((category) => {
+                        category.name = t(`finance:defaultIncomeCategories.${category.name}`);
+                    });
+                    expense.forEach((category) => {
+                        category.name = t(`finance:defaultExpenseCategories.${category.name}`);
+                    });
+                    return { income, expense };
+                }),
+        initialData: {
+            income: [],
+            expense: [],
+        },
+        refetchInterval: 1000 * 60 * 10,
+        refetchIntervalInBackground: true,
+    });
+};

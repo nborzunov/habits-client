@@ -8,7 +8,14 @@ import {
     createRoutesFromElements,
 } from 'react-router-dom';
 import { Auth, Login, Signup } from '~/modules/Auth';
-import { AchievementsPage, AuthPage, DashboardPage, HabitsPage, ProfilePage } from '~/pages';
+import {
+    AchievementsPage,
+    AuthPage,
+    DashboardPage,
+    FinancePage,
+    HabitsPage,
+    ProfilePage,
+} from '~/pages';
 import { Layout } from '~/ui/Layout/components/Layout';
 
 function App() {
@@ -48,6 +55,7 @@ function App() {
                 <Route path='/' element={<Layout />}>
                     <Route path='habits/*' element={<HabitsPage />} />
                     <Route path='achievements' element={<AchievementsPage />} />
+                    <Route path='finance/*' element={<FinancePage />} />
                     <Route path='dashboard' element={<DashboardPage />} />
                     <Route path='me/*' element={<ProfilePage />} />
                 </Route>
