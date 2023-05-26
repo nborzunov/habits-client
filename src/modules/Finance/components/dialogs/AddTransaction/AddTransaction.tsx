@@ -1,11 +1,15 @@
 import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDialog } from '~/common/hooks/useDialog';
-import { useAccounts } from '~/modules/Finance/api/useAccounts';
-import { useCategories } from '~/modules/Finance/api/useCategories';
+import { DefaultDialogProps } from '~/common/hooks/useDIalog.types';
+import { createDialogProvider } from '~/common/hooks/useDialog';
+import { useAccounts } from '~/modules/Finance/api/accounts/useAccounts';
+import { useCategories } from '~/modules/Finance/api/categories/useCategories';
+import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
 import { AddTransactionForm } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransactionForm';
-import { DialogTypes } from '~/modules/Finance/types';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
+import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
 
 export enum AddTransactionMode {
     Income = 'income',
@@ -13,13 +17,7 @@ export enum AddTransactionMode {
     Transfer = 'transfer',
 }
 
-export const AddTransactionDialog = ({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) => {
+export const AddTransaction = ({ isOpen, onClose }: DefaultDialogProps) => {
     const [mode, setMode] = useState<AddTransactionMode>(AddTransactionMode.Expense);
     const [[handleClose], setHandleClose] = useState<Array<() => void>>([onClose]);
     const { t } = useTranslation();
@@ -29,17 +27,13 @@ export const AddTransactionDialog = ({
     } = useCategories();
     const { data: accounts } = useAccounts();
 
-    const { isOpen: isOpenAddAccountDialog } = useDialog(DialogTypes.AddAccountDialog);
-    const { isOpen: isOpenAddAccountManagementDialog } = useDialog(
-        DialogTypes.AccountManagementDialog,
-    );
-    const { isOpen: isOpenAddCategoryDialog } = useDialog(DialogTypes.AddCategoryDialog);
-    const { isOpen: isOpenCategoryManagementDialog } = useDialog(
-        DialogTypes.CategoryManagementDialog,
-    );
+    const { isOpen: isOpenAddAccountDialog } = useAddAccountDialog();
+    const { isOpen: isOpenAddAccountManagementDialog } = useAccountManagementDialog();
+    const { isOpen: isOpenAddCategoryDialog } = useAddCategoryDialog();
+    const { isOpen: isOpenCategoryManagementDialog } = useCategoryManagementDialog();
 
     return (
-        <Modal isOpen={isOpen} onClose={handleClose} closeOnOverlayClick={false}>
+        <Modal isOpen={isOpen} onClose={handleClose} closeOnOverlayClick={false} size={'lg'}>
             <ModalOverlay />
             <ModalContent
                 p={0}
@@ -69,3 +63,8 @@ export const AddTransactionDialog = ({
         </Modal>
     );
 };
+
+export const {
+    DialogProvider: AddTransactionDialogProvider,
+    useDialogAction: useAddTransactionDialog,
+} = createDialogProvider(AddTransaction);

@@ -20,10 +20,15 @@ export const useCategories = () => {
                 }>()
                 .then(({ income, expense }) => {
                     income.forEach((category) => {
-                        category.name = t(`finance:defaultIncomeCategories.${category.name}`);
+                        category.name = category.default
+                            ? t(`finance:defaultIncomeCategories.${category.name}`)
+                            : category.name;
                     });
+
                     expense.forEach((category) => {
-                        category.name = t(`finance:defaultExpenseCategories.${category.name}`);
+                        category.name = category.default
+                            ? t(`finance:defaultExpenseCategories.${category.name}`)
+                            : category.name;
                     });
                     return { income, expense };
                 }),

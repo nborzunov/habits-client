@@ -2,9 +2,6 @@ import {
     Alert,
     AlertIcon,
     Box,
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
     Button,
     FormControl,
     FormLabel,
@@ -24,18 +21,18 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
 import validationRules from '~/common/helpers/validationRules';
-import { useDialog } from '~/common/hooks/useDialog';
-import { useCreateTransaction } from '~/modules/Finance/api/useCreateTransaction';
+import { useCreateTransaction } from '~/modules/Finance/api/transactions/useCreateTransaction';
 import { SelectFromPicklistField } from '~/modules/Finance/components/SelectFromPicklistField';
-import { AccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagementDialog';
-import { AddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccountDialog';
-import { AddTransactionMode } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransactionDialog';
-import { CategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagementDialog';
+import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
+import { AddTransactionMode } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransaction';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
+import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
 import { getCurrency } from '~/modules/Finance/helpers';
 import {
     Account,
     Category,
-    DialogTypes,
+    CategoryType,
     PicklistItem,
     TransactionType,
 } from '~/modules/Finance/types';
@@ -148,29 +145,28 @@ export const AddTransactionForm = ({
         return [];
     }, [mode, incomeCategories, expenseCategories]);
 
-    const {
-        isOpen: isOpenAddAccountDialog,
-        onOpen: onOpenAddAccountDialog,
-        onClose: onCloseAddAccountDialog,
-    } = useDialog(DialogTypes.AddAccountDialog);
+    const { onOpen: onOpenAddAccountDialog, onClose: onCloseAddAccountDialog } =
+        useAddAccountDialog();
+    const { onOpen: onOpenAccountManagementDialog } = useAccountManagementDialog();
+    const { onOpen: onOpenCategoryManagementDialog } = useCategoryManagementDialog();
+    const { onOpen: onOpenAddCategoryDialog, onClose: onCloseAddCategoryDialog } =
+        useAddCategoryDialog();
 
-    const {
-        isOpen: isOpenAccountManagementDialog,
-        onOpen: onOpenAccountManagementDialog,
-        onClose: onCloseAccountManagementDialog,
-    } = useDialog(DialogTypes.AccountManagementDialog);
-
-    const {
-        // isOpen: isOpenAddCategoryDialog,
-        onOpen: onOpenAddCategoryDialog,
-        // onClose: onCloseAddCategoryDialog,
-    } = useDialog(DialogTypes.AddCategoryDialog);
-
-    const {
-        isOpen: isOpenCategoryManagementDialog,
-        onOpen: onOpenCategoryManagementDialog,
-        onClose: onCloseCategoryManagementDialog,
-    } = useDialog(DialogTypes.CategoryManagementDialog);
+    const openAddAccountDialog = useCallback(
+        () =>
+            onOpenAddAccountDialog({
+                breadcrumbs: [
+                    {
+                        label: t('finance:addTransaction'),
+                        onClick: onCloseAddAccountDialog,
+                    },
+                    {
+                        label: t(`finance:newAccount`),
+                    },
+                ],
+            }),
+        [t, onOpenAddAccountDialog, onCloseAddAccountDialog],
+    );
 
     const clearForm = useCallback(() => {
         setValue('account', undefined);
@@ -202,52 +198,6 @@ export const AddTransactionForm = ({
 
     return (
         <>
-            <AddAccountDialog
-                isOpen={isOpenAddAccountDialog}
-                onClose={onCloseAddAccountDialog}
-                header={
-                    <Breadcrumb>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink onClick={onCloseAddAccountDialog}>
-                                {t('finance:addTransaction')}
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-
-                        <BreadcrumbItem isCurrentPage>
-                            <BreadcrumbLink>{t(`finance:newAccount`)}</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </Breadcrumb>
-                }
-            />
-            <AccountManagementDialog
-                isOpen={isOpenAccountManagementDialog}
-                onClose={onCloseAccountManagementDialog}
-            />
-
-            {/*<AddCategory*/}
-            {/*    isOpen={isOpenAddAccountDialog}*/}
-            {/*    onClose={onCloseAddAccountDialog}*/}
-            {/*    header={*/}
-            {/*        <Breadcrumb>*/}
-            {/*            <BreadcrumbItem>*/}
-            {/*                <BreadcrumbLink onClick={onCloseAddAccountDialog}>*/}
-            {/*                    {t('finance:addTransaction')}*/}
-            {/*                </BreadcrumbLink>*/}
-            {/*            </BreadcrumbItem>*/}
-
-            {/*            <BreadcrumbItem isCurrentPage>*/}
-            {/*                <BreadcrumbLink>{t(`finance:newAccount`)}</BreadcrumbLink>*/}
-            {/*            </BreadcrumbItem>*/}
-            {/*        </Breadcrumb>*/}
-            {/*    }*/}
-            {/*/>*/}
-
-            <CategoryManagementDialog
-                isOpen={isOpenCategoryManagementDialog}
-                onClose={onCloseCategoryManagementDialog}
-                items={categories}
-            />
-
             <ModalBody py={0} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <HStack spacing={2}>
                     {Object.values(AddTransactionMode).map((m) => (
@@ -302,7 +252,7 @@ export const AddTransactionForm = ({
                                         base: 'md',
                                         sm: 'md',
                                     }}
-                                    onClick={onOpenAddAccountDialog}
+                                    onClick={openAddAccountDialog}
                                 >
                                     {t('finance:newAccount')}
                                 </Button>
@@ -315,11 +265,11 @@ export const AddTransactionForm = ({
                                     aria-label={'manage accounts'}
                                     size={'xs'}
                                     variant={'ghost'}
-                                    onClick={onOpenAccountManagementDialog}
+                                    onClick={() => onOpenAccountManagementDialog()}
                                 ></IconButton>
                             </Tooltip>
                         }
-                        addItem={onOpenAddAccountDialog}
+                        addItem={openAddAccountDialog}
                     />
                     <SelectFromPicklistField
                         name={t('finance:category')}
@@ -335,11 +285,29 @@ export const AddTransactionForm = ({
                                     aria-label={'manage categories'}
                                     size={'xs'}
                                     variant={'ghost'}
-                                    onClick={onOpenCategoryManagementDialog}
+                                    onClick={() =>
+                                        onOpenCategoryManagementDialog({
+                                            items: categories,
+                                            mode: mode as unknown as CategoryType,
+                                        })
+                                    }
                                 ></IconButton>
                             </Tooltip>
                         }
-                        addItem={onOpenAddCategoryDialog}
+                        addItem={() =>
+                            onOpenAddCategoryDialog({
+                                breadcrumbs: [
+                                    {
+                                        label: t('finance:addTransaction'),
+                                        onClick: onCloseAddCategoryDialog,
+                                    },
+                                    {
+                                        label: t(`finance:newCategory`),
+                                    },
+                                ],
+                                categoryType: mode as unknown as CategoryType,
+                            })
+                        }
                     />
 
                     <FormControl>

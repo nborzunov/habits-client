@@ -15,36 +15,62 @@ import {
     ModalHeader,
     Stack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
-import { useDialog } from '~/common/hooks/useDialog';
-import { Category, DialogTypes, PicklistItem } from '~/modules/Finance/types';
+import { useCustomScroll } from '~/common/hooks/useCustomScroll';
+import { DialogProps } from '~/common/hooks/useDIalog.types';
+import { createDialogProvider } from '~/common/hooks/useDialog';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
+import { Category, CategoryType, PicklistItem } from '~/modules/Finance/types';
 
-export const CategoryManagementDialog = ({
+export interface CategoryManagementProps {
+    items: PicklistItem<Category>[];
+    mode: CategoryType;
+}
+
+const CategoryManagement = ({
     isOpen,
     onClose,
     items = [],
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-    items: PicklistItem<Category>[];
-}) => {
+    mode,
+}: DialogProps<CategoryManagementProps>) => {
     const { t } = useTranslation();
 
     const {
         isOpen: isOpenAddCategoryDialog,
-        // onOpen: onOpenAddCategoryDialog,
-        // onClose: onCloseAddCategoryDialog,
-    } = useDialog(DialogTypes.AddCategoryDialog);
+        onOpen: onOpenAddCategoryDialog,
+        onClose: onCloseAddCategoryDialog,
+    } = useAddCategoryDialog();
 
     const showChildren = true;
     const [selectedParent, setSelectedParent] = React.useState<PicklistItem<Category> | null>(null);
 
+    useEffect(() => {
+        setSelectedParent(null);
+    }, [isOpen]);
+
+    const openAddCategoryDialog = (parentId?: string) =>
+        onOpenAddCategoryDialog({
+            breadcrumbs: [
+                {
+                    label: t('finance:addTransaction'),
+                    onClick: onCloseAddCategoryDialog,
+                },
+                {
+                    label: t(`finance:newCategory`),
+                },
+            ],
+            categoryType: mode as unknown as CategoryType,
+            parentId,
+        });
+
+    const customScroll = useCustomScroll();
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} size={'3xl'}>
+        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} size={'4xl'}>
             <ModalContent mx={4} visibility={isOpenAddCategoryDialog ? 'hidden' : 'visible'}>
-                <ModalHeader>{t(`finance:categoryManagement`)}</ModalHeader>
+                <ModalHeader>{t(`finance:categoryManagement`)} </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {!items.length && (
@@ -66,16 +92,14 @@ export const CategoryManagementDialog = ({
                                 pr={1.5}
                                 h={'307px'}
                                 overflowY={'scroll'}
+                                css={customScroll}
                             >
                                 {items.map((item) => (
                                     <Button
                                         minH={'40px'}
                                         key={item.id}
                                         onClick={() => {
-                                            if (item.children?.length) {
-                                                setSelectedParent(item);
-                                                return;
-                                            }
+                                            setSelectedParent(item);
                                         }}
                                         width={'100%'}
                                         justifyContent={'space-between'}
@@ -84,7 +108,12 @@ export const CategoryManagementDialog = ({
                                                 <Icon fontSize='lg' as={Icons.Right} />
                                             ) : undefined
                                         }
-                                        variant={'solid'}
+                                        colorScheme={
+                                            selectedParent?.id === item.id ? 'blue' : undefined
+                                        }
+                                        variant={
+                                            selectedParent?.id === item.id ? 'outline' : 'solid'
+                                        }
                                     >
                                         {item.label}
                                     </Button>
@@ -99,13 +128,13 @@ export const CategoryManagementDialog = ({
                             {!selectedParent && (
                                 <Alert status='info'>
                                     <AlertIcon />
-                                    {t('finance:selectCategoryToViewChildren')}
+                                    {t('finance:selectCategoryToViewSubcategories')}
                                 </Alert>
                             )}
                             {selectedParent?.children?.length === 0 && (
                                 <Alert status='info'>
                                     <AlertIcon />
-                                    {t('finance:selectedCategoryHasNoChildren')}
+                                    {t('finance:selectedCategoryHasNoSubcategories')}
                                 </Alert>
                             )}
                             {selectedParent?.children && selectedParent?.children?.length > 0 && (
@@ -135,18 +164,27 @@ export const CategoryManagementDialog = ({
                             )}
                         </GridItem>
                     </Grid>
-
-                    {/*    TODO: add category*/}
                 </ModalBody>
 
                 <ModalFooter pt={0}>
-                    <Flex width={'100%'}>
+                    <Flex width={'100%'} justifyContent={'space-between'}>
                         <Button
                             minH={'40px'}
                             leftIcon={<Icon as={Icons.Add} />}
                             width={'calc(50% - 10.5px)'}
                             justifyContent={'start'}
                             variant={'solid'}
+                            onClick={() => openAddCategoryDialog()}
+                        >
+                            {t('finance:add')}
+                        </Button>
+                        <Button
+                            minH={'40px'}
+                            leftIcon={<Icon as={Icons.Add} />}
+                            width={'calc(50% - 10.5px)'}
+                            justifyContent={'start'}
+                            variant={'solid'}
+                            onClick={() => openAddCategoryDialog(selectedParent?.id)}
                         >
                             {t('finance:add')}
                         </Button>
@@ -156,3 +194,8 @@ export const CategoryManagementDialog = ({
         </Modal>
     );
 };
+
+export const {
+    DialogProvider: CategoryManagementDialogProvider,
+    useDialogAction: useCategoryManagementDialog,
+} = createDialogProvider<CategoryManagementProps>(CategoryManagement);

@@ -7,7 +7,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
 import { BREAKPOINTS } from '~/common/constants';
-import { DialogProvider } from '~/common/hooks/useDialog';
 
 import App from './App';
 import './i18n.ts';
@@ -39,9 +38,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <ChakraProvider theme={theme}>
             <RecoilRoot>
                 <QueryClientProvider client={queryClient}>
-                    <DialogProvider>
-                        <App />
-                    </DialogProvider>
+                    <App />
                 </QueryClientProvider>
             </RecoilRoot>
         </ChakraProvider>

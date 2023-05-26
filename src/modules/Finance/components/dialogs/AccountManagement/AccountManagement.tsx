@@ -2,9 +2,6 @@ import {
     Alert,
     AlertIcon,
     Box,
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
     Button,
     Flex,
     Icon,
@@ -22,28 +19,23 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Icons from '~/common/helpers/Icons';
-import { useDialog } from '~/common/hooks/useDialog';
-import { useAccounts } from '~/modules/Finance/api/useAccounts';
-import { AddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccountDialog';
+import { DefaultDialogProps } from '~/common/hooks/useDIalog.types';
+import { createDialogProvider } from '~/common/hooks/useDialog';
+import { useAccounts } from '~/modules/Finance/api/accounts/useAccounts';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
 import { getAccountTypeColor } from '~/modules/Finance/helpers';
-import { DialogTypes } from '~/modules/Finance/types';
 
-export const AccountManagementDialog = ({
-    isOpen,
-    onClose,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-}) => {
+const AccountManagement = ({ isOpen, onClose }: DefaultDialogProps) => {
     const { t } = useTranslation();
 
     const {
         isOpen: isOpenAddAccountDialog,
         onOpen: onOpenAddAccountDialog,
         onClose: onCloseAddAccountDialog,
-    } = useDialog(DialogTypes.AddAccountDialog);
+    } = useAddAccountDialog();
 
     const { data: accounts } = useAccounts();
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalContent mx={4} visibility={isOpenAddAccountDialog ? 'hidden' : 'visible'}>
@@ -89,24 +81,6 @@ export const AccountManagementDialog = ({
                             </Flex>
                         ))}
                     </Stack>
-
-                    <AddAccountDialog
-                        isOpen={isOpenAddAccountDialog}
-                        onClose={onCloseAddAccountDialog}
-                        header={
-                            <Breadcrumb>
-                                <BreadcrumbItem>
-                                    <BreadcrumbLink onClick={onCloseAddAccountDialog}>
-                                        {t('finance:accountManagement')}
-                                    </BreadcrumbLink>
-                                </BreadcrumbItem>
-
-                                <BreadcrumbItem isCurrentPage>
-                                    <BreadcrumbLink>{t(`finance:newAccount`)}</BreadcrumbLink>
-                                </BreadcrumbItem>
-                            </Breadcrumb>
-                        }
-                    />
                 </ModalBody>
 
                 <ModalFooter>
@@ -118,7 +92,19 @@ export const AccountManagementDialog = ({
                             colorScheme='green'
                             type='submit'
                             size={'md'}
-                            onClick={onOpenAddAccountDialog}
+                            onClick={() =>
+                                onOpenAddAccountDialog({
+                                    breadcrumbs: [
+                                        {
+                                            label: t('finance:accountManagement'),
+                                            onClick: onCloseAddAccountDialog,
+                                        },
+                                        {
+                                            label: t(`finance:newAccount`),
+                                        },
+                                    ],
+                                })
+                            }
                         >
                             {t('finance:newAccount')}
                         </Button>
@@ -128,3 +114,8 @@ export const AccountManagementDialog = ({
         </Modal>
     );
 };
+
+export const {
+    DialogProvider: AccountManagementDialogProvider,
+    useDialogAction: useAccountManagementDialog,
+} = createDialogProvider(AccountManagement);

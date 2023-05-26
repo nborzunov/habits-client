@@ -18,7 +18,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useCreateAccount } from '~/modules/Finance/api/useCreateAccount';
+import { Breadcrumbs, BreadcrumbsProps } from '~/common/components/Breadcrumbs';
+import { DialogProps } from '~/common/hooks/useDIalog.types';
+import { createDialogProvider } from '~/common/hooks/useDialog';
+import { useCreateAccount } from '~/modules/Finance/api/accounts/useCreateAccount';
 import { SelectFromPicklistField } from '~/modules/Finance/components/SelectFromPicklistField';
 import { AccountType, Currency } from '~/modules/Finance/types';
 
@@ -34,15 +37,9 @@ interface FormData {
     amount?: number | '';
 }
 
-export const AddAccountDialog = ({
-    isOpen,
-    onClose,
-    header,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
-    header: any;
-}) => {
+type AddAccountProps = BreadcrumbsProps;
+
+export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAccountProps>) => {
     const { t } = useTranslation();
 
     const { mutate } = useCreateAccount(() => {
@@ -114,7 +111,9 @@ export const AddAccountDialog = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
-                <ModalHeader>{header}</ModalHeader>
+                <ModalHeader>
+                    <Breadcrumbs items={breadcrumbs} />
+                </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={3}>
@@ -205,3 +204,8 @@ export const AddAccountDialog = ({
         </Modal>
     );
 };
+
+export const {
+    DialogProvider: AddAccountDialogProvider,
+    useDialogAction: useAddAccountDialog,
+} = createDialogProvider<AddAccountProps>(AddAccount);

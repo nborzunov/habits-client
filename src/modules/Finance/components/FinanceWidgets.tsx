@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icons from '~/common/helpers/Icons';
-import { useTransactions } from '~/modules/Finance/api/useTransactions';
+import { useTransactions } from '~/modules/Finance/api/transactions/useTransactions';
 import {
     getAccountTypeColor,
     getCategoryName,

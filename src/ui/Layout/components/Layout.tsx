@@ -25,9 +25,7 @@ interface LayoutContext {
 
 export const LayoutContext = createContext<LayoutContext>({
     isMenuOpened: false,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onOpenMenu: () => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCloseMenu: () => {},
 });
 export const Layout = () => {

@@ -1,68 +1,44 @@
 import { useDisclosure } from '@chakra-ui/react';
-import {
-    Dispatch,
-    FC,
-    ReactNode,
-    SetStateAction,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import { ComponentType, ReactElement, createContext, useContext, useState } from 'react';
+import { DialogContextProps, DialogProps } from '~/common/hooks/useDIalog.types';
 
-interface DialogState {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
+export function createDialogProvider<T>(DialogComponent: ComponentType<DialogProps<T>>) {
+    const DialogContext = createContext<DialogContextProps<T>>({
+        onOpen: () => {},
+        onClose: () => {},
+        isOpen: false,
+    } as DialogContextProps<T>);
+
+    const DialogProvider = ({ children }: { children: ReactElement }) => {
+        const { isOpen, onOpen, onClose } = useDisclosure();
+
+        const open = (props: T) => {
+            onOpen();
+            setDialogConfig(props);
+        };
+
+        const close = () => {
+            onClose();
+            setTimeout(() => {
+                setDialogConfig({} as T);
+            }, 300);
+        };
+
+        const [dialogConfig, setDialogConfig] = useState<T>({} as T);
+
+        return (
+            <DialogContext.Provider
+                value={{ onOpen: open, isOpen, onClose: close } as DialogContextProps<T>}
+            >
+                {children}
+                <DialogComponent isOpen={isOpen} onClose={close} {...dialogConfig} />
+            </DialogContext.Provider>
+        );
+    };
+
+    function useDialogAction() {
+        return useContext(DialogContext);
+    }
+
+    return { DialogProvider, useDialogAction };
 }
-
-interface DialogContextType {
-    dialogs: Record<string, DialogState>;
-    setDialogs: Dispatch<SetStateAction<Record<string, DialogState>>>;
-}
-
-const DialogContext = createContext<DialogContextType>({
-    dialogs: {},
-    setDialogs: () => '',
-});
-
-interface DialogProviderProps {
-    children: ReactNode;
-}
-
-export const DialogProvider: FC<DialogProviderProps> = ({ children }) => {
-    const [dialogs, setDialogs] = useState<Record<string, DialogState>>({});
-
-    return (
-        <DialogContext.Provider value={{ dialogs, setDialogs }}>{children}</DialogContext.Provider>
-    );
-};
-
-const useDialogContext = () => useContext(DialogContext);
-
-interface UseDialogState {
-    (dialogId: string, isOpenDefault?: boolean): DialogState;
-}
-
-export const useDialog: UseDialogState = (dialogId, isOpenDefault = false) => {
-    const { dialogs, setDialogs } = useDialogContext();
-    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: isOpenDefault });
-
-    useEffect(() => {
-        if (!dialogs[dialogId]) {
-            setDialogs((prevDialogs) => ({
-                ...prevDialogs,
-                [dialogId]: { isOpen, onOpen, onClose },
-            }));
-        }
-    }, [isOpen, onOpen, onClose, dialogId, setDialogs, dialogs]);
-
-    useEffect(() => {
-        setDialogs((prevDialogs) => ({
-            ...prevDialogs,
-            [dialogId]: { isOpen, onOpen, onClose },
-        }));
-    }, [isOpen, onOpen, onClose, setDialogs, dialogId]);
-
-    return dialogs[dialogId] || { isOpen: false };
-};

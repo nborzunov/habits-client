@@ -66,6 +66,8 @@ export const finance = {
     manageCategories: 'Manage Categories',
     categoryManagement: 'Category Management',
     noCategoriesWarning: 'You have no categories yet. Please add one.',
-    selectCategoryToViewChildren: 'Select category to view its children',
-    selectedCategoryHasNoChildren: 'Selected category has no children',
+    selectCategoryToViewSubcategories: 'Select category to view its subcategories',
+    selectedCategoryHasNoSubcategories: 'Selected category has no subcategories',
+    categoryCreated: 'Category created',
+    newCategory: 'New Category',
 };
