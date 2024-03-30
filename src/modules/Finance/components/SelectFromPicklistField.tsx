@@ -39,6 +39,7 @@ export const SelectFromPicklistField = <
     noItemsWarning,
     editButton,
     addItem,
+    itemRenderer,
 }: {
     name: string;
     title: string;
@@ -50,6 +51,7 @@ export const SelectFromPicklistField = <
     noItemsWarning?: any;
     editButton?: any;
     addItem?: any;
+    itemRenderer?: (item: PicklistItem<T>) => React.ReactNode;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { t } = useTranslation();
@@ -107,7 +109,7 @@ export const SelectFromPicklistField = <
                                                     value?.id === item.id ? 'outline' : 'solid'
                                                 }
                                             >
-                                                {item.label}
+                                                {itemRenderer ? itemRenderer(item) : item.label}
                                             </Button>
                                         </GridItem>
                                     ))}

@@ -3,6 +3,7 @@ import {
     AlertIcon,
     Box,
     Button,
+    Flex,
     FormControl,
     FormLabel,
     HStack,
@@ -28,7 +29,7 @@ import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/Accoun
 import { AddTransactionMode } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransaction';
 import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
 import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
-import { getCurrency } from '~/modules/Finance/helpers';
+import { getAccountTypeColor, getCurrency } from '~/modules/Finance/helpers';
 import {
     Account,
     Category,
@@ -235,6 +236,19 @@ export const AddTransactionForm = ({
                             label: account.name,
                             value: account,
                         }))}
+                        itemRenderer={({ value: account }) => (
+                            <Flex width='100%' alignItems='center'>
+                                <Icon
+                                    as={Icons.accountTypes[account.accountType]}
+                                    fontSize={'4xl'}
+                                    color={`${getAccountTypeColor(account)}.500`}
+                                    p={2}
+                                    borderRadius={'xl'}
+                                    boxShadow={'sm'}
+                                />
+                                <span>{account.name}</span>
+                            </Flex>
+                        )}
                         noItemsWarning={
                             <>
                                 <Alert status='info'>

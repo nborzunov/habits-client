@@ -205,7 +205,5 @@ export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAcco
     );
 };
 
-export const {
-    DialogProvider: AddAccountDialogProvider,
-    useDialogAction: useAddAccountDialog,
-} = createDialogProvider<AddAccountProps>(AddAccount);
+export const { DialogProvider: AddAccountDialogProvider, useDialogAction: useAddAccountDialog } =
+    createDialogProvider<AddAccountProps>(AddAccount);

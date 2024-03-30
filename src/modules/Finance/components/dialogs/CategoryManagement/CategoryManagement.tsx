@@ -92,7 +92,7 @@ const CategoryManagement = ({
                                 pr={1.5}
                                 h={'307px'}
                                 overflowY={'scroll'}
-                                css={customScroll}
+                                __css={customScroll}
                             >
                                 {items.map((item) => (
                                     <Button

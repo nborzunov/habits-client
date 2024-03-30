@@ -75,7 +75,7 @@ const AddCategory = ({
 
     useEffect(() => {
         setValue('name', '');
-    }, [isOpen]);
+    }, [isOpen, setValue]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>

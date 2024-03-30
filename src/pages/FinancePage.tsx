@@ -19,6 +19,8 @@ export const OpenAddTransactionDialogButton = () => {
     const { t } = useTranslation();
 
     return (
+        // eslint-disable-next-line
+        // @ts-ignore
         <Tooltip label={t('finance:addTransaction')}>
             <IconButton
                 size={'lg'}
