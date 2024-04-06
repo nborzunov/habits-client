@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import Icons from '~/common/helpers/Icons';
+import { AccountsList } from '~/modules/Finance/components/Accounts/AccountsList';
 import { FinanceWidgets } from '~/modules/Finance/components/FinanceWidgets';
 import { TransactionsList } from '~/modules/Finance/components/Transactions/TransactionsList';
 import { AccountManagementDialogProvider } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
@@ -19,8 +20,6 @@ export const OpenAddTransactionDialogButton = () => {
     const { t } = useTranslation();
 
     return (
-        // eslint-disable-next-line
-        // @ts-ignore
         <Tooltip label={t('finance:addTransaction')}>
             <IconButton
                 size={'lg'}
@@ -74,6 +73,7 @@ export const FinancePage = () => {
                 <Routes>
                     <Route path={''} element={<FinanceWidgets />} />
                     <Route path={'/transactions'} element={<TransactionsList />} />
+                    <Route path={'/accounts'} element={<AccountsList />} />
                 </Routes>
             </Box>
         </Box>

@@ -1,12 +1,8 @@
 import {
     Alert,
     AlertIcon,
+    Box,
     Button,
-    Divider,
-    Flex,
-    Grid,
-    GridItem,
-    Icon,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -15,10 +11,8 @@ import {
     ModalHeader,
     Stack,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Icons from '~/common/helpers/Icons';
-import { useCustomScroll } from '~/common/hooks/useCustomScroll';
 import { DialogProps } from '~/common/hooks/useDIalog.types';
 import { createDialogProvider } from '~/common/hooks/useDialog';
 import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
@@ -43,14 +37,7 @@ const CategoryManagement = ({
         onClose: onCloseAddCategoryDialog,
     } = useAddCategoryDialog();
 
-    const showChildren = true;
-    const [selectedParent, setSelectedParent] = React.useState<PicklistItem<Category> | null>(null);
-
-    useEffect(() => {
-        setSelectedParent(null);
-    }, [isOpen]);
-
-    const openAddCategoryDialog = (parentId?: string) =>
+    const openAddCategoryDialog = () =>
         onOpenAddCategoryDialog({
             breadcrumbs: [
                 {
@@ -62,15 +49,12 @@ const CategoryManagement = ({
                 },
             ],
             categoryType: mode as unknown as CategoryType,
-            parentId,
         });
 
-    const customScroll = useCustomScroll();
-
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} size={'4xl'}>
+        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalContent mx={4} visibility={isOpenAddCategoryDialog ? 'hidden' : 'visible'}>
-                <ModalHeader>{t(`finance:categoryManagement`)} </ModalHeader>
+                <ModalHeader>{t(`finance:categoryManagement`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {!items.length && (
@@ -80,115 +64,34 @@ const CategoryManagement = ({
                         </Alert>
                     )}
 
-                    <Grid
-                        py={2}
-                        gridTemplateColumns={showChildren ? '1fr 1px 1fr' : '1fr'}
-                        gridColumnGap={1}
-                    >
-                        <GridItem>
-                            <Stack
-                                flexDirection={'column'}
-                                spacing={3}
-                                pr={1.5}
-                                h={'307px'}
-                                overflowY={'scroll'}
-                                __css={customScroll}
+                    <Stack spacing={3} mt={3}>
+                        {items.map((item) => (
+                            <Button
+                                minH={'40px'}
+                                key={item.id}
+                                width={'100%'}
+                                justifyContent={'space-between'}
                             >
-                                {items.map((item) => (
-                                    <Button
-                                        minH={'40px'}
-                                        key={item.id}
-                                        onClick={() => {
-                                            setSelectedParent(item);
-                                        }}
-                                        width={'100%'}
-                                        justifyContent={'space-between'}
-                                        rightIcon={
-                                            item.children?.length ? (
-                                                <Icon fontSize='lg' as={Icons.Right} />
-                                            ) : undefined
-                                        }
-                                        colorScheme={
-                                            selectedParent?.id === item.id ? 'blue' : undefined
-                                        }
-                                        variant={
-                                            selectedParent?.id === item.id ? 'outline' : 'solid'
-                                        }
-                                    >
-                                        {item.label}
-                                    </Button>
-                                ))}
-                            </Stack>
-                        </GridItem>
-
-                        <GridItem>
-                            <Divider orientation='vertical' w={'1px'} />
-                        </GridItem>
-                        <GridItem>
-                            {!selectedParent && (
-                                <Alert status='info'>
-                                    <AlertIcon />
-                                    {t('finance:selectCategoryToViewSubcategories')}
-                                </Alert>
-                            )}
-                            {selectedParent?.children?.length === 0 && (
-                                <Alert status='info'>
-                                    <AlertIcon />
-                                    {t('finance:selectedCategoryHasNoSubcategories')}
-                                </Alert>
-                            )}
-                            {selectedParent?.children && selectedParent?.children?.length > 0 && (
-                                <Stack spacing={3} ml={1.5}>
-                                    {selectedParent.children.map((item) => (
-                                        <Button
-                                            key={item.id}
-                                            h={'40px'}
-                                            width={'100%'}
-                                            textAlign={'left'}
-                                            justifyContent={'space-between'}
-                                            variant={'solid'}
-                                        >
-                                            {item.label}
-                                        </Button>
-                                    ))}
-                                    <Button
-                                        minH={'40px'}
-                                        leftIcon={<Icon as={Icons.Add} />}
-                                        width={'calc(50% - 10.5px)'}
-                                        justifyContent={'start'}
-                                        variant={'solid'}
-                                    >
-                                        {t('finance:add')}
-                                    </Button>
-                                </Stack>
-                            )}
-                        </GridItem>
-                    </Grid>
+                                {item.label}
+                            </Button>
+                        ))}
+                    </Stack>
                 </ModalBody>
 
-                <ModalFooter pt={0}>
-                    <Flex width={'100%'} justifyContent={'space-between'}>
+                <ModalFooter>
+                    <Box display={'flex'} justifyContent={'end'}>
+                        <Button colorScheme='blue' mr={3} size={'md'} onClick={onClose}>
+                            {t('common:close')}
+                        </Button>
                         <Button
-                            minH={'40px'}
-                            leftIcon={<Icon as={Icons.Add} />}
-                            width={'calc(50% - 10.5px)'}
-                            justifyContent={'start'}
-                            variant={'solid'}
+                            colorScheme='green'
+                            type='submit'
+                            size={'md'}
                             onClick={() => openAddCategoryDialog()}
                         >
-                            {t('finance:add')}
+                            {t('finance:newCategory')}
                         </Button>
-                        <Button
-                            minH={'40px'}
-                            leftIcon={<Icon as={Icons.Add} />}
-                            width={'calc(50% - 10.5px)'}
-                            justifyContent={'start'}
-                            variant={'solid'}
-                            onClick={() => openAddCategoryDialog(selectedParent?.id)}
-                        >
-                            {t('finance:add')}
-                        </Button>
-                    </Flex>
+                    </Box>
                 </ModalFooter>
             </ModalContent>
         </Modal>

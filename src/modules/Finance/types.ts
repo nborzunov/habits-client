@@ -22,10 +22,10 @@ export interface Account {
 
 export interface Category {
     id: string;
-    parentId: string | null;
     name: string;
+    icon: string;
+    color: string;
     categoryType: CategoryType;
-    children: Category[];
     default: boolean;
 }
 
@@ -38,7 +38,6 @@ export interface PicklistItem<T> {
     id: string;
     label: string;
     value: T;
-    children?: PicklistItem<T>[];
 }
 
 export enum DialogTypes {

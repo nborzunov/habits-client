@@ -1,10 +1,8 @@
 import {
     Box,
     Button,
-    Divider,
     FormControl,
     FormLabel,
-    Grid,
     GridItem,
     Icon,
     Input,
@@ -35,7 +33,6 @@ export const SelectFromPicklistField = <
     items,
     value,
     onChange,
-    hasChildren,
     noItemsWarning,
     editButton,
     addItem,
@@ -46,7 +43,6 @@ export const SelectFromPicklistField = <
     items: PicklistItem<T>[];
     value: T | undefined;
     onChange: (value: T) => void;
-    hasChildren?: boolean;
     // TODO: fix any
     noItemsWarning?: any;
     editButton?: any;
@@ -90,179 +86,44 @@ export const SelectFromPicklistField = <
                         >
                             <Text> {title}</Text>
                         </PopoverHeader>
-                        <PopoverBody width={'100%'} boxShadow={'lg'} height={'350px'}>
+                        <PopoverBody width={'100%'} boxShadow={'lg'}>
                             {!items.length && noItemsWarning}
-                            {!hasChildren && (
-                                <Grid gridTemplateColumns={'repeat(3, 1fr)'} gridGap={2}>
-                                    {items.map((item) => (
-                                        <GridItem key={item.id}>
-                                            <Button
-                                                onClick={() => {
-                                                    onChange(item.value);
-                                                    handleClose();
-                                                }}
-                                                width={'100%'}
-                                                colorScheme={
-                                                    value?.id === item.id ? 'blue' : undefined
-                                                }
-                                                variant={
-                                                    value?.id === item.id ? 'outline' : 'solid'
-                                                }
-                                            >
-                                                {itemRenderer ? itemRenderer(item) : item.label}
-                                            </Button>
-                                        </GridItem>
-                                    ))}
-                                    {addItem && (
-                                        <GridItem>
-                                            <Button
-                                                leftIcon={<Icon as={Icons.Add} />}
-                                                onClick={() => {
-                                                    addItem();
-                                                }}
-                                                width={'100%'}
-                                                variant={'solid'}
-                                            >
-                                                {t('finance:add')}
-                                            </Button>
-                                        </GridItem>
-                                    )}
-                                </Grid>
-                            )}
-                            {hasChildren && (
-                                <NestedPicklistSelect
-                                    value={value}
-                                    items={items}
-                                    onChange={onChange}
-                                    onClose={handleClose}
-                                    addItem={addItem}
-                                />
-                            )}
+                            <Stack spacing={2} height={'350px'} overflowY={'auto'}>
+                                {items.map((item) => (
+                                    <Button
+                                        key={item.id}
+                                        onClick={() => {
+                                            onChange(item.value);
+                                            handleClose();
+                                        }}
+                                        width={'100%'}
+                                        height={'36px'}
+                                        display='block'
+                                        colorScheme={value?.id === item.id ? 'blue' : undefined}
+                                        variant={value?.id === item.id ? 'outline' : 'solid'}
+                                    >
+                                        {itemRenderer ? itemRenderer(item) : item.label}
+                                    </Button>
+                                ))}
+                                {addItem && (
+                                    <GridItem>
+                                        <Button
+                                            leftIcon={<Icon as={Icons.Add} />}
+                                            onClick={() => {
+                                                addItem();
+                                            }}
+                                            width={'100%'}
+                                            variant={'solid'}
+                                        >
+                                            {t('finance:add')}
+                                        </Button>
+                                    </GridItem>
+                                )}
+                            </Stack>
                         </PopoverBody>
                     </PopoverContent>
                 </Popover>
             </FormControl>
         </Box>
     );
-};
-
-const NestedPicklistSelect = <
-    T extends {
-        id: string;
-        name: string;
-    },
->({
-    value,
-    items,
-    onChange,
-    onClose,
-    addItem,
-}: {
-    value: T | undefined;
-    items: PicklistItem<T>[];
-    onChange: (value: T) => void;
-    onClose: (callback?: () => void) => void;
-    addItem?: any;
-}) => {
-    const [selectedParent, setSelectedParent] = React.useState<PicklistItem<T> | null>(null);
-
-    const { t } = useTranslation();
-
-    const handleClose = () => {
-        onClose(() => {
-            setSelectedParent(null);
-        });
-    };
-
-    const showChildren = items.some((i) => i.children?.length);
-    return (
-        <Grid
-            py={2}
-            gridTemplateColumns={showChildren ? '1fr 1px 1fr' : '1fr'}
-            // gridTemplateRows={`repeat(${items.length}, 60px)`}
-            gridColumnGap={1}
-        >
-            <GridItem>
-                <Stack
-                    flexDirection={'column'}
-                    spacing={3}
-                    pr={1.5}
-                    h={'307px'}
-                    overflowY={'scroll'}
-                >
-                    {items.map((item) => (
-                        <Button
-                            minH={'40px'}
-                            key={item.id}
-                            onClick={() => {
-                                if (item.children?.length) {
-                                    setSelectedParent(item);
-                                    return;
-                                }
-                                onChange(item.value);
-                                handleClose();
-                            }}
-                            width={'100%'}
-                            justifyContent={'space-between'}
-                            rightIcon={
-                                item.children?.length ? (
-                                    <Icon fontSize='lg' as={Icons.Right} />
-                                ) : undefined
-                            }
-                            colorScheme={value?.id === item.id ? 'blue' : undefined}
-                            variant={value?.id === item.id ? 'outline' : 'solid'}
-                        >
-                            {item.label}
-                        </Button>
-                    ))}
-                    {addItem && (
-                        <Button
-                            minH={'40px'}
-                            leftIcon={<Icon as={Icons.Add} />}
-                            onClick={() => {
-                                addItem();
-                            }}
-                            width={'100%'}
-                            justifyContent={'start'}
-                            variant={'solid'}
-                        >
-                            {t('finance:add')}
-                        </Button>
-                    )}
-                </Stack>
-            </GridItem>
-            {showChildren && (
-                <>
-                    <GridItem>
-                        <Divider orientation='vertical' w={'1px'} />
-                    </GridItem>
-                    <GridItem>
-                        <Stack spacing={3} ml={1.5}>
-                            {selectedParent?.children?.map((item) => (
-                                <Button
-                                    key={item.id}
-                                    onClick={() => {
-                                        onChange(item.value);
-                                        handleClose();
-                                    }}
-                                    h={'40px'}
-                                    width={'100%'}
-                                    textAlign={'left'}
-                                    justifyContent={'space-between'}
-                                    colorScheme={value?.id === item.id ? 'blue' : ''}
-                                    variant={value?.id === item.id ? 'outline' : 'solid'}
-                                >
-                                    {item.label}
-                                </Button>
-                            ))}
-                        </Stack>
-                    </GridItem>
-                </>
-            )}
-        </Grid>
-    );
-};
-
-SelectFromPicklistField.defaultProps = {
-    hasChildren: false,
 };

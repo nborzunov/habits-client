@@ -2,7 +2,6 @@ import { Flex, Icon, Text, Tooltip } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconType } from 'react-icons/lib';
 import Icons from '~/common/helpers/Icons';
 
 const StatisticsComponent = ({
@@ -16,7 +15,7 @@ const StatisticsComponent = ({
 }: {
     title: string;
     value: number;
-    icon?: IconType;
+    icon?: typeof Icons;
     type: 'increase' | 'decrease' | 'streak' | 'none';
     footerValue?: number;
     startDate?: Date;

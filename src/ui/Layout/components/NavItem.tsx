@@ -1,8 +1,8 @@
 import { Flex, Icon } from '@chakra-ui/react';
-import { IconType } from 'react-icons/lib';
+import Icons from '~/common/helpers/Icons';
 
 interface NavItemProps {
-    icon?: IconType;
+    icon?: typeof Icons;
 }
 
 export const NavItem = (

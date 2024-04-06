@@ -44,11 +44,6 @@ const transformCategories = (categories: Category[]): PicklistItem<Category>[] =
         id: category.id,
         label: category.name,
         value: category,
-        children: category.children.map((child) => ({
-            id: child.id,
-            label: child.name,
-            value: child,
-        })),
     }));
 };
 
@@ -167,6 +162,24 @@ export const AddTransactionForm = ({
                 ],
             }),
         [t, onOpenAddAccountDialog, onCloseAddAccountDialog],
+    );
+
+    const openAddCategoryDialog = useCallback(
+        () =>
+            onOpenAddCategoryDialog({
+                breadcrumbs: [
+                    {
+                        label: t('finance:addTransaction'),
+                        onClick: onCloseAddCategoryDialog,
+                    },
+                    {
+                        label: t(`finance:newCategory`),
+                    },
+                ],
+
+                categoryType: mode as unknown as CategoryType,
+            }),
+        [t, onOpenAddCategoryDialog, onCloseAddCategoryDialog, mode],
     );
 
     const clearForm = useCallback(() => {
@@ -291,7 +304,6 @@ export const AddTransactionForm = ({
                         value={form.category}
                         onChange={(value) => setValue('category', value)}
                         items={categories}
-                        hasChildren
                         editButton={
                             <Tooltip label={t('finance:manageCategories')}>
                                 <IconButton
@@ -308,20 +320,43 @@ export const AddTransactionForm = ({
                                 ></IconButton>
                             </Tooltip>
                         }
-                        addItem={() =>
-                            onOpenAddCategoryDialog({
-                                breadcrumbs: [
-                                    {
-                                        label: t('finance:addTransaction'),
-                                        onClick: onCloseAddCategoryDialog,
-                                    },
-                                    {
-                                        label: t(`finance:newCategory`),
-                                    },
-                                ],
-                                categoryType: mode as unknown as CategoryType,
-                            })
+                        itemRenderer={({ value: category }) => (
+                            <Flex width='100%' alignItems='center' h='36px'>
+                                <Icon
+                                    as={Icons.expenseIcons[category.icon]}
+                                    fontSize={'4xl'}
+                                    color={`${category.color}.500`}
+                                    p={2}
+                                    borderRadius={'xl'}
+                                    boxShadow={'sm'}
+                                />
+                                <span>{category.name}</span>
+                            </Flex>
+                        )}
+                        noItemsWarning={
+                            <>
+                                <Alert status='info'>
+                                    <AlertIcon />
+                                    {t('finance:noCategoriesWarning')}
+                                </Alert>
+
+                                <Button
+                                    mt={2}
+                                    width={'100%'}
+                                    colorScheme='green'
+                                    variant={'outline'}
+                                    type='submit'
+                                    size={{
+                                        base: 'md',
+                                        sm: 'md',
+                                    }}
+                                    onClick={openAddCategoryDialog}
+                                >
+                                    {t('finance:newCategory')}
+                                </Button>
+                            </>
                         }
+                        addItem={openAddCategoryDialog}
                     />
 
                     <FormControl>
