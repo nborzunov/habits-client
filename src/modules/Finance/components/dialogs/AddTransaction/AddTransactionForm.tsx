@@ -24,11 +24,11 @@ import Icons from '~/common/helpers/Icons';
 import validationRules from '~/common/helpers/validationRules';
 import { useCreateTransaction } from '~/modules/Finance/api/transactions/useCreateTransaction';
 import { SelectFromPicklistField } from '~/modules/Finance/components/SelectFromPicklistField';
-import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
-import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
+import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AddAccount';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/AddCategory';
 import { AddTransactionMode } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransaction';
-import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
-import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
+import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement';
 import { getAccountTypeColor, getCurrency } from '~/modules/Finance/helpers';
 import {
     Account,
@@ -313,7 +313,7 @@ export const AddTransactionForm = ({
                                     variant={'ghost'}
                                     onClick={() =>
                                         onOpenCategoryManagementDialog({
-                                            items: categories,
+                                            categories,
                                             mode: mode as unknown as CategoryType,
                                         })
                                     }

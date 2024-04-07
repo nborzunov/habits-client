@@ -6,14 +6,14 @@ import Icons from '~/common/helpers/Icons';
 import { AccountsList } from '~/modules/Finance/components/Accounts/AccountsList';
 import { FinanceWidgets } from '~/modules/Finance/components/FinanceWidgets';
 import { TransactionsList } from '~/modules/Finance/components/Transactions/TransactionsList';
-import { AccountManagementDialogProvider } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
-import { AddAccountDialogProvider } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
+import { AccountManagementDialogProvider } from '~/modules/Finance/components/dialogs/AccountManagement';
+import { AddAccountDialogProvider } from '~/modules/Finance/components/dialogs/AddAccount';
+import { AddCategoryDialogProvider } from '~/modules/Finance/components/dialogs/AddCategory';
 import {
     AddTransactionDialogProvider,
     useAddTransactionDialog,
 } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransaction';
-import { AddCategoryDialogProvider } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
-import { CategoryManagementDialogProvider } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
+import { CategoryManagementDialogProvider } from '~/modules/Finance/components/dialogs/CategoryManagement';
 
 export const OpenAddTransactionDialogButton = () => {
     const { onOpen: onOpenAddTransaction } = useAddTransactionDialog();

@@ -15,18 +15,21 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DialogProps } from '~/common/hooks/useDIalog.types';
 import { createDialogProvider } from '~/common/hooks/useDialog';
-import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/AddCategory';
+import { getCategoryIconsMap } from '~/modules/Finance/helpers';
 import { Category, CategoryType, PicklistItem } from '~/modules/Finance/types';
 
+import { ListItem } from '../ListItem';
+
 export interface CategoryManagementProps {
-    items: PicklistItem<Category>[];
+    categories: PicklistItem<Category>[];
     mode: CategoryType;
 }
 
 const CategoryManagement = ({
     isOpen,
     onClose,
-    items = [],
+    categories = [],
     mode,
 }: DialogProps<CategoryManagementProps>) => {
     const { t } = useTranslation();
@@ -57,7 +60,7 @@ const CategoryManagement = ({
                 <ModalHeader>{t(`finance:categoryManagement`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {!items.length && (
+                    {!categories.length && (
                         <Alert status='info'>
                             <AlertIcon />
                             {t('finance:noCategoriesWarning')}
@@ -65,16 +68,20 @@ const CategoryManagement = ({
                     )}
 
                     <Stack spacing={3} mt={3}>
-                        {items.map((item) => (
-                            <Button
-                                minH={'40px'}
-                                key={item.id}
-                                width={'100%'}
-                                justifyContent={'space-between'}
-                            >
-                                {item.label}
-                            </Button>
-                        ))}
+                        {categories.map(({ value: category }) => {
+                            const categoryIconsMap = getCategoryIconsMap(category.categoryType);
+                            return (
+                                <ListItem
+                                    id={category.id}
+                                    key={category.id}
+                                    color={category.color}
+                                    icon={categoryIconsMap[category.icon]}
+                                    label={category.name}
+                                    onDelete={async () => alert('TODO')}
+                                    onEdit={async () => alert('TODO')}
+                                />
+                            );
+                        })}
                     </Stack>
                 </ModalBody>
 

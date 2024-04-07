@@ -5,6 +5,7 @@ import {
     FormLabel,
     Grid,
     GridItem,
+    Icon,
     Input,
     Modal,
     ModalBody,
@@ -15,7 +16,7 @@ import {
     Stack,
     theme,
 } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs, BreadcrumbsProps } from '~/common/components/Breadcrumbs';
@@ -23,6 +24,7 @@ import Icons from '~/common/helpers/Icons';
 import { DialogProps } from '~/common/hooks/useDIalog.types';
 import { createDialogProvider } from '~/common/hooks/useDialog';
 import { useCreateCategory } from '~/modules/Finance/api/categories/useCreateCategory';
+import { getCategoryComponents, getCategoryIcons } from '~/modules/Finance/helpers';
 import { CategoryType } from '~/modules/Finance/types';
 
 const colors = [
@@ -96,26 +98,8 @@ const AddCategory = ({
         setValue('name', '');
     }, [isOpen, setValue]);
 
-    const icons = useMemo(() => {
-        switch (categoryType) {
-            case CategoryType.Expense:
-                return Object.keys(Icons.expenseIcons) as Array<keyof typeof Icons.expenseIcons>;
-            case CategoryType.Income:
-                return Object.keys(Icons.incomeIcons) as Array<keyof typeof Icons.incomeIcons>;
-            default:
-                return [];
-        }
-    }, [categoryType]);
-    const iconsComponents = useMemo(() => {
-        switch (categoryType) {
-            case CategoryType.Expense:
-                return Icons.expenseIcons;
-            case CategoryType.Income:
-                return Icons.incomeIcons;
-            default:
-                return null;
-        }
-    }, [categoryType]);
+    const icons = getCategoryIcons(categoryType);
+    const iconsComponents = getCategoryComponents(categoryType);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
@@ -172,7 +156,7 @@ const AddCategory = ({
                                                             : 'gray.200',
                                                 }}
                                             >
-                                                <LucideIcon
+                                                <Icon
                                                     key={icon}
                                                     size={32}
                                                     as={LucideIcon}

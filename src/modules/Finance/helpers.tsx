@@ -1,4 +1,5 @@
-import { Account, Category, Currency } from '~/modules/Finance/types';
+import Icons from '~/common/helpers/Icons';
+import { Account, Category, CategoryType, Currency } from '~/modules/Finance/types';
 
 export const getCurrency = (value: string) => {
     if (value) {
@@ -48,4 +49,37 @@ export const getCategoryName = (category: Category) => {
         }
     }
     return category.name;
+};
+
+export const getCategoryIcons = (categoryType: CategoryType) => {
+    switch (categoryType) {
+        case CategoryType.Expense:
+            return Object.keys(Icons.expenseIcons) as Array<keyof typeof Icons.expenseIcons>;
+        case CategoryType.Income:
+            return Object.keys(Icons.incomeIcons) as Array<keyof typeof Icons.incomeIcons>;
+        default:
+            return [];
+    }
+};
+
+export const getCategoryIconsMap = (categoryType: CategoryType) => {
+    switch (categoryType) {
+        case CategoryType.Expense:
+            return Icons.expenseIcons;
+        case CategoryType.Income:
+            return Icons.incomeIcons;
+        default:
+            return {};
+    }
+};
+
+export const getCategoryComponents = (categoryType: CategoryType) => {
+    switch (categoryType) {
+        case CategoryType.Expense:
+            return Icons.expenseIcons;
+        case CategoryType.Income:
+            return Icons.incomeIcons;
+        default:
+            return null;
+    }
 };

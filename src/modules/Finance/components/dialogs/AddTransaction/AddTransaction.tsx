@@ -5,11 +5,11 @@ import { DefaultDialogProps } from '~/common/hooks/useDIalog.types';
 import { createDialogProvider } from '~/common/hooks/useDialog';
 import { useAccounts } from '~/modules/Finance/api/accounts/useAccounts';
 import { useCategories } from '~/modules/Finance/api/categories/useCategories';
-import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AccountManagement';
-import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
+import { useAccountManagementDialog } from '~/modules/Finance/components/dialogs/AccountManagement';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AddAccount';
+import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/AddCategory';
 import { AddTransactionForm } from '~/modules/Finance/components/dialogs/AddTransaction/AddTransactionForm';
-import { useAddCategoryDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/AddCategory';
-import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement/CategoryManagement';
+import { useCategoryManagementDialog } from '~/modules/Finance/components/dialogs/CategoryManagement';
 
 export enum AddTransactionMode {
     Income = 'income',

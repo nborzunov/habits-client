@@ -3,9 +3,6 @@ import {
     AlertIcon,
     Box,
     Button,
-    Flex,
-    Icon,
-    IconButton,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -13,8 +10,6 @@ import {
     ModalFooter,
     ModalHeader,
     Stack,
-    Text,
-    Tooltip,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +17,10 @@ import Icons from '~/common/helpers/Icons';
 import { DefaultDialogProps } from '~/common/hooks/useDIalog.types';
 import { createDialogProvider } from '~/common/hooks/useDialog';
 import { useAccounts } from '~/modules/Finance/api/accounts/useAccounts';
-import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AccountManagement/AddAccount';
+import { useAddAccountDialog } from '~/modules/Finance/components/dialogs/AddAccount';
 import { getAccountTypeColor } from '~/modules/Finance/helpers';
+
+import { ListItem } from '../ListItem';
 
 const AccountManagement = ({ isOpen, onClose }: DefaultDialogProps) => {
     const { t } = useTranslation();
@@ -51,34 +48,15 @@ const AccountManagement = ({ isOpen, onClose }: DefaultDialogProps) => {
 
                     <Stack spacing={3} mt={3}>
                         {accounts.map((account) => (
-                            <Flex key={account.id} justifyContent={'space-between'}>
-                                <Flex alignItems={'center'} h={'100%'}>
-                                    <Icon
-                                        as={Icons.accountTypes[account.accountType]}
-                                        fontSize={'4xl'}
-                                        mr={2}
-                                        color={`${getAccountTypeColor(account)}.500`}
-                                        bg={`${getAccountTypeColor(account)}.50`}
-                                        p={2}
-                                        borderRadius={'xl'}
-                                        boxShadow={'sm'}
-                                    />
-                                    <Text fontWeight='semibold' fontSize='lg' color={'gray.600'}>
-                                        {account.name}
-                                    </Text>
-                                </Flex>
-
-                                <Tooltip label={t('common:delete')}>
-                                    <IconButton
-                                        icon={<Icon as={Icons.Delete} />}
-                                        aria-label={'delete'}
-                                        colorScheme='red'
-                                        variant='outline'
-                                        size='sm'
-                                        onClick={() => alert('TODO')}
-                                    />
-                                </Tooltip>
-                            </Flex>
+                            <ListItem
+                                id={account.id}
+                                key={account.id}
+                                color={getAccountTypeColor(account) as string}
+                                icon={Icons.accountTypes[account.accountType]}
+                                label={account.name}
+                                onDelete={async () => alert('TODO')}
+                                onEdit={async () => alert('TODO')}
+                            />
                         ))}
                     </Stack>
                 </ModalBody>
