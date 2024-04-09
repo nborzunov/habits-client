@@ -1,4 +1,4 @@
-import { Periodicity } from '../../../src/modules/Habits/types';
+import { Periodicity } from '../../../src/entities/habit/model/types';
 
 export const habits = {
     noHabits: 'Пока нет привычек, давайте создадим одну!',

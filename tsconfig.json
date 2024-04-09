@@ -23,9 +23,9 @@
         "incremental": true,
         "baseUrl": ".",
         "paths": {
-            "~/*": ["src/*"]
+            "@*": ["src/*"]
         }
     },
-    "include": ["vite.config.ts", "**/*.ts", "**/*.tsx"],
+    "include": ["vite.config.ts", "**/*.ts", "**/*.tsx", "src/features/category-management-dialog/ui/CategoryManagementDialog.tsx"],
     "exclude": ["node_modules"]
 }
