@@ -1,1 +1,1 @@
-export { AddAccountDialogProvider, useAddAccountDialog } from './ui/AddAccountDialog';
+export { openAddAccountDialog, useAddAccountDialog } from './ui/AddAccountDialog';

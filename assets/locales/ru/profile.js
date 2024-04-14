@@ -69,7 +69,6 @@ export const profile = {
     welcomeDescription: 'Войдите в свой аккаунт и начните строить хорошие привычки.',
     cleanData: 'Подтвердите операцию очистки',
     cleanAllHabits: 'Очистить все цели',
-    delete: 'Подтвердите операцию удаления',
     deleteAllHabits: 'Удалить все привычки',
     joined: 'Присоединился {{date}}',
     errors: {

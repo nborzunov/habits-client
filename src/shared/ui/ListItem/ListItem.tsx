@@ -7,8 +7,8 @@ interface ListItemProps {
     color: string;
     icon: any;
     label: string;
-    onDelete: (id: string) => Promise<void>;
-    onEdit: (id: string) => Promise<void>;
+    onDelete: (id: string) => void;
+    onEdit: (id: string) => void;
 }
 export const ListItem = (props: ListItemProps) => {
     return (

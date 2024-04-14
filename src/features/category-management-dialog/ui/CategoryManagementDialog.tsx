@@ -11,58 +11,63 @@ import {
     ModalHeader,
     Stack,
 } from '@chakra-ui/react';
-import { Category, CategoryType } from '@entities/category';
+import { CategoryType, useCategoriesByType } from '@entities/category';
+import { useDeleteCategory } from '@entities/category/api/useDeleteCategory';
 import { getCategoryIconsMap } from '@entities/finance/lib/helpers';
 import { useAddCategoryDialog } from '@features/add-category-dialog';
-import { DialogProps, createDialogProvider } from '@shared/hooks';
-import { PicklistItem } from '@shared/model/types';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
+import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { ListItem } from '@shared/ui/ListItem';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface CategoryManagementProps {
-    categories: PicklistItem<Category>[];
+interface Props {
     mode: CategoryType;
 }
 
-const CategoryManagement = ({
-    isOpen,
-    onClose,
-    categories = [],
-    mode,
-}: DialogProps<CategoryManagementProps>) => {
+const CategoryManagementDialog = createDialog(({ mode }: Props) => {
     const { t } = useTranslation();
-
-    const {
-        isOpen: isOpenAddCategoryDialog,
-        onOpen: onOpenAddCategoryDialog,
-        onClose: onCloseAddCategoryDialog,
-    } = useAddCategoryDialog();
+    const categories = useCategoriesByType(mode as unknown as CategoryType);
+    const dialog = useCategoryManagementDialog();
+    const addCategoryDialog = useAddCategoryDialog();
 
     const openAddCategoryDialog = () =>
-        onOpenAddCategoryDialog({
+        addCategoryDialog.show({
             breadcrumbs: [
                 {
                     label: t('finance:addTransaction'),
-                    onClick: onCloseAddCategoryDialog,
+                    onClick: addCategoryDialog.hide,
                 },
                 {
-                    label: t(`finance:newCategory`),
+                    label: t(`finance:categories.newCategory`),
                 },
             ],
             categoryType: mode as unknown as CategoryType,
         });
 
+    const { mutate: deleteCategory } = useDeleteCategory();
+
+    const onDelete = (categoryId: string) => {
+        openConfirmationDialog({
+            title: t('common:delete'),
+            text: t('finance:confirmCategoryDelete'),
+            cancelText: t('common:cancel'),
+            okText: t('common:delete'),
+        })
+            .then(() => deleteCategory(categoryId))
+            .catch(() => {});
+    };
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
-            <ModalContent mx={4} visibility={isOpenAddCategoryDialog ? 'hidden' : 'visible'}>
-                <ModalHeader>{t(`finance:categoryManagement`)}</ModalHeader>
+        <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
+            <ModalContent mx={4} visibility={addCategoryDialog.visible ? 'hidden' : 'visible'}>
+                <ModalHeader>{t(`finance:categories.categoryManagement`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {!categories.length && (
                         <Alert status='info'>
                             <AlertIcon />
-                            {t('finance:noCategoriesWarning')}
+                            {t('finance:categories.noCategoriesWarning')}
                         </Alert>
                     )}
 
@@ -80,8 +85,8 @@ const CategoryManagement = ({
                                         ]
                                     }
                                     label={category.name}
-                                    onDelete={async () => alert('TODO')}
-                                    onEdit={async () => alert('TODO')}
+                                    onEdit={() => alert('TODO')}
+                                    onDelete={() => onDelete(category.id)}
                                 />
                             );
                         })}
@@ -90,7 +95,7 @@ const CategoryManagement = ({
 
                 <ModalFooter>
                     <Box display={'flex'} justifyContent={'end'}>
-                        <Button colorScheme='blue' mr={3} size={'md'} onClick={onClose}>
+                        <Button colorScheme='blue' mr={3} size={'md'} onClick={dialog.hide}>
                             {t('common:close')}
                         </Button>
                         <Button
@@ -99,16 +104,19 @@ const CategoryManagement = ({
                             size={'md'}
                             onClick={() => openAddCategoryDialog()}
                         >
-                            {t('finance:newCategory')}
+                            {t('finance:categories.newCategory')}
                         </Button>
                     </Box>
                 </ModalFooter>
             </ModalContent>
         </Modal>
     );
-};
+});
 
-export const {
-    DialogProvider: CategoryManagementDialogProvider,
-    useDialogAction: useCategoryManagementDialog,
-} = createDialogProvider<CategoryManagementProps>(CategoryManagement);
+export const openCategoryManagementDialog = (props: Props) =>
+    openDialog(CategoryManagementDialog, {
+        id: 'CategoryManagement',
+        ...props,
+    });
+
+export const useCategoryManagementDialog = () => useDialog(CategoryManagementDialog);

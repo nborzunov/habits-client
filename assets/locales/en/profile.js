@@ -69,7 +69,6 @@ export const profile = {
     welcomeDescription: 'Sign in to your account and start building good habits.',
     cleanData: 'Confirm Clean Operation',
     cleanAllHabits: 'Clean All Habits Targets',
-    delete: 'Confirm Delete Operation',
     deleteAllHabits: 'Delete All Habits',
     joined: 'Joined {{date}}',
     errors: {

@@ -1,1 +1,1 @@
-export { AddCategoryDialogProvider, useAddCategoryDialog } from './ui/AddCategory';
+export { openAddCategoryDialog, useAddCategoryDialog } from './ui/AddCategoryDialog';

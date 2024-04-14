@@ -1,3 +1,4 @@
+import NiceModal from '@ebay/nice-modal-react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -14,12 +15,15 @@ import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
 
 dayjs.extend(relativeTime);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <ThemeProvider>
             <RecoilRoot>
                 <QueryProvider>
-                    <BaseLayout />
+                    <NiceModal.Provider>
+                        <BaseLayout />
+                    </NiceModal.Provider>
                 </QueryProvider>
             </RecoilRoot>
         </ThemeProvider>

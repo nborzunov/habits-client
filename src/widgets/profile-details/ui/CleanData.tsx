@@ -1,10 +1,9 @@
-import { Box, Button, Heading, Stack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Heading, Stack } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
-import { useCleanHabits } from '@entities/habit';
-import { useDeleteHabits } from '@entities/habit/api/useDeleteHabits';
+import { useCleanHabits, useDeleteHabits } from '@entities/habit';
 import { useTitle } from '@shared/hooks';
-import { ConfirmationDialog } from '@shared/ui/ConfirmationDialog';
-import React, { useRef } from 'react';
+import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -13,81 +12,28 @@ export const CleanData = () => {
     const { t } = useTranslation();
     useTitle(`${user?.name} ${user?.surname} - ${t('common:cleanData')}`);
 
-    const {
-        isOpen: isOpenCleanConfirm,
-        onOpen: onOpenCleanConfirm,
-        onClose: onCloseCleanConfirm,
-    } = useDisclosure();
-    const {
-        isOpen: isOpenDeleteConfirm,
-        onOpen: onOpenDeleteConfirm,
-        onClose: onCloseDeleteConfirm,
-    } = useDisclosure();
+    const { mutate: cleanHabits } = useCleanHabits();
+    const { mutate: deleteHabits } = useDeleteHabits();
 
-    const { mutate: cleanHabits } = useCleanHabits(onCloseCleanConfirm);
-    const { mutate: deleteHabits } = useDeleteHabits(onCloseDeleteConfirm);
+    const onCleanHabits = () => {
+        openConfirmationDialog({
+            title: t('profile:cleanData'),
+            text: t('common:confirmText'),
+            cancelText: t('common:cancel'),
+            okText: t('common:clean'),
+        }).then(() => cleanHabits());
+    };
 
-    const cancelRef = useRef();
-
+    const onDeleteHabits = () => {
+        openConfirmationDialog({
+            title: t('common:delete'),
+            text: t('common:confirmText'),
+            cancelText: t('common:cancel'),
+            okText: t('common:delete'),
+        }).then(() => deleteHabits());
+    };
     return (
         <>
-            <ConfirmationDialog
-                isOpen={isOpenCleanConfirm}
-                onClose={onOpenCleanConfirm}
-                cancelRef={cancelRef}
-                title={t('profile:cleanData')}
-                text={t('common:confirmText')}
-            >
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    onClick={onCloseCleanConfirm}
-                >
-                    {t('common:cancel')}
-                </Button>
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    colorScheme='red'
-                    onClick={() => cleanHabits()}
-                    ml={3}
-                >
-                    {t('common:clean')}
-                </Button>
-            </ConfirmationDialog>
-            <ConfirmationDialog
-                isOpen={isOpenDeleteConfirm}
-                onClose={onCloseDeleteConfirm}
-                cancelRef={cancelRef}
-                title={t('profile:delete')}
-                text={t('common:confirmText')}
-            >
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    onClick={onCloseDeleteConfirm}
-                >
-                    {t('common:cancel')}
-                </Button>
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    colorScheme='red'
-                    onClick={() => deleteHabits()}
-                    ml={3}
-                >
-                    {t('common:delete')}
-                </Button>
-            </ConfirmationDialog>
-
             <Box>
                 <Heading as='h3' size='md' mb={'6'}>
                     {t('common:cleanData')}
@@ -99,7 +45,7 @@ export const CleanData = () => {
                             base: 'md',
                             sm: 'md',
                         }}
-                        onClick={onOpenCleanConfirm}
+                        onClick={onCleanHabits}
                         colorScheme={'purple'}
                         px={'4'}
                     >
@@ -110,11 +56,11 @@ export const CleanData = () => {
                             base: 'md',
                             sm: 'md',
                         }}
-                        onClick={onOpenDeleteConfirm}
+                        onClick={onDeleteHabits}
                         colorScheme={'purple'}
                         px={'4'}
                     >
-                        {t('profile:deleteAllHabits')}
+                        {t('common:deleteAllHabits')}
                     </Button>
                 </Stack>
             </Box>

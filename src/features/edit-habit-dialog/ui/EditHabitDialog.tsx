@@ -19,6 +19,7 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import { GoalType, HabitData, Periodicity } from '@entities/habit/model/types';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { FormField } from '@shared/ui/Form';
 import { NumericInput } from '@shared/ui/Form/NumericInput';
 import { validationRules } from '@shared/ui/Form/validationRules';
@@ -37,19 +38,13 @@ const defaultState = {
     canBeFinished: false,
     totalGoal: 1,
 };
-export const EditHabitDialog = ({
-    isOpen,
-    onClose,
-    initialState,
-    createMode,
-    onSubmit,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
+
+type Props = {
     initialState?: HabitData;
     createMode?: boolean;
-    onSubmit: (h: HabitData) => void;
-}) => {
+};
+export const EditHabitDialog = createDialog(({ initialState, createMode }: Props) => {
+    const dialog = useEditHabitDialog();
     const [form, setForm] = useState(defaultState);
 
     const setValue = useCallback((field: string, value: string | boolean | number) => {
@@ -93,7 +88,7 @@ export const EditHabitDialog = ({
     });
 
     const onFormSubmit = (data: { title: string }) => {
-        onSubmit({
+        dialog.resolve({
             ...form,
             title: data.title,
         });
@@ -102,10 +97,10 @@ export const EditHabitDialog = ({
     const { t } = useTranslation();
 
     useEffect(() => {
-        if (isOpen) setInitialState();
-    }, [isOpen, setInitialState]);
+        if (dialog.visible) setInitialState();
+    }, [dialog.visible, setInitialState]);
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={dialog.visible} onClose={dialog.hide}>
             <ModalOverlay />
             <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <ModalHeader>
@@ -285,7 +280,7 @@ export const EditHabitDialog = ({
                             base: 'md',
                             sm: 'md',
                         }}
-                        onClick={onClose}
+                        onClick={dialog.hide}
                     >
                         {t('common:close')}
                     </Button>
@@ -304,4 +299,12 @@ export const EditHabitDialog = ({
             </ModalContent>
         </Modal>
     );
-};
+});
+
+export const openEditHabitDialog = (props: Props) =>
+    openDialog(EditHabitDialog, {
+        id: 'EditHabit',
+        ...props,
+    });
+
+export const useEditHabitDialog = () => useDialog(EditHabitDialog);

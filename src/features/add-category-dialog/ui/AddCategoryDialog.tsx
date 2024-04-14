@@ -19,7 +19,8 @@ import {
 import { useCreateCategory } from '@entities/category';
 import { CategoryType } from '@entities/category';
 import { getCategoryComponents, getCategoryIcons } from '@entities/finance';
-import { DialogProps, createDialogProvider } from '@shared/hooks';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
+import { Icons$ } from '@shared/lib';
 import { Breadcrumbs, BreadcrumbsProps } from '@shared/ui/Breadcrumbs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -37,7 +38,7 @@ const colors = [
     'pink',
 ] as const;
 type SelectedColor = (typeof colors)[number];
-type SelectedIcon = keyof Icon.expenseIcons | keyof Icon.incomeIcons | null;
+type SelectedIcon = keyof typeof Icons$.expenseIcons | keyof typeof Icons$.incomeIcons | null;
 
 interface FormData {
     name: string;
@@ -45,20 +46,16 @@ interface FormData {
     icon: SelectedIcon;
 }
 
-type AddCategoryProps = {
+type Props = {
     categoryType: CategoryType;
 } & BreadcrumbsProps;
 
-const AddCategory = ({
-    isOpen,
-    onClose,
-    breadcrumbs,
-    categoryType,
-}: DialogProps<AddCategoryProps>) => {
+const AddCategoryDialog = createDialog(({ breadcrumbs, categoryType }: Props) => {
     const { t } = useTranslation();
+    const dialog = useAddCategoryDialog();
 
     const { mutate } = useCreateCategory(() => {
-        onClose();
+        dialog.hide();
     });
 
     const defaultState: FormData = {
@@ -94,13 +91,13 @@ const AddCategory = ({
 
     useEffect(() => {
         setValue('name', '');
-    }, [isOpen, setValue]);
+    }, [dialog.visible, setValue]);
 
     const icons = getCategoryIcons(categoryType);
     const iconsComponents = getCategoryComponents(categoryType);
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+        <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
             <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <ModalHeader>
                     <Breadcrumbs items={breadcrumbs} />
@@ -199,7 +196,7 @@ const AddCategory = ({
 
                 <ModalFooter>
                     <Box display={'flex'} justifyContent={'end'}>
-                        <Button colorScheme='blue' mr={3} size={'md'} onClick={onClose}>
+                        <Button colorScheme='blue' mr={3} size={'md'} onClick={dialog.hide}>
                             {t('common:close')}
                         </Button>
                         <Button
@@ -215,7 +212,12 @@ const AddCategory = ({
             </ModalContent>
         </Modal>
     );
-};
+});
 
-export const { DialogProvider: AddCategoryDialogProvider, useDialogAction: useAddCategoryDialog } =
-    createDialogProvider<AddCategoryProps>(AddCategory);
+export const openAddCategoryDialog = (props: Props) =>
+    openDialog(AddCategoryDialog, {
+        id: 'AddCategory',
+        ...props,
+    });
+
+export const useAddCategoryDialog = () => useDialog(AddCategoryDialog);

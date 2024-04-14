@@ -2,10 +2,9 @@ import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import { Icons$ } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 
-import { useAddTransactionDialog } from './AddTransaction';
+import { openAddTransactionDialog } from './AddTransactionDialog';
 
 export const OpenAddTransactionDialogAction = () => {
-    const { onOpen: onOpenAddTransaction } = useAddTransactionDialog();
     const { t } = useTranslation();
 
     return (
@@ -16,7 +15,7 @@ export const OpenAddTransactionDialogAction = () => {
                 icon={<Icon as={Icons$.Add} />}
                 aria-label={'add-transaction'}
                 borderRadius={'lg'}
-                onClick={() => onOpenAddTransaction()}
+                onClick={() => openAddTransactionDialog({})}
             />
         </Tooltip>
     );

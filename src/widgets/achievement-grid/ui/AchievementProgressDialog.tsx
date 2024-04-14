@@ -11,30 +11,28 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { Achievement } from '@entities/achievement';
+import { openDialog, useDialog } from '@shared/hooks';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-export const AchievementProgressDialog = ({
-    isOpen,
-    onClose,
-    achievement,
-}: {
-    isOpen: boolean;
-    onClose: () => void;
+type Props = {
     achievement: Achievement;
-}) => {
+};
+export const AchievementProgressDialog = ({ achievement }: Props) => {
     const { t } = useTranslation();
 
+    const dialog = useAchivementProgressDialog();
     const navigate = useNavigate();
 
     const [selectedHabit, setSelectedHabit] = React.useState<string | null>(null);
+
     return (
         <Modal
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={dialog.visible}
+            onClose={dialog.hide}
             onCloseComplete={() => {
                 if (selectedHabit) {
                     navigate(`/habits/${selectedHabit}`);
@@ -68,7 +66,7 @@ export const AchievementProgressDialog = ({
                             px={4}
                             onClick={() => {
                                 setSelectedHabit(p.habitId);
-                                onClose();
+                                dialog.hide();
                             }}
                         >
                             <Flex justify={'space-between'}>
@@ -98,3 +96,11 @@ export const AchievementProgressDialog = ({
         </Modal>
     );
 };
+
+export const openAchievementProgressDialog = (props: Props) =>
+    openDialog(AchievementProgressDialog, {
+        id: 'AchievementProgress',
+        ...props,
+    });
+
+export const useAchivementProgressDialog = () => useDialog(AchievementProgressDialog);

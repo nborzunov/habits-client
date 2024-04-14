@@ -1,4 +1,4 @@
 export {
-    CategoryManagementDialogProvider,
+    openCategoryManagementDialog,
     useCategoryManagementDialog,
 } from './ui/CategoryManagementDialog';

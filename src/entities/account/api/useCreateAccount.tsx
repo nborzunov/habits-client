@@ -1,9 +1,10 @@
 import api from '@/shared/lib/api';
 import { useToast } from '@chakra-ui/react';
+import { Currency } from '@entities/finance';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { Account, AccountType, Currency } from '../../../pages/finance/model/types';
+import { Account, AccountType } from '../model/types';
 
 export const useCreateAccount = (onSuccess: () => void) => {
     const queryClient = useQueryClient();

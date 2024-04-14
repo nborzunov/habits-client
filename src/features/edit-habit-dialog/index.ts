@@ -1,1 +1,1 @@
-export { EditHabitDialog } from './ui/EditHabitDialog';
+export { useEditHabitDialog } from './ui/EditHabitDialog';

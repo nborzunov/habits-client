@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 
 import { habitsState } from '../store/atoms';
 
-export const useCleanHabits = (onClose: () => void) => {
+export const useCleanHabits = () => {
     const setHabits = useSetRecoilState(habitsState);
     const { t } = useTranslation();
     const toast = useToast();
@@ -40,8 +40,7 @@ export const useCleanHabits = (onClose: () => void) => {
                         duration: 3000,
                         isClosable: true,
                     });
-                })
-                .finally(() => onClose());
+                });
         },
     });
 };

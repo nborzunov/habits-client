@@ -1,8 +1,5 @@
 import { Box, Flex, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
-import {
-    AddTransactionDialogProvider,
-    OpenAddTransactionDialogAction,
-} from '@features/add-transaction-dialog';
+import { OpenAddTransactionDialogAction } from '@features/add-transaction-dialog';
 import { Icons$ } from '@shared/lib';
 import { AccountList } from '@widgets/account-list';
 import { FinanceWidgets } from '@widgets/finance-dashboard';
@@ -34,9 +31,7 @@ export const FinancePage = () => {
                         />
                     </Tooltip>
 
-                    <AddTransactionDialogProvider>
-                        <OpenAddTransactionDialogAction />
-                    </AddTransactionDialogProvider>
+                    <OpenAddTransactionDialogAction />
                 </Flex>
             </Flex>
             <Box px={4}>

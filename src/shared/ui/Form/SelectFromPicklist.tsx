@@ -18,10 +18,9 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { Icons$ } from '@shared/lib';
+import { PicklistItem } from '@shared/model/types';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { PicklistItem } from '../../../pages/finance/model/types';
 
 export const SelectFromPicklist = <
     T extends {
@@ -62,69 +61,63 @@ export const SelectFromPicklist = <
     };
 
     return (
-        <Box>
-            <FormControl isRequired>
-                <FormLabel>{name}</FormLabel>
-                <Popover isOpen={isOpen} onClose={handleClose} matchWidth>
-                    <PopoverTrigger>
-                        <Input
-                            value={value?.name || ''}
-                            onChange={() => ''}
-                            placeholder={name}
-                            onClick={onOpen}
-                        />
-                    </PopoverTrigger>
-                    <PopoverContent width={'100%'}>
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <Box position={'absolute'} top={0.5} right={9}>
-                            {editButton}
-                        </Box>
-                        <PopoverHeader
-                            borderBottom={'none'}
-                            fontSize={'lg'}
-                            fontWeight={'semibold'}
-                        >
-                            <Text> {title}</Text>
-                        </PopoverHeader>
-                        <PopoverBody width={'100%'} boxShadow={'lg'}>
-                            {!items.length && noItemsWarning}
-                            <Stack spacing={2} height={'350px'} overflowY={'auto'}>
-                                {items.map((item) => (
+        <FormControl isRequired>
+            <FormLabel>{name}</FormLabel>
+            <Popover isOpen={isOpen} onClose={handleClose} matchWidth>
+                <PopoverTrigger>
+                    <Input
+                        value={value?.name || ''}
+                        onChange={() => ''}
+                        placeholder={name}
+                        onClick={onOpen}
+                    />
+                </PopoverTrigger>
+                <PopoverContent width={'100%'}>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <Box position={'absolute'} top={0.5} right={9}>
+                        {editButton}
+                    </Box>
+                    <PopoverHeader borderBottom={'none'} fontSize={'lg'} fontWeight={'semibold'}>
+                        <Text> {title}</Text>
+                    </PopoverHeader>
+                    <PopoverBody width={'100%'} boxShadow={'lg'}>
+                        {!items.length && noItemsWarning}
+                        <Stack spacing={2} height={'350px'} overflowY={'auto'}>
+                            {items.map((item) => (
+                                <Button
+                                    key={item.id}
+                                    onClick={() => {
+                                        onChange(item.value);
+                                        handleClose();
+                                    }}
+                                    width={'100%'}
+                                    height={'36px'}
+                                    display='block'
+                                    colorScheme={value?.id === item.id ? 'blue' : undefined}
+                                    variant={value?.id === item.id ? 'outline' : 'solid'}
+                                >
+                                    {children(item.value)}
+                                </Button>
+                            ))}
+                            {addItem && (
+                                <GridItem>
                                     <Button
-                                        key={item.id}
+                                        leftIcon={<Icon as={Icons$.Add} />}
                                         onClick={() => {
-                                            onChange(item.value);
-                                            handleClose();
+                                            addItem();
                                         }}
                                         width={'100%'}
-                                        height={'36px'}
-                                        display='block'
-                                        colorScheme={value?.id === item.id ? 'blue' : undefined}
-                                        variant={value?.id === item.id ? 'outline' : 'solid'}
+                                        variant={'solid'}
                                     >
-                                        {children(item.value)}
+                                        {t('finance:add')}
                                     </Button>
-                                ))}
-                                {addItem && (
-                                    <GridItem>
-                                        <Button
-                                            leftIcon={<Icon as={Icons$.Add} />}
-                                            onClick={() => {
-                                                addItem();
-                                            }}
-                                            width={'100%'}
-                                            variant={'solid'}
-                                        >
-                                            {t('finance:add')}
-                                        </Button>
-                                    </GridItem>
-                                )}
-                            </Stack>
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
-            </FormControl>
-        </Box>
+                                </GridItem>
+                            )}
+                        </Stack>
+                    </PopoverBody>
+                </PopoverContent>
+            </Popover>
+        </FormControl>
     );
 };

@@ -7,7 +7,6 @@ import {
     Icon,
     Text,
     Tooltip,
-    useDisclosure,
     useToast,
 } from '@chakra-ui/react';
 import { Achievement } from '@entities/achievement';
@@ -17,7 +16,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AchievementProgressDialog } from './AchievementProgressDialog';
+import { openAchievementProgressDialog } from './AchievementProgressDialog';
 
 export const AchievementCard = ({
     achievement,
@@ -31,11 +30,6 @@ export const AchievementCard = ({
 
     const biggestProgress = achievement.progress?.[0];
 
-    const {
-        isOpen: isOpenProgressDialog,
-        onOpen: onOpenProgressDialog,
-        onClose: onCloseProgressDialog,
-    } = useDisclosure();
     return (
         <Box
             as={GridItem}
@@ -97,7 +91,11 @@ export const AchievementCard = ({
                                     _hover={{
                                         opacity: 0.8,
                                     }}
-                                    onClick={onOpenProgressDialog}
+                                    onClick={() =>
+                                        openAchievementProgressDialog({
+                                            achievement,
+                                        })
+                                    }
                                 >
                                     <ProgressBar
                                         count={(biggestProgress.progress / achievement.goal) * 100}
@@ -105,12 +103,6 @@ export const AchievementCard = ({
                                     />
                                 </Box>
                             </Tooltip>
-
-                            <AchievementProgressDialog
-                                onClose={onCloseProgressDialog}
-                                isOpen={isOpenProgressDialog}
-                                achievement={achievement}
-                            />
                         </>
                     )}
                     {!alertView && achievement.completed && (

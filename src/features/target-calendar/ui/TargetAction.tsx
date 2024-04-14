@@ -8,7 +8,6 @@ import {
     MenuList,
     Text,
     Tooltip,
-    useDisclosure,
 } from '@chakra-ui/react';
 import { Habit, Target, TargetType } from '@entities/habit/model/types';
 import { useMobile } from '@shared/hooks';
@@ -17,7 +16,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SetTargetDialog } from './SetTargetDialog';
+import { openSetTargetDialog } from './SetTargetDialog';
 
 interface TargetActionContext {
     habit: Habit;
@@ -48,11 +47,6 @@ export const TargetAction = memo(
         styles?: any;
     }>) => {
         const { habit, onChangeTarget } = useContext(TargetActionContext);
-        const {
-            isOpen: isSetTargetOpened,
-            onOpen: onOpenSetTarget,
-            onClose: onCloseSetTarget,
-        } = useDisclosure();
 
         const { t } = useTranslation();
 
@@ -133,7 +127,12 @@ export const TargetAction = memo(
                                     Number(target?.value) <= habit?.goal) ||
                                     habit?.allowOverGoalCompletion) && (
                                     <TargetCell
-                                        onClick={() => onOpenSetTarget()}
+                                        onClick={() =>
+                                            openSetTargetDialog({
+                                                onSubmit: onSetValue,
+                                                habit,
+                                            })
+                                        }
                                         label={t('habits:operations.set')}
                                         icon={Icons$.Edit}
                                     />
@@ -155,13 +154,6 @@ export const TargetAction = memo(
                                 )}
                             </MenuList>
                         </Menu>
-                        <SetTargetDialog
-                            habit={habit}
-                            target={target}
-                            isOpen={isSetTargetOpened}
-                            onClose={onCloseSetTarget}
-                            onSubmit={(value) => onSetValue(value)}
-                        />
                     </>
                 )}
             </>

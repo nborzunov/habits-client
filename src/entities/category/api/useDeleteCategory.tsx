@@ -1,41 +1,35 @@
 import { useToast } from '@chakra-ui/react';
+import { useTransactions } from '@entities/transaction';
 import api from '@shared/lib/api';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
-import { useSetRecoilState } from 'recoil';
 
-import { Habit } from '../model/types';
-import { habitsState } from '../store/atoms';
+import { useCategories } from './useCategories';
 
-export const useArchiveHabit = (habitId: string) => {
-    const setHabits = useSetRecoilState(habitsState);
-    const { habitId: selectedHabitId } = useParams();
-    const navigate = useNavigate();
+export const useDeleteCategory = () => {
     const { t } = useTranslation();
     const toast = useToast();
 
+    const { refetch: refetchCategories } = useCategories();
+    const { refetch: refetchTransactions } = useTransactions();
+
     return useMutation({
-        mutationFn: () => {
+        mutationFn: (categoryId: string) => {
             return api
-                .put(`habits/${habitId}/archive/`)
-                .json<Habit>()
+                .delete(`finance/category/${categoryId}`)
+                .text()
                 .then(() => {
-                    setHabits((prev) => prev.filter((h) => h.id !== habitId));
-                    if (selectedHabitId === habitId) {
-                        navigate('/habits');
-                    }
-                })
-                .then(() =>
+                    refetchCategories();
+                    refetchTransactions();
                     toast({
                         title: t('common:success'),
-                        description: t('habits:successfully'),
+                        description: t('finance:categories.categoryDeleted'),
                         status: 'success',
                         duration: 1000,
                         isClosable: true,
-                    }),
-                )
-                .catch((err) =>
+                    });
+                })
+                .catch((err) => {
                     toast({
                         title: t('common:error'),
                         description:
@@ -45,8 +39,8 @@ export const useArchiveHabit = (habitId: string) => {
                         status: 'error',
                         duration: 3000,
                         isClosable: true,
-                    }),
-                );
+                    });
+                });
         },
     });
 };

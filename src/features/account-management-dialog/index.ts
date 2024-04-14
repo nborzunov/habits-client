@@ -1,4 +1,4 @@
 export {
-    AccountManagementDialogProvider,
+    openAccountManagementDialog,
     useAccountManagementDialog,
 } from './ui/AccountManagementDialog';

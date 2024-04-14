@@ -1,10 +1,10 @@
-import { Box, BoxProps, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
 import { habitsState } from '@entities/habit';
 import { ProfileInfoToolbar } from '@features/profile-info-toolbar';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
-import { SettingsDialog } from '@widgets/settings';
+import { openSettingsDialog } from '@widgets/settings/ui/SettingsDialog';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -31,11 +31,6 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
         navigate('/login');
     };
 
-    const {
-        isOpen: isOpenSettingsDialog,
-        onOpen: onOpenSettingsDialog,
-        onClose: onCloseSettingsDialog,
-    } = useDisclosure();
     return (
         <Box
             as='nav'
@@ -82,10 +77,9 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                     {/*</NavLink>*/}
                 </Flex>
                 <Flex direction='column' pb={6}>
-                    <NavItem icon={Icons$.Settings} onClick={onOpenSettingsDialog}>
+                    <NavItem icon={Icons$.Settings} onClick={() => openSettingsDialog({})}>
                         {t('common:settings')}
                     </NavItem>
-                    <SettingsDialog isOpen={isOpenSettingsDialog} onClose={onCloseSettingsDialog} />
                     <NavItem icon={Icons$.Logout} onClick={logout}>
                         {t('common:logout')}
                     </NavItem>

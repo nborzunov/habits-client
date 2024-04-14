@@ -1,7 +1,7 @@
 import api from '@/shared/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-import { Transaction } from '../../../pages/finance/model/types';
+import { Transaction } from '../model/types';
 
 export const useTransactions = () => {
     return useQuery<Transaction[]>({

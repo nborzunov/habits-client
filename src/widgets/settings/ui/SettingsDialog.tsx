@@ -11,21 +11,24 @@ import {
     ModalOverlay,
     Select,
 } from '@chakra-ui/react';
+import { openDialog, useDialog } from '@shared/hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const SettingsDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+type Props = {};
+export const SettingsDialog = () => {
     const { t, i18n } = useTranslation();
 
+    const dialog = useSettingsDialog();
     const [language, setLanguage] = React.useState(i18n.language);
     const handleSave = () => {
         i18n.changeLanguage(language).then(() => {
             localStorage.setItem('lang', language);
-            onClose();
+            dialog.hide();
         });
     };
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={dialog.visible} onClose={dialog.hide}>
             <ModalOverlay />
             <ModalContent mx={4}>
                 <ModalHeader>{t('common:settings')}</ModalHeader>
@@ -58,7 +61,7 @@ export const SettingsDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
                             base: 'md',
                             sm: 'md',
                         }}
-                        onClick={onClose}
+                        onClick={dialog.hide}
                     >
                         {t('common:close')}
                     </Button>
@@ -78,3 +81,11 @@ export const SettingsDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
         </Modal>
     );
 };
+
+export const openSettingsDialog = (props: Props) =>
+    openDialog(SettingsDialog, {
+        id: 'Settings',
+        ...props,
+    });
+
+export const useSettingsDialog = () => useDialog(SettingsDialog);

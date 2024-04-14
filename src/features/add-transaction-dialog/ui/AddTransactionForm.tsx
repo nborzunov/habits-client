@@ -17,18 +17,13 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import { Account } from '@entities/account';
-import { Category, CategoryType } from '@entities/category';
-import {
-    getAccountTypeColor,
-    getCurrency,
-    getModeButtonColor,
-    transformCategories,
-} from '@entities/finance';
+import { Category, CategoryType, useCategoriesByType } from '@entities/category';
+import { getAccountTypeColor, getCurrency, getModeButtonColor } from '@entities/finance';
 import { TransactionType, useCreateTransaction } from '@entities/transaction';
 import { useAccountManagementDialog } from '@features/account-management-dialog';
 import { useAddAccountDialog } from '@features/add-account-dialog';
 import { useAddCategoryDialog } from '@features/add-category-dialog';
-import { useCategoryManagementDialog } from '@features/category-management-dialog';
+import { openCategoryManagementDialog } from '@features/category-management-dialog';
 import { Icons$ } from '@shared/lib';
 import { validationRules } from '@shared/ui/Form';
 import { FormField, SelectFromPicklist } from '@shared/ui/Form';
@@ -38,25 +33,19 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AddTransactionMode } from '../model/types';
+import { useAddTransactionDialog } from './AddTransactionDialog';
 
 export const AddTransactionForm = ({
-    incomeCategories,
-    expenseCategories,
     accounts,
     mode,
     setMode,
-    onClose,
-    setOnClose,
 }: {
-    incomeCategories: Category[];
-    expenseCategories: Category[];
     accounts: Account[];
     mode: AddTransactionMode;
     setMode: React.Dispatch<React.SetStateAction<AddTransactionMode>>;
-    onClose: () => void;
-    setOnClose: (callback: Array<() => void>) => void;
 }) => {
     const { t } = useTranslation();
+    const dialog = useAddTransactionDialog();
     const defaultState: {
         date: string;
         account: Account | undefined;
@@ -113,54 +102,46 @@ export const AddTransactionForm = ({
 
     const [form, setForm] = useState(defaultState);
 
-    const categories = useMemo(() => {
-        if (mode === AddTransactionMode.Income) {
-            return transformCategories(incomeCategories);
-        } else if (mode === AddTransactionMode.Expense) {
-            return transformCategories(expenseCategories);
-        }
-        return [];
-    }, [mode, incomeCategories, expenseCategories]);
+    const categories = useCategoriesByType(mode as unknown as CategoryType);
 
-    const { onOpen: onOpenAddAccountDialog, onClose: onCloseAddAccountDialog } =
-        useAddAccountDialog();
-    const { onOpen: onOpenAccountManagementDialog } = useAccountManagementDialog();
-    const { onOpen: onOpenCategoryManagementDialog } = useCategoryManagementDialog();
-    const { onOpen: onOpenAddCategoryDialog, onClose: onCloseAddCategoryDialog } =
-        useAddCategoryDialog();
+    const addAccountDialog = useAddAccountDialog();
+
+    const accountManagementDialog = useAccountManagementDialog();
+
+    const addCategoryDialog = useAddCategoryDialog();
 
     const openAddAccountDialog = useCallback(
         () =>
-            onOpenAddAccountDialog({
+            addAccountDialog.show({
                 breadcrumbs: [
                     {
                         label: t('finance:addTransaction'),
-                        onClick: onCloseAddAccountDialog,
+                        onClick: addAccountDialog.hide,
                     },
                     {
                         label: t(`finance:newAccount`),
                     },
                 ],
             }),
-        [t, onOpenAddAccountDialog, onCloseAddAccountDialog],
+        [t, addAccountDialog],
     );
 
     const openAddCategoryDialog = useCallback(
         () =>
-            onOpenAddCategoryDialog({
+            addCategoryDialog.show({
                 breadcrumbs: [
                     {
                         label: t('finance:addTransaction'),
-                        onClick: onCloseAddCategoryDialog,
+                        onClick: addCategoryDialog.hide,
                     },
                     {
-                        label: t(`finance:newCategory`),
+                        label: t(`finance:categories.newCategory`),
                     },
                 ],
 
                 categoryType: mode as unknown as CategoryType,
             }),
-        [t, onOpenAddCategoryDialog, onCloseAddCategoryDialog, mode],
+        [t, addCategoryDialog, mode],
     );
 
     const clearForm = useCallback(() => {
@@ -174,12 +155,8 @@ export const AddTransactionForm = ({
 
     const handleClose = useCallback(() => {
         clearForm();
-        onClose();
-    }, [clearForm, onClose]);
-
-    useEffect(() => {
-        setOnClose([handleClose]);
-    }, [setOnClose, handleClose]);
+        dialog.hide();
+    }, [clearForm, dialog]);
 
     useEffect(() => {
         const subscription = watch((value) => setForm(value as any));
@@ -260,7 +237,7 @@ export const AddTransactionForm = ({
                                     aria-label={'manage accounts'}
                                     size={'xs'}
                                     variant={'ghost'}
-                                    onClick={() => onOpenAccountManagementDialog()}
+                                    onClick={() => accountManagementDialog.show({})}
                                 ></IconButton>
                             </Tooltip>
                         }
@@ -271,7 +248,7 @@ export const AddTransactionForm = ({
                                 <Icon
                                     as={
                                         Icons$.accountTypes[
-                                            account.accountType as keyof Icon.accountTypes
+                                            account.accountType as keyof typeof Icons$.accountTypes
                                         ]
                                     }
                                     fontSize={'4xl'}
@@ -291,15 +268,14 @@ export const AddTransactionForm = ({
                         onChange={(value) => setValue('category', value)}
                         items={categories}
                         editButton={
-                            <Tooltip label={t('finance:manageCategories')}>
+                            <Tooltip label={t('finance:categories.manageCategories')}>
                                 <IconButton
                                     icon={<Icon as={Icons$.Settings} />}
                                     aria-label={'manage categories'}
                                     size={'xs'}
                                     variant={'ghost'}
                                     onClick={() =>
-                                        onOpenCategoryManagementDialog({
-                                            categories,
+                                        openCategoryManagementDialog({
                                             mode: mode as unknown as CategoryType,
                                         })
                                     }
@@ -310,7 +286,7 @@ export const AddTransactionForm = ({
                             <>
                                 <Alert status='info'>
                                     <AlertIcon />
-                                    {t('finance:noCategoriesWarning')}
+                                    {t('finance:categories.noCategoriesWarning')}
                                 </Alert>
 
                                 <Button
@@ -325,7 +301,7 @@ export const AddTransactionForm = ({
                                     }}
                                     onClick={openAddCategoryDialog}
                                 >
-                                    {t('finance:newCategory')}
+                                    {t('finance:categories.newCategory')}
                                 </Button>
                             </>
                         }
@@ -336,7 +312,7 @@ export const AddTransactionForm = ({
                                 <Icon
                                     as={
                                         Icons$.expenseIcons[
-                                            category.icon as keyof Icon.expenseIcons
+                                            category.icon as keyof typeof Icons$.expenseIcons
                                         ]
                                     }
                                     fontSize={'4xl'}

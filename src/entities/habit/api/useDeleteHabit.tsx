@@ -8,7 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { Habit } from '../model/types';
 import { habitsState } from '../store/atoms';
 
-export const useDeleteHabit = (habitId: string, onClose: () => void) => {
+export const useDeleteHabit = (habitId: string) => {
     const setHabits = useSetRecoilState(habitsState);
     const { habitId: selectedHabitId } = useParams();
     const navigate = useNavigate();
@@ -46,8 +46,7 @@ export const useDeleteHabit = (habitId: string, onClose: () => void) => {
                         duration: 3000,
                         isClosable: true,
                     }),
-                )
-                .finally(() => onClose());
+                );
         },
     });
 };

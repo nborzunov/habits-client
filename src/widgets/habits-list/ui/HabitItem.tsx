@@ -9,18 +9,19 @@ import {
     MenuButton,
     MenuList,
     Text,
-    useDisclosure,
 } from '@chakra-ui/react';
 import {
     Habit,
+    HabitData,
     useArchiveHabit,
     useCleanHabit,
     useDeleteHabit,
     useEditHabit,
 } from '@entities/habit';
-import { EditHabitDialog } from '@features/edit-habit-dialog';
+import { useEditHabitDialog } from '@features/edit-habit-dialog';
+import { openEditHabitDialog } from '@features/edit-habit-dialog/ui/EditHabitDialog';
 import { Icons$ } from '@shared/lib';
-import { ConfirmationDialog } from '@shared/ui/ConfirmationDialog';
+import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import { MouseEventHandler, useEffect, useRef } from 'react';
@@ -60,29 +61,12 @@ export const HabitItem = ({
         }
     }, [selected, habit.title, t]);
 
-    const {
-        isOpen: isOpenDeleteConfirm,
-        onOpen: onOpenDeleteConfirm,
-        onClose: onCloseDeleteConfirm,
-    } = useDisclosure();
-    const cancelRef = useRef();
+    const editHabitDialog = useEditHabitDialog();
 
-    const {
-        isOpen: isOpenEditHabit,
-        onOpen: onOpenEditHabit,
-        onClose: onCloseEditHabit,
-    } = useDisclosure();
-
-    const {
-        isOpen: isOpenCleanConfirm,
-        onOpen: onOpenCleanConfirm,
-        onClose: onCloseConfirmClean,
-    } = useDisclosure();
-
-    const { mutate: editHabit } = useEditHabit(habit.id, onCloseEditHabit);
-    const { mutate: deleteHabit } = useDeleteHabit(habit.id, onCloseDeleteConfirm);
-    const { mutate: archiveHabit } = useArchiveHabit(habit.id, onCloseDeleteConfirm);
-    const { mutate: cleanData } = useCleanHabit(habit.id, onCloseConfirmClean);
+    const { mutate: editHabit } = useEditHabit(habit.id, editHabitDialog.hide);
+    const { mutate: deleteHabit } = useDeleteHabit(habit.id);
+    const { mutate: archiveHabit } = useArchiveHabit(habit.id);
+    const { mutate: cleanData } = useCleanHabit(habit.id);
 
     const selectHabit = (habitId: string) => {
         navigate(`/habits/${habitId}`);
@@ -106,6 +90,65 @@ export const HabitItem = ({
 
         selectHabit(habit.id);
     };
+
+    const onDeleteHabit = () =>
+        openConfirmationDialog({
+            title: t('habits:deleteHabit', { title: habit.title }),
+            text: t('habits:deleteHabitDescription'),
+            customFooter: (ok, cancel) => {
+                return (
+                    <>
+                        <Button
+                            size={{
+                                base: 'md',
+                                sm: 'md',
+                            }}
+                            onClick={cancel}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            size={{
+                                base: 'md',
+                                sm: 'md',
+                            }}
+                            colorScheme='blue'
+                            onClick={() => ok(() => archiveHabit())}
+                            ml={3}
+                        >
+                            {t('habits:archive')}
+                        </Button>
+                        <Button
+                            size={{
+                                base: 'md',
+                                sm: 'md',
+                            }}
+                            colorScheme='red'
+                            onClick={() => ok(() => deleteHabit())}
+                            ml={3}
+                        >
+                            {t('habits:delete')}
+                        </Button>
+                    </>
+                );
+            },
+        });
+
+    const onCleanHabit = () =>
+        openConfirmationDialog({
+            title: t('habits:cleanData'),
+            text: t('habits:confirmText'),
+            okText: t('common:clean'),
+            cancelText: t('common:cancel'),
+        })
+            .then(() => cleanData())
+            .catch(() => {});
+
+    const onEditHabit = () =>
+        openEditHabitDialog({
+            initialState: habit,
+        }).then((h: HabitData) => editHabit(h));
+
     return (
         <>
             <Box
@@ -152,14 +195,14 @@ export const HabitItem = ({
                         />
                         <MenuList p={0} ref={menuRef}>
                             <OperationMenuItem
-                                onClick={onOpenEditHabit}
+                                onClick={onEditHabit}
                                 icon={Icons$.Edit}
                                 label={t('common:edit')}
                             />
 
                             {habit.targets.length > 0 && (
                                 <OperationMenuItem
-                                    onClick={onOpenCleanConfirm}
+                                    onClick={onCleanHabit}
                                     icon={Icons$.Delete}
                                     label={t('habits:cleanTargets')}
                                 />
@@ -171,7 +214,7 @@ export const HabitItem = ({
                                 label={t('habits:archive')}
                             />
                             <OperationMenuItem
-                                onClick={onOpenDeleteConfirm}
+                                onClick={onDeleteHabit}
                                 icon={Icons$.TrashBin}
                                 label={t('habits:delete')}
                             />
@@ -185,82 +228,6 @@ export const HabitItem = ({
                     </Box>
                 )}
             </Box>
-
-            <ConfirmationDialog
-                isOpen={isOpenDeleteConfirm}
-                onClose={onCloseDeleteConfirm}
-                cancelRef={cancelRef}
-                title={t('habits:deleteHabit', { title: habit.title })}
-                text={t('habits:deleteHabitDescription')}
-            >
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    onClick={onCloseDeleteConfirm}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    colorScheme='blue'
-                    onClick={() => archiveHabit()}
-                    ml={3}
-                >
-                    {t('habits:archive')}
-                </Button>
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    colorScheme='red'
-                    onClick={() => deleteHabit()}
-                    ml={3}
-                >
-                    {t('habits:delete')}
-                </Button>
-            </ConfirmationDialog>
-
-            <ConfirmationDialog
-                isOpen={isOpenCleanConfirm}
-                onClose={onCloseConfirmClean}
-                cancelRef={cancelRef}
-                title={t('common:cleanData')}
-                text={t('common:confirmText')}
-            >
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    onClick={onCloseConfirmClean}
-                >
-                    {t('common:cancel')}
-                </Button>
-                <Button
-                    size={{
-                        base: 'md',
-                        sm: 'md',
-                    }}
-                    colorScheme='red'
-                    onClick={() => cleanData()}
-                    ml={3}
-                >
-                    {t('common:clean')}
-                </Button>
-            </ConfirmationDialog>
-
-            <EditHabitDialog
-                isOpen={isOpenEditHabit}
-                onClose={onCloseEditHabit}
-                onSubmit={editHabit}
-                initialState={habit}
-            />
         </>
     );
 };

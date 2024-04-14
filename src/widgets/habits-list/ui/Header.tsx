@@ -1,15 +1,22 @@
-import { Button, Flex, Heading, Icon, IconButton, useDisclosure } from '@chakra-ui/react';
-import { useCreateHabit } from '@entities/habit';
-import { EditHabitDialog } from '@features/edit-habit-dialog';
+import { Button, Flex, Heading, Icon, IconButton } from '@chakra-ui/react';
+import { HabitData, useCreateHabit } from '@entities/habit';
+import { useEditHabitDialog } from '@features/edit-habit-dialog';
 import { Icons$ } from '@shared/lib';
 import { MobileMenu } from '@shared/ui/Layout/MobileMenu';
 import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const { t } = useTranslation();
 
-    const { mutate: createHabit } = useCreateHabit(onClose);
+    const editHabitDialog = useEditHabitDialog();
+    const { mutate: createHabit } = useCreateHabit(editHabitDialog.hide);
+
+    const onOpenCreateHabitDialog = () =>
+        editHabitDialog
+            .show({
+                createMode: true,
+            })
+            .then((h: HabitData) => createHabit(h));
     return (
         <>
             <Flex justifyContent='space-between' alignItems='center' p={4}>
@@ -21,7 +28,12 @@ export const Header = () => {
                 </Flex>
 
                 <Flex gap={2}>
-                    <Button colorScheme='blue' variant='solid' size='sm' onClick={onOpen}>
+                    <Button
+                        colorScheme='blue'
+                        variant='solid'
+                        size='sm'
+                        onClick={onOpenCreateHabitDialog}
+                    >
                         <Icon as={Icons$.Add} fontSize={'20px'} /> {t('habits:addHabit')}
                     </Button>
                     <IconButton
@@ -34,7 +46,6 @@ export const Header = () => {
                     />
                 </Flex>
             </Flex>
-            <EditHabitDialog onSubmit={createHabit} isOpen={isOpen} onClose={onClose} createMode />
         </>
     );
 };

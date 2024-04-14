@@ -11,25 +11,26 @@ import {
     ModalOverlay,
 } from '@chakra-ui/react';
 import { Habit, Target } from '@entities/habit/model/types';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { NumericInput } from '@shared/ui/Form/NumericInput';
-import { memo, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
     habit: Habit;
     target?: Target;
-    isOpen: boolean;
-    onClose: () => void;
     onSubmit: (value: number) => void;
 }
 
-export const SetTargetDialog = memo(({ target, habit, isOpen, onClose, onSubmit }: Props) => {
+export const SetTargetDialog = createDialog(({ target, habit, onSubmit }: Props) => {
     const [result, setResult] = useState(target?.value ?? 1);
 
+    const dialog = useSetTargetDialog();
     const handleClose = useCallback(() => {
         setResult(1);
-        onClose();
-    }, [onClose]);
+        dialog.hide();
+    }, [dialog]);
+
     const { t } = useTranslation();
 
     const handleSubmit = useCallback(() => {
@@ -37,7 +38,7 @@ export const SetTargetDialog = memo(({ target, habit, isOpen, onClose, onSubmit 
         handleClose();
     }, [onSubmit, handleClose, result]);
     return (
-        <Modal isOpen={isOpen} onClose={handleClose}>
+        <Modal isOpen={dialog.visible} onClose={handleClose}>
             <ModalOverlay />
             <ModalContent mx={4}>
                 <ModalHeader>{t('habits:setResult', { title: habit.title })}</ModalHeader>
@@ -75,3 +76,11 @@ export const SetTargetDialog = memo(({ target, habit, isOpen, onClose, onSubmit 
 });
 
 SetTargetDialog.displayName = 'SetTargetDialog';
+
+export const openSetTargetDialog = (props: Props) =>
+    openDialog(SetTargetDialog, {
+        id: 'SetTarget',
+        ...props,
+    });
+
+export const useSetTargetDialog = () => useDialog(SetTargetDialog);

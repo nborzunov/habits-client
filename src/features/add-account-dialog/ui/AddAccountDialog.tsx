@@ -18,7 +18,7 @@ import {
 import { useCreateAccount } from '@entities/account';
 import { AccountType } from '@entities/account';
 import { Currency, getCurrency } from '@entities/finance';
-import { DialogProps, createDialogProvider } from '@shared/hooks';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { Breadcrumbs, BreadcrumbsProps } from '@shared/ui/Breadcrumbs';
 import { SelectFromPicklist } from '@shared/ui/Form';
 import { useEffect, useState } from 'react';
@@ -37,13 +37,14 @@ interface FormData {
     amount?: number | '';
 }
 
-type AddAccountProps = BreadcrumbsProps;
+type Props = {} & BreadcrumbsProps;
 
-export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAccountProps>) => {
+export const AddAccountDialog = createDialog(({ breadcrumbs }: Props) => {
+    const dialog = useAddAccountDialog();
     const { t } = useTranslation();
 
     const { mutate } = useCreateAccount(() => {
-        onClose();
+        dialog.hide();
     });
 
     const defaultState: FormData = {
@@ -93,7 +94,7 @@ export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAcco
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+        <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
             <ModalContent mx={4} as={'form'} onSubmit={handleSubmit(onFormSubmit)}>
                 <ModalHeader>
                     <Breadcrumbs items={breadcrumbs} />
@@ -151,7 +152,7 @@ export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAcco
                                 },
                             }))}
                         >
-                            {(currency) => currency}
+                            {(currency) => currency.name}
                         </SelectFromPicklist>
 
                         <FormControl isDisabled={!form.currency}>
@@ -173,7 +174,7 @@ export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAcco
 
                 <ModalFooter>
                     <Box display={'flex'} justifyContent={'end'}>
-                        <Button colorScheme='blue' mr={3} size={'md'} onClick={onClose}>
+                        <Button colorScheme='blue' mr={3} size={'md'} onClick={dialog.hide}>
                             {t('common:close')}
                         </Button>
                         <Button
@@ -189,7 +190,12 @@ export const AddAccount = ({ isOpen, onClose, breadcrumbs }: DialogProps<AddAcco
             </ModalContent>
         </Modal>
     );
-};
+});
 
-export const { DialogProvider: AddAccountDialogProvider, useDialogAction: useAddAccountDialog } =
-    createDialogProvider<AddAccountProps>(AddAccount);
+export const openAddAccountDialog = (props: Props) =>
+    openDialog(AddAccountDialog, {
+        id: 'AddAccount',
+        ...props,
+    });
+
+export const useAddAccountDialog = () => useDialog(AddAccountDialog);
