@@ -1,7 +1,7 @@
 import NiceModal, { useModal as useNiceModal } from '@ebay/nice-modal-react';
 
 export const openDialog = NiceModal.show as unknown as <T extends {}>(
-    component: React.FC<T>,
+    component: React.FC<T> | string,
     props: T,
 ) => Promise<any>;
 

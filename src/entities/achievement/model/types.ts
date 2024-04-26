@@ -1,17 +1,17 @@
 export type AchievementKey =
-    | 'streakStarter'
-    | 'habitFormed'
-    | 'consistencyChampion'
-    | 'habitualHero'
-    | 'habitMaster'
-    | 'habitProdigy'
-    | 'habitLegend'
-    | 'steadyEddie'
-    | 'relentless'
-    | 'unstoppable'
-    | 'surpassingLimits'
-    | 'perseverance'
-    | 'comebackKid';
+    | 'StreakStarter'
+    | 'HabitFormed'
+    | 'ConsistencyChampion'
+    | 'HabitualHero'
+    | 'HabitMaster'
+    | 'HabitProdigy'
+    | 'HabitLegend'
+    | 'SteadyEddie'
+    | 'Relentless'
+    | 'Unstoppable'
+    | 'SurpassingLimits'
+    | 'Perseverance'
+    | 'ComebackKid';
 
 export interface AchievementData {
     readonly key: AchievementKey;
@@ -20,8 +20,8 @@ export interface AchievementData {
 }
 
 export interface AchievementProgress {
-    habitId: string;
-    habitTitle: string;
+    habit_id: string;
+    habit_title: string;
     progress: number;
 }
 
@@ -29,7 +29,7 @@ export interface BaseAchievement {
     key: AchievementKey;
     progress: AchievementProgress[];
     completed: boolean;
-    completedDate?: Date;
+    completed_date?: Date;
 }
 
 export interface Achievement extends BaseAchievement {

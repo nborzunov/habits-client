@@ -17,12 +17,12 @@ export const WidgetsGrid = ({ habit, isEditMode }: { habit: Habit; isEditMode: b
     const { mutate: createTarget } = useCreateTarget();
 
     const onChangeTarget = useCallback(
-        (id: string | undefined, date: Date, targetType: TargetType, value?: number) => {
+        (id: string | undefined, date: Date, target_type: TargetType, value?: number) => {
             createTarget({
                 id: id,
-                habitId: habit.id,
+                habit_id: habit.id,
                 date: getCorrectDate(date),
-                targetType: targetType,
+                target_type: target_type,
                 value: value || habit.goal,
             });
         },

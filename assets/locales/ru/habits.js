@@ -2,7 +2,7 @@ import { Periodicity } from '../../../src/entities/habit/model/types';
 
 export const habits = {
     noHabits: 'Пока нет привычек, давайте создадим одну!',
-    completedToday: 'Завершено сегодня',
+    completed_today: 'Завершено сегодня',
     allHabits: 'Все привычки',
     successfullyCreated: 'Привычка создана!',
     successfullyUpdated: 'Привычка обновлена!',
@@ -16,8 +16,8 @@ export const habits = {
     selectedHabit: `{{title}} - Привычки`,
     deleteHabit: 'Удалить привычку "{{title}}"',
     deleteHabitDescription: 'Вы уверены? Если вы удалите привычку, вы потеряете весь прогресс.',
-    completedCount: '{{count}} выполнено',
-    failedCount: '{{count}} провалено',
+    completed_count: '{{count}} выполнено',
+    failed_count: '{{count}} провалено',
     cleanTargets: 'Очистить',
     archive: 'Архивировать',
     delete: 'Удалить',
@@ -39,7 +39,7 @@ export const habits = {
         mins: 'Всего минут',
         times: 'Всего повторений',
     },
-    completedValues: {
+    completed_values: {
         mins: 'Выполнено минут',
         times: 'Выполнено повторений',
     },
@@ -60,7 +60,7 @@ export const habits = {
     title: 'Название',
     dailyGoal: 'Ежедневная цель',
     increaseDailyGoal: 'Нужно увеличить ежедневную цель',
-    goalType: 'Тип цели',
+    goal_type: 'Тип цели',
     timesTitle: 'Повторения',
     minutesTitle: 'Минуты',
     periodicity: 'Периодичность',
@@ -72,8 +72,8 @@ export const habits = {
     },
     allowOverGoal: 'Разрешить превышение цели',
     allowPartial: 'Разрешить частичное выполнение',
-    allowSkip: 'Разрешить пропуски',
-    allowSkipDescription: '(например, если необходимо время на отдых)',
+    allow_skip: 'Разрешить пропуски',
+    allow_skipDescription: '(например, если необходимо время на отдых)',
     setResult: '{{title}} - Установите результат сегодня',
     operations: {
         set: 'Установить',
@@ -88,7 +88,7 @@ export const habits = {
     targets_other: '{{count}} выполнений',
     currentWeek: 'Текущая неделя',
     goal: 'Цель',
-    canBeFinished: 'Можно завершить',
+    can_be_finished: 'Можно завершить',
     finishIf: 'Завершить, если ',
     chartNoData: 'Нет данных для отображения',
 };

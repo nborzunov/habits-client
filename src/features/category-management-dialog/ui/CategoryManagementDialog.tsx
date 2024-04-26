@@ -42,19 +42,19 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
                     label: t(`finance:categories.newCategory`),
                 },
             ],
-            categoryType: mode as unknown as CategoryType,
+            category_type: mode as unknown as CategoryType,
         });
 
     const { mutate: deleteCategory } = useDeleteCategory();
 
-    const onDelete = (categoryId: string) => {
+    const onDelete = (category_id: string) => {
         openConfirmationDialog({
             title: t('common:delete'),
             text: t('finance:confirmCategoryDelete'),
             cancelText: t('common:cancel'),
             okText: t('common:delete'),
         })
-            .then(() => deleteCategory(categoryId))
+            .then(() => deleteCategory(category_id))
             .catch(() => {});
     };
 
@@ -73,7 +73,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
 
                     <Stack spacing={3} mt={3}>
                         {categories.map(({ value: category }) => {
-                            const categoryIconsMap = getCategoryIconsMap(category.categoryType);
+                            const categoryIconsMap = getCategoryIconsMap(category.category_type);
                             return (
                                 <ListItem
                                     id={category.id}

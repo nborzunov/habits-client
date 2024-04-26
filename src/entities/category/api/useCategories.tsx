@@ -2,7 +2,7 @@ import api from '@/shared/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { Category } from '../../../pages/finance/model/types';
+import { Category } from '../model/types';
 
 export const useCategories = () => {
     const { t } = useTranslation();
@@ -14,20 +14,20 @@ export const useCategories = () => {
         queryKey: ['categories'],
         queryFn: () =>
             api
-                .get('finance/category')
+                .get('category')
                 .json<{
                     income: Category[];
                     expense: Category[];
                 }>()
                 .then(({ income, expense }) => {
-                    income.forEach((category) => {
-                        category.name = category.default
+                    income.forEach((category: Category) => {
+                        category.name = category.is_default
                             ? t(`finance:defaultIncomeCategories.${category.name}`)
                             : category.name;
                     });
 
-                    expense.forEach((category) => {
-                        category.name = category.default
+                    expense.forEach((category: Category) => {
+                        category.name = category.is_default
                             ? t(`finance:defaultExpenseCategories.${category.name}`)
                             : category.name;
                     });

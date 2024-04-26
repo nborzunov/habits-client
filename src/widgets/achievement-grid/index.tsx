@@ -3,6 +3,7 @@ import { useAchievements } from '@entities/achievement';
 import React from 'react';
 
 import { AchievementCard } from './ui/AchievementCard';
+import { AchievementProgressDialog } from './ui/AchievementProgressDialog';
 
 export const AchievementsGrid = () => {
     // TODO: compare to friend ...
@@ -11,6 +12,8 @@ export const AchievementsGrid = () => {
 
     return (
         <Grid my={4} gridTemplateColumns={'repeat(auto-fit, minmax(450px, 1fr))'} gap={4}>
+            {/* @ts-ignore */}
+            <AchievementProgressDialog id='AchievementProgress' />
             {achievements.map((achievement) => (
                 <AchievementCard key={achievement.key} achievement={achievement} />
             ))}

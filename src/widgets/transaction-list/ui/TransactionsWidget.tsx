@@ -28,13 +28,13 @@ export const TransactionsWidget = () => {
                         <Flex alignItems={'center'}>
                             <Icon
                                 as={
-                                    Icons$.transactionTypes[
-                                        transaction.transactionType as keyof Icon.transactionTypes
+                                    Icons$.transaction_types[
+                                        transaction.transaction_type as keyof Icon.transaction_types
                                     ]
                                 }
                                 fontSize={'2xl'}
                                 mr={4}
-                                color={getTransactionTypeColor(transaction.transactionType)}
+                                color={getTransactionTypeColor(transaction.transaction_type)}
                             />
                             <Flex flexDirection={'column'}>
                                 <Text fontWeight='bold' fontSize='lg' color='gray.600'>
@@ -46,9 +46,9 @@ export const TransactionsWidget = () => {
                                 <Flex alignItems={'center'} mt={1}>
                                     <Icon
                                         as={
-                                            Icons$.accountTypes[
+                                            Icons$.account_types[
                                                 transaction.account
-                                                    .accountType as keyof Icon.accountTypes
+                                                    .account_type as keyof Icon.account_types
                                             ]
                                         }
                                         fontSize={'lg'}

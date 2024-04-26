@@ -47,14 +47,14 @@ export const AddTransactionForm = ({
     const { t } = useTranslation();
     const dialog = useAddTransactionDialog();
     const defaultState: {
-        date: string;
+        created_date: string;
         account: Account | undefined;
         category: Category | undefined;
         amount: number | '';
         note: string;
     } = useMemo(
         () => ({
-            date: dayjs().format('YYYY-MM-DD'),
+            created_date: dayjs().format('YYYY-MM-DD'),
             account: undefined,
             category: undefined,
             amount: '',
@@ -78,23 +78,23 @@ export const AddTransactionForm = ({
     });
 
     const onFormSubmit = (data: {
-        date: string;
+        created_date: string;
         account: Account | undefined;
         category: Category | undefined;
         amount: number | '';
         note: string;
     }) => {
         const currentTime = dayjs();
-        const date = dayjs(data.date)
+        const created_date = dayjs(data.created_date)
             .add(currentTime.hour(), 'hour')
             .add(currentTime.minute(), 'minute')
             .add(currentTime.second(), 'second');
 
         mutate({
-            date: date.toDate(),
-            accountId: data.account?.id as string,
-            categoryId: data.category?.id as string,
-            transactionType: mode as unknown as TransactionType,
+            created_date: created_date.toDate(),
+            account_id: data.account?.id as string,
+            category_id: data.category?.id as string,
+            transaction_type: mode as unknown as TransactionType,
             amount: Number(data.amount) || 0,
             note: data.note,
         });
@@ -139,7 +139,7 @@ export const AddTransactionForm = ({
                     },
                 ],
 
-                categoryType: mode as unknown as CategoryType,
+                category_type: mode as unknown as CategoryType,
             }),
         [t, addCategoryDialog, mode],
     );
@@ -180,7 +180,7 @@ export const AddTransactionForm = ({
                             onClick={() => setMode(m)}
                             w={'33%'}
                         >
-                            {t(`finance:transactionTypes.${m}`)}
+                            {t(`finance:transaction_types.${m}`)}
                         </Button>
                     ))}
                 </HStack>
@@ -188,8 +188,8 @@ export const AddTransactionForm = ({
                 <Stack>
                     <FormField
                         label={t('finance:date')}
-                        validationProps={register('date', validationRules.text(2))}
-                        validationError={errors.date}
+                        validationProps={register('created_date', validationRules.text(2))}
+                        validationError={errors.created_date}
                         field={'date'}
                         direction={'column'}
                         variant={'outline'}
@@ -213,21 +213,6 @@ export const AddTransactionForm = ({
                                     <AlertIcon />
                                     {t('finance:noAccountsWarning')}
                                 </Alert>
-
-                                <Button
-                                    mt={2}
-                                    width={'100%'}
-                                    colorScheme='green'
-                                    variant={'outline'}
-                                    type='submit'
-                                    size={{
-                                        base: 'md',
-                                        sm: 'md',
-                                    }}
-                                    onClick={openAddAccountDialog}
-                                >
-                                    {t('finance:newAccount')}
-                                </Button>
                             </>
                         }
                         editButton={
@@ -247,8 +232,8 @@ export const AddTransactionForm = ({
                             <Flex width='100%' alignItems='center'>
                                 <Icon
                                     as={
-                                        Icons$.accountTypes[
-                                            account.accountType as keyof typeof Icons$.accountTypes
+                                        Icons$.account_types[
+                                            account.account_type as keyof typeof Icons$.account_types
                                         ]
                                     }
                                     fontSize={'4xl'}
@@ -288,21 +273,6 @@ export const AddTransactionForm = ({
                                     <AlertIcon />
                                     {t('finance:categories.noCategoriesWarning')}
                                 </Alert>
-
-                                <Button
-                                    mt={2}
-                                    width={'100%'}
-                                    colorScheme='green'
-                                    variant={'outline'}
-                                    type='submit'
-                                    size={{
-                                        base: 'md',
-                                        sm: 'md',
-                                    }}
-                                    onClick={openAddCategoryDialog}
-                                >
-                                    {t('finance:categories.newCategory')}
-                                </Button>
                             </>
                         }
                         addItem={openAddCategoryDialog}

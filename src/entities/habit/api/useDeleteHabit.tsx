@@ -8,9 +8,9 @@ import { useSetRecoilState } from 'recoil';
 import { Habit } from '../model/types';
 import { habitsState } from '../store/atoms';
 
-export const useDeleteHabit = (habitId: string) => {
+export const useDeleteHabit = (habit_id: string) => {
     const setHabits = useSetRecoilState(habitsState);
-    const { habitId: selectedHabitId } = useParams();
+    const { habit_id: selectedHabitId } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const toast = useToast();
@@ -18,11 +18,11 @@ export const useDeleteHabit = (habitId: string) => {
     return useMutation({
         mutationFn: () => {
             return api
-                .delete(`habits/${habitId}`)
+                .delete(`habits/${habit_id}`)
                 .json<Habit>()
                 .then(() => {
-                    setHabits((prev) => prev.filter((h) => h.id !== habitId));
-                    if (selectedHabitId === habitId) {
+                    setHabits((prev) => prev.filter((h) => h.id !== habit_id));
+                    if (selectedHabitId === habit_id) {
                         navigate('/habits');
                     }
                 })

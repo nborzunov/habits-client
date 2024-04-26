@@ -120,7 +120,7 @@ export const WIDGETS: {
         },
     },
     TOTAL_VALUES: {
-        getTitle: (habit) => `habits:totalValues.${habit.goalType}`,
+        getTitle: (habit) => `habits:totalValues.${habit.goal_type}`,
         icon: Icons$.Stats,
         desktop: {
             w: 1,
@@ -136,7 +136,7 @@ export const WIDGETS: {
         },
     },
     COMPLETED_VALUES: {
-        getTitle: (habit) => `habits:completedValues.${habit.goalType}`,
+        getTitle: (habit) => `habits:completed_values.${habit.goal_type}`,
         icon: Icons$.Stats,
         desktop: {
             w: 1,
@@ -234,14 +234,14 @@ export const useWidgets = (habit: Habit, isEditMode: boolean) => {
     const filterWidget = useCallback(
         (widget: HabitsWidget) => {
             if (
-                !habit.allowSkip &&
+                !habit.allow_skip &&
                 widget in [HabitsWidget.SKIPPED_TARGETS, HabitsWidget.TOTAL_TARGETS]
             ) {
                 return false;
             }
 
             return !(
-                !(habit.allowPartialCompletion && habit.allowOverGoalCompletion) &&
+                !(habit.allow_partial_completion && habit.allow_over_goal_completion) &&
                 widget in [HabitsWidget.TOTAL_VALUES, HabitsWidget.COMPLETED_VALUES]
             );
         },

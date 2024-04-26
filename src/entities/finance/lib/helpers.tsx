@@ -22,8 +22,8 @@ export const getCurrency = (value: string) => {
     return '$';
 };
 
-export const getTransactionTypeColor = (transactionType: string) => {
-    switch (transactionType) {
+export const getTransactionTypeColor = (transaction_type: string) => {
+    switch (transaction_type) {
         case 'income':
             return 'green.500';
         case 'expense':
@@ -33,7 +33,7 @@ export const getTransactionTypeColor = (transactionType: string) => {
     }
 };
 export const getAccountTypeColor = (account: Account) => {
-    switch (account.accountType) {
+    switch (account.account_type) {
         case 'cash':
             return 'orange';
         case 'card':
@@ -46,8 +46,8 @@ export const getAccountTypeColor = (account: Account) => {
 };
 
 export const getCategoryName = (category: Category) => {
-    if (category.default) {
-        if (category.categoryType === 'expense') {
+    if (category.is_default) {
+        if (category.category_type === 'expense') {
             return `finance:defaultExpenseCategories.${category.name}`;
         } else {
             return `finance:defaultIncomeCategories.${category.name}`;
@@ -56,8 +56,8 @@ export const getCategoryName = (category: Category) => {
     return category.name;
 };
 
-export const getCategoryIcons = (categoryType: CategoryType) => {
-    switch (categoryType) {
+export const getCategoryIcons = (category_type: CategoryType) => {
+    switch (category_type) {
         case CategoryType.Expense:
             return Object.keys(Icons$.expenseIcons);
         case CategoryType.Income:
@@ -67,8 +67,8 @@ export const getCategoryIcons = (categoryType: CategoryType) => {
     }
 };
 
-export const getCategoryIconsMap = (categoryType: CategoryType) => {
-    switch (categoryType) {
+export const getCategoryIconsMap = (category_type: CategoryType) => {
+    switch (category_type) {
         case CategoryType.Expense:
             return Icons$.expenseIcons;
         case CategoryType.Income:
@@ -78,8 +78,8 @@ export const getCategoryIconsMap = (categoryType: CategoryType) => {
     }
 };
 
-export const getCategoryComponents = (categoryType: CategoryType) => {
-    switch (categoryType) {
+export const getCategoryComponents = (category_type: CategoryType) => {
+    switch (category_type) {
         case CategoryType.Expense:
             return Icons$.expenseIcons;
         case CategoryType.Income:

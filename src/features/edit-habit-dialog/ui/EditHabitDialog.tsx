@@ -30,13 +30,13 @@ import { useTranslation } from 'react-i18next';
 const defaultState = {
     title: '',
     goal: 1,
-    goalType: GoalType.Times,
+    goal_type: GoalType.Times,
     periodicity: Periodicity.Daily,
-    allowSkip: false,
-    allowPartialCompletion: false,
-    allowOverGoalCompletion: false,
-    canBeFinished: false,
-    totalGoal: 1,
+    allow_skip: false,
+    allow_partial_completion: false,
+    allow_over_goal_completion: false,
+    can_be_finished: false,
+    total_goal: 1,
 };
 
 type Props = {
@@ -55,24 +55,24 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
     }, []);
 
     useEffect(() => {
-        if (form.goal <= 1 && form.allowPartialCompletion) {
-            setValue('allowPartialCompletion', false);
+        if (form.goal <= 1 && form.allow_partial_completion) {
+            setValue('allow_partial_completion', false);
         }
-    }, [form.goal, form.allowPartialCompletion, setValue]);
+    }, [form.goal, form.allow_partial_completion, setValue]);
 
     const setInitialState = useCallback(() => {
         setForm({
             title: initialState?.title ?? defaultState.title,
             goal: initialState?.goal ?? defaultState.goal,
-            goalType: initialState?.goalType ?? defaultState.goalType,
+            goal_type: initialState?.goal_type ?? defaultState.goal_type,
             periodicity: initialState?.periodicity ?? defaultState.periodicity,
-            allowSkip: initialState?.allowSkip ?? defaultState.allowSkip,
-            allowPartialCompletion:
-                initialState?.allowPartialCompletion ?? defaultState.allowPartialCompletion,
-            allowOverGoalCompletion:
-                initialState?.allowOverGoalCompletion ?? defaultState.allowPartialCompletion,
-            canBeFinished: initialState?.canBeFinished ?? defaultState.canBeFinished,
-            totalGoal: initialState?.totalGoal ?? defaultState.totalGoal,
+            allow_skip: initialState?.allow_skip ?? defaultState.allow_skip,
+            allow_partial_completion:
+                initialState?.allow_partial_completion ?? defaultState.allow_partial_completion,
+            allow_over_goal_completion:
+                initialState?.allow_over_goal_completion ?? defaultState.allow_partial_completion,
+            can_be_finished: initialState?.can_be_finished ?? defaultState.can_be_finished,
+            total_goal: initialState?.total_goal ?? defaultState.total_goal,
         });
     }, [initialState]);
 
@@ -129,7 +129,7 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                                 <Tooltip label={t('habits:dailyGoal')} hasArrow>
                                     <Box>
                                         <NumericInput
-                                            min={form.allowPartialCompletion ? 2 : 1}
+                                            min={form.allow_partial_completion ? 2 : 1}
                                             value={form.goal}
                                             onChange={(e) =>
                                                 setValue(
@@ -141,11 +141,11 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                                     </Box>
                                 </Tooltip>
 
-                                <Tooltip label={t('habits:goalType')} hasArrow>
+                                <Tooltip label={t('habits:goal_type')} hasArrow>
                                     <Select
-                                        value={form.goalType}
+                                        value={form.goal_type}
                                         onChange={(e) =>
-                                            setValue('goalType', e.target.value as GoalType)
+                                            setValue('goal_type', e.target.value as GoalType)
                                         }
                                         size={{
                                             base: 'md',
@@ -188,11 +188,11 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
 
                             <FormControl>
                                 <Checkbox
-                                    isChecked={form.canBeFinished}
+                                    isChecked={form.can_be_finished}
                                     isDisabled={!createMode}
-                                    onChange={(e) => setValue('canBeFinished', e.target.checked)}
+                                    onChange={(e) => setValue('can_be_finished', e.target.checked)}
                                 >
-                                    {t('habits:canBeFinished')}
+                                    {t('habits:can_be_finished')}
                                 </Checkbox>
                             </FormControl>
 
@@ -201,18 +201,18 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                                 flexDir={'row'}
                                 alignItems='center'
                                 justify='space-between'
-                                color={!createMode || !form.canBeFinished ? 'gray.500' : ''}
+                                color={!createMode || !form.can_be_finished ? 'gray.500' : ''}
                             >
                                 <Text whiteSpace={'nowrap'}>{t('habits:finishIf')}</Text>
                                 <Tooltip label={t('habits:goal')} hasArrow>
                                     <Box>
                                         <NumericInput
                                             min={form.goal}
-                                            isDisabled={!createMode || !form.canBeFinished}
-                                            value={form.totalGoal}
+                                            isDisabled={!createMode || !form.can_be_finished}
+                                            value={form.total_goal}
                                             onChange={(e) =>
                                                 setValue(
-                                                    'totalGoal',
+                                                    'total_goal',
                                                     !Number.isNaN(Number(e)) ? Number(e) : 1,
                                                 )
                                             }
@@ -221,7 +221,7 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                                 </Tooltip>
                                 <Text>
                                     {t('common:daysShort', {
-                                        count: form.totalGoal,
+                                        count: form.total_goal,
                                     })}
                                 </Text>
                             </Flex>
@@ -233,9 +233,9 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
 
                             <FormControl>
                                 <Checkbox
-                                    isChecked={form.allowOverGoalCompletion}
+                                    isChecked={form.allow_over_goal_completion}
                                     onChange={(e) =>
-                                        setValue('allowOverGoalCompletion', e.target.checked)
+                                        setValue('allow_over_goal_completion', e.target.checked)
                                     }
                                 >
                                     {t('habits:allowOverGoal')}
@@ -248,9 +248,9 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                             >
                                 <FormControl isDisabled={form.goal <= 1}>
                                     <Checkbox
-                                        isChecked={form.allowPartialCompletion}
+                                        isChecked={form.allow_partial_completion}
                                         onChange={(e) =>
-                                            setValue('allowPartialCompletion', e.target.checked)
+                                            setValue('allow_partial_completion', e.target.checked)
                                         }
                                     >
                                         {t('habits:allowPartial')}
@@ -260,13 +260,13 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
 
                             <FormControl>
                                 <Checkbox
-                                    isChecked={form.allowSkip}
-                                    onChange={(e) => setValue('allowSkip', e.target.checked)}
+                                    isChecked={form.allow_skip}
+                                    onChange={(e) => setValue('allow_skip', e.target.checked)}
                                 >
-                                    {t('habits:allowSkip')}
+                                    {t('habits:allow_skip')}
                                 </Checkbox>
 
-                                <FormHelperText>{t('habits:allowSkipDescription')}</FormHelperText>
+                                <FormHelperText>{t('habits:allow_skipDescription')}</FormHelperText>
                             </FormControl>
                         </Stack>
                     </Stack>

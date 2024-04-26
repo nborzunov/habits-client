@@ -51,7 +51,9 @@ export const SetTargetDialog = createDialog(({ target, habit, onSubmit }: Props)
                             onChange={(v) => setResult(v)}
                             min={1}
                             max={
-                                habit.allowOverGoalCompletion ? Number.MAX_SAFE_INTEGER : habit.goal
+                                habit.allow_over_goal_completion
+                                    ? Number.MAX_SAFE_INTEGER
+                                    : habit.goal
                             }
                         />
                     </FormControl>

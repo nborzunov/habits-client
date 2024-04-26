@@ -50,8 +50,8 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                                 key={account.id}
                                 color={getAccountTypeColor(account) as string}
                                 icon={
-                                    Icons$.accountTypes[
-                                        account.name as keyof typeof Icons$.accountTypes
+                                    Icons$.account_types[
+                                        account.name as keyof typeof Icons$.account_types
                                     ]
                                 }
                                 label={account.name}

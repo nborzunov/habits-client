@@ -89,15 +89,15 @@ export const TransactionList = () => {
                                                             <Flex alignItems={'center'}>
                                                                 <Icon
                                                                     as={
-                                                                        Icons$.transactionTypes[
+                                                                        Icons$.transaction_types[
                                                                             transaction
-                                                                                .transactionType
+                                                                                .transaction_type
                                                                         ]
                                                                     }
                                                                     fontSize={'2xl'}
                                                                     mr={4}
                                                                     color={getTransactionTypeColor(
-                                                                        transaction.transactionType,
+                                                                        transaction.transaction_type,
                                                                     )}
                                                                 />
                                                                 <Flex flexDirection={'column'}>
@@ -145,9 +145,9 @@ export const TransactionList = () => {
                                                             <Flex alignItems={'center'} h={'100%'}>
                                                                 <Icon
                                                                     as={
-                                                                        Icons$.accountTypes[
+                                                                        Icons$.account_types[
                                                                             transaction.account
-                                                                                .accountType
+                                                                                .account_type
                                                                         ]
                                                                     }
                                                                     fontSize={'4xl'}
@@ -179,14 +179,14 @@ export const TransactionList = () => {
                                                                     fontSize='md'
                                                                     columnGap={1}
                                                                     color={
-                                                                        transaction.transactionType ===
+                                                                        transaction.transaction_type ===
                                                                         'income'
                                                                             ? 'green.500'
                                                                             : 'gray.900'
                                                                     }
                                                                 >
                                                                     <span>
-                                                                        {transaction.transactionType ===
+                                                                        {transaction.transaction_type ===
                                                                         'income'
                                                                             ? '+ '
                                                                             : '– '}

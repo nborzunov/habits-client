@@ -7,7 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { Habit, HabitData } from '../model/types';
 import { habitsState } from '../store/atoms';
 
-export const useEditHabit = (habitId: string, onClose: () => void) => {
+export const useEditHabit = (habit_id: string, onClose: () => void) => {
     const setHabits = useSetRecoilState(habitsState);
     const { t } = useTranslation();
     const toast = useToast();
@@ -15,10 +15,10 @@ export const useEditHabit = (habitId: string, onClose: () => void) => {
     return useMutation({
         mutationFn: (data: HabitData) => {
             return api
-                .put(`habits/${habitId}`, { json: data })
+                .put(`habits/${habit_id}`, { json: data })
                 .json<Habit>()
                 .then((newHabit) => {
-                    setHabits((prev) => prev.map((h) => (h.id === habitId ? newHabit : h)));
+                    setHabits((prev) => prev.map((h) => (h.id === habit_id ? newHabit : h)));
                 })
                 .then(() =>
                     toast({

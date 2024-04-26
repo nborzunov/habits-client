@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { TransactionType } from '../../../pages/finance/model/types';
+import { TransactionType } from '../model/types';
 
 export const useCreateTransaction = (onSuccess: () => void) => {
     const queryClient = useQueryClient();
@@ -12,14 +12,14 @@ export const useCreateTransaction = (onSuccess: () => void) => {
 
     return useMutation({
         mutationFn: (data: {
-            date: Date;
-            accountId: string;
-            categoryId: string;
-            transactionType: TransactionType;
+            created_date: Date;
+            account_id: string;
+            category_id: string;
+            transaction_type: TransactionType;
             amount: number;
             note: string;
         }) => {
-            return api.post('finance/transaction', { json: data });
+            return api.post('transaction', { json: data });
         },
         onSuccess: () => {
             toast({

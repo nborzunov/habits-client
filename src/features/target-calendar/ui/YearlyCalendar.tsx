@@ -5,6 +5,7 @@ import { getLoopCallback } from '@shared/lib';
 import dayjs from 'dayjs';
 import React, { memo, useCallback, useContext, useMemo } from 'react';
 
+import { CURRENT_YEAR } from './MonthlyCalendar';
 import { TargetAction, TargetActionContext } from './TargetAction';
 
 const cellGaps = {
@@ -74,11 +75,17 @@ const Month = memo(
         size: number;
         targetsMap: Record<string, Target>;
     }) => {
-        const daysInMonth = useMemo(() => dayjs(`2023-${monthId + 1}-1`).daysInMonth(), [monthId]);
-        const firstDay = useMemo(() => dayjs(`2023-${monthId + 1}-1`).day(), [monthId]);
+        const daysInMonth = useMemo(
+            () => dayjs(`${CURRENT_YEAR}-${monthId + 1}-1`).daysInMonth(),
+            [monthId],
+        );
+        const firstDay = useMemo(() => dayjs(`${CURRENT_YEAR}-${monthId + 1}-1`).day(), [monthId]);
         const columns = Math.ceil((firstDay + daysInMonth) / 7);
 
-        const month = useMemo(() => dayjs(`2023-${monthId + 1}-1`).format('MMM'), [monthId]);
+        const month = useMemo(
+            () => dayjs(`${CURRENT_YEAR}-${monthId + 1}-1`).format('MMM'),
+            [monthId],
+        );
         const getLoop = useCallback(getLoopCallback, []);
 
         return (
@@ -127,7 +134,7 @@ const Cell = memo(
     }) => {
         const { habit } = useContext(TargetActionContext);
         const day = useMemo(
-            () => dayjs(`2023-${monthId + 1}-${dayId + 1}`).startOf('day'),
+            () => dayjs(`${CURRENT_YEAR}-${monthId + 1}-${dayId + 1}`).startOf('day'),
             [dayId, monthId],
         );
         const target = useMemo(() => targetsMap[day.format('DD/MM/YYYY')], [targetsMap, day]);
@@ -137,7 +144,7 @@ const Cell = memo(
         const sizePx = useMemo(() => `${size}px`, [size]);
         const bgColor = useMemo(
             () =>
-                target && target.targetType === TargetType.Skip
+                target && target.target_type === TargetType.Skip
                     ? 'gray.300'
                     : target
                     ? green[500]
@@ -151,7 +158,7 @@ const Cell = memo(
         return (
             <Box key={monthId + dayId} cursor='pointer'>
                 <TargetAction date={day} target={target}>
-                    {target && target.targetType === TargetType.Skip ? (
+                    {target && target.target_type === TargetType.Skip ? (
                         <Box
                             width={sizePx}
                             height={sizePx}

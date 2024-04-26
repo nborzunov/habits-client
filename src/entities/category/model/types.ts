@@ -3,8 +3,8 @@ export interface Category {
     name: string;
     icon: string;
     color: string;
-    categoryType: CategoryType;
-    default: boolean;
+    category_type: CategoryType;
+    is_default: boolean;
 }
 
 export enum CategoryType {

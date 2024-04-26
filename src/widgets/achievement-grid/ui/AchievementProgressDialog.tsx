@@ -10,8 +10,9 @@ import {
     ModalOverlay,
     Text,
 } from '@chakra-ui/react';
+import { useModal } from '@ebay/nice-modal-react';
 import { Achievement } from '@entities/achievement';
-import { openDialog, useDialog } from '@shared/hooks';
+import { createDialog, openDialog } from '@shared/hooks';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -21,10 +22,10 @@ import { useNavigate } from 'react-router';
 type Props = {
     achievement: Achievement;
 };
-export const AchievementProgressDialog = ({ achievement }: Props) => {
+export const AchievementProgressDialog = createDialog(({ achievement }: Props) => {
     const { t } = useTranslation();
 
-    const dialog = useAchivementProgressDialog();
+    const dialog = useModal();
     const navigate = useNavigate();
 
     const [selectedHabit, setSelectedHabit] = React.useState<string | null>(null);
@@ -54,7 +55,7 @@ export const AchievementProgressDialog = ({ achievement }: Props) => {
                 <ModalBody py={6}>
                     {achievement.progress.map((p) => (
                         <Box
-                            key={p.habitId}
+                            key={p.habit_id}
                             width={'100%'}
                             bg={'transparent'}
                             transition='all 0.2s ease'
@@ -65,13 +66,13 @@ export const AchievementProgressDialog = ({ achievement }: Props) => {
                             py={2}
                             px={4}
                             onClick={() => {
-                                setSelectedHabit(p.habitId);
+                                setSelectedHabit(p.habit_id);
                                 dialog.hide();
                             }}
                         >
                             <Flex justify={'space-between'}>
                                 <Heading size={'sm'} fontWeight={'semibold'}>
-                                    {p.habitTitle}
+                                    {p.habit_title}
                                 </Heading>
                                 {achievement.goal && !achievement.completed && (
                                     <Text fontSize={'md'} color={'gray.500'} letterSpacing={'2px'}>
@@ -83,7 +84,7 @@ export const AchievementProgressDialog = ({ achievement }: Props) => {
                             {achievement.completed && (
                                 <Text fontWeight='semibold' fontSize='md' my={2}>
                                     {t('achievements:completedFrom', {
-                                        date: dayjs(achievement.completedDate).from(dayjs()),
+                                        date: dayjs(achievement.completed_date).from(dayjs()),
                                     })}
                                 </Text>
                             )}
@@ -95,7 +96,7 @@ export const AchievementProgressDialog = ({ achievement }: Props) => {
             </ModalContent>
         </Modal>
     );
-};
+});
 
 export const openAchievementProgressDialog = (props: Props) =>
     openDialog(AchievementProgressDialog, {
@@ -103,4 +104,4 @@ export const openAchievementProgressDialog = (props: Props) =>
         ...props,
     });
 
-export const useAchivementProgressDialog = () => useDialog(AchievementProgressDialog);
+// export const useAchivementProgressDialog = () => useDialog(AchievementProgressDialog);

@@ -13,11 +13,11 @@ export const useCreateCategory = (onSuccess: () => void) => {
     return useMutation({
         mutationFn: (data: {
             name: string;
-            default: boolean;
+            is_default: boolean;
             parentId?: string;
-            categoryType: CategoryType;
+            category_type: CategoryType;
         }) => {
-            return api.post('finance/category', { json: data });
+            return api.post('category', { json: data });
         },
         onSuccess: () => {
             toast({

@@ -8,6 +8,6 @@ export interface User {
     image?: string;
     emailVerified: boolean;
     active: boolean;
-    createdDate: Date;
+    created_date: Date;
     updatedDate: Date;
 }

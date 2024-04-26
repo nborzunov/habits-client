@@ -14,9 +14,9 @@ export const useDeleteCategory = () => {
     const { refetch: refetchTransactions } = useTransactions();
 
     return useMutation({
-        mutationFn: (categoryId: string) => {
+        mutationFn: (category_id: string) => {
             return api
-                .delete(`finance/category/${categoryId}`)
+                .delete(`category/${category_id}`)
                 .text()
                 .then(() => {
                     refetchCategories();

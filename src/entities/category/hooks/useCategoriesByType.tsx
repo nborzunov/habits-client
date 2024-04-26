@@ -4,17 +4,17 @@ import { useMemo } from 'react';
 import { useCategories } from '../api/useCategories';
 import { CategoryType } from '../model/types';
 
-export const useCategoriesByType = (categoryType: CategoryType) => {
+export const useCategoriesByType = (category_type: CategoryType) => {
     const {
         data: { income: incomeCategories, expense: expenseCategories },
     } = useCategories();
 
     return useMemo(() => {
-        if (categoryType === CategoryType.Income) {
+        if (category_type === CategoryType.Income) {
             return transformCategories(incomeCategories);
-        } else if (categoryType === CategoryType.Expense) {
+        } else if (category_type === CategoryType.Expense) {
             return transformCategories(expenseCategories);
         }
         return [];
-    }, [categoryType, incomeCategories, expenseCategories]);
+    }, [category_type, incomeCategories, expenseCategories]);
 };

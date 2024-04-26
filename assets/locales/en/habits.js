@@ -2,7 +2,7 @@ import { Periodicity } from '../../../src/entities/habit/model/types';
 
 export const habits = {
     noHabits: "No habits yet, let's create one!",
-    completedToday: 'Completed today',
+    completed_today: 'Completed today',
     allHabits: 'All Habits',
     successfullyCreated: 'Habit created!',
     successfullyUpdated: 'Habit updated!',
@@ -17,8 +17,8 @@ export const habits = {
     deleteHabit: 'Delete Habit "{{title}}"',
     deleteHabitDescription:
         'Are you sure? If you delete this habit, you will lose all your progress.',
-    completedCount: '{{count}} completed',
-    failedCount: '{{count}} failed',
+    completed_count: '{{count}} completed',
+    failed_count: '{{count}} failed',
     cleanTargets: 'Clean Targets',
     archive: 'Archive',
     delete: 'Delete',
@@ -40,7 +40,7 @@ export const habits = {
         mins: 'Total Minutes',
         times: 'Total Times',
     },
-    completedValues: {
+    completed_values: {
         mins: 'Completed Minutes',
         times: 'Completed Times',
     },
@@ -61,7 +61,7 @@ export const habits = {
     title: 'Title',
     dailyGoal: 'Daily Goal',
     increaseDailyGoal: 'Please increase your daily goal',
-    goalType: 'Goal Type',
+    goal_type: 'Goal Type',
     timesTitle: 'Times',
     minutesTitle: 'Minutes',
     periodicity: 'Periodicity',
@@ -73,8 +73,8 @@ export const habits = {
     },
     allowOverGoal: 'Allow overgoal completion',
     allowPartial: 'Allow partial completion',
-    allowSkip: 'Allow skip specific days',
-    allowSkipDescription: '(e.g. if you need some time to rest)',
+    allow_skip: 'Allow skip specific days',
+    allow_skipDescription: '(e.g. if you need some time to rest)',
     setResult: "{{title}} - Set Today's Result",
     operations: {
         set: 'Set',
@@ -87,7 +87,7 @@ export const habits = {
     skipOn: 'Skip on {{date}}',
     currentWeek: 'Current week',
     goal: 'Goal',
-    canBeFinished: 'Can be finished',
+    can_be_finished: 'Can be finished',
     finishIf: 'Finish if ',
     chartNoData: 'No data to show',
 };

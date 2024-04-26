@@ -11,6 +11,6 @@ export interface Account {
     id: string;
     name: string;
     currency: Currency;
-    accountType: AccountType;
+    account_type: AccountType;
     amount: number;
 }

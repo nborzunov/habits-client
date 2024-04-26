@@ -10,13 +10,12 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { Achievement } from '@entities/achievement';
+import { openDialog } from '@shared/hooks';
 import { Icons$ } from '@shared/lib/Icons';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { openAchievementProgressDialog } from './AchievementProgressDialog';
 
 export const AchievementCard = ({
     achievement,
@@ -92,7 +91,7 @@ export const AchievementCard = ({
                                         opacity: 0.8,
                                     }}
                                     onClick={() =>
-                                        openAchievementProgressDialog({
+                                        openDialog('AchievementProgress', {
                                             achievement,
                                         })
                                     }
@@ -108,7 +107,7 @@ export const AchievementCard = ({
                     {!alertView && achievement.completed && (
                         <Text fontWeight='semibold' fontSize='md' my={2}>
                             {t('achievements:completedFrom', {
-                                date: dayjs(achievement.completedDate).from(dayjs()),
+                                date: dayjs(achievement.completed_date).from(dayjs()),
                             })}
                         </Text>
                     )}

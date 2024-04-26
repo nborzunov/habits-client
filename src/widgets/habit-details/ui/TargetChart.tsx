@@ -44,8 +44,8 @@ export const TargetChart = memo(({ completed, failed }: { completed: number; fai
 
                             return `${
                                 context.dataIndex === 0
-                                    ? t('habits:completedCount', { count: context.parsed })
-                                    : t('habits:failedCount', { count: context.parsed })
+                                    ? t('habits:completed_count', { count: context.parsed })
+                                    : t('habits:failed_count', { count: context.parsed })
                             } - ${Math.round((context.parsed / allTargets) * 100)}%`;
                         },
                     },

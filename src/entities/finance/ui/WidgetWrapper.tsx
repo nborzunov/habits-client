@@ -32,13 +32,11 @@ export const WidgetWrapper = ({
         <Flex pt={4} px={2} h='261px' flexDir='column' justifyContent={'space-between'}>
             <Stack spacing={3}>{children}</Stack>
 
-            {data.length > 3 && (
-                <Link to={link}>
-                    <Button mt={4} width={'100%'} variant='outline' colorScheme={'cyan'}>
-                        {linkText} ({data.length})
-                    </Button>
-                </Link>
-            )}
+            <Link to={link}>
+                <Button mt={4} width={'100%'} variant='outline' colorScheme={'cyan'}>
+                    {linkText} ({data.length})
+                </Button>
+            </Link>
         </Flex>
     </Box>
 );

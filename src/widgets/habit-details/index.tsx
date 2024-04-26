@@ -16,7 +16,7 @@ import { WidgetsToolbar } from './ui/WidgetsToolbar';
 
 export const HabitDetails = () => {
     const habits = useRecoilValue(habitsState);
-    const { habitId: selectedHabitId } = useParams();
+    const { habit_id: selectedHabitId } = useParams();
     const habit = habits.find((h) => h.id === selectedHabitId);
     if (!habit) {
         return null;

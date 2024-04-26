@@ -22,9 +22,9 @@ export const HabitsList = () => {
 
     const getProgress = (habit: Habit) => {
         return {
-            count: (habit.statistics.completedCount / habit.totalGoal) * 100,
-            start: habit.statistics.completedCount,
-            end: habit.totalGoal,
+            count: (habit.statistics.completed_count / habit.total_goal) * 100,
+            start: habit.statistics.completed_count,
+            end: habit.total_goal,
         };
     };
     return (
@@ -55,7 +55,7 @@ export const HabitsList = () => {
                 {completedHabits.length > 0 && (
                     <Box mt={4}>
                         <Heading as='h3' size='md' mb={'12px'} py='8px' px={2}>
-                            {t('habits:completedToday')}
+                            {t('habits:completed_today')}
                         </Heading>
                         <List styleType='none'>
                             {completedHabits.map((habit) => (

@@ -2,65 +2,65 @@ import { AchievementData } from './types';
 
 export const achievementsData: AchievementData[] = [
     {
-        key: 'streakStarter',
+        key: 'StreakStarter',
         goal: 3,
         color: 'red.100',
     },
     {
-        key: 'habitFormed',
+        key: 'HabitFormed',
         goal: 7,
         color: 'green.100',
     },
     {
-        key: 'consistencyChampion',
+        key: 'ConsistencyChampion',
         goal: 14,
         color: 'yellow.100',
     },
     {
-        key: 'habitualHero',
+        key: 'HabitualHero',
         goal: 30,
         color: 'pink.100',
     },
     {
-        key: 'habitMaster',
+        key: 'HabitMaster',
         goal: 60,
         color: 'blue.100',
     },
     {
-        key: 'habitProdigy',
+        key: 'HabitProdigy',
         goal: 90,
         color: 'purple.100',
     },
     {
-        key: 'habitLegend',
+        key: 'HabitLegend',
         goal: 180,
         color: 'yellow.200',
     },
     {
-        key: 'steadyEddie',
+        key: 'SteadyEddie',
         goal: 21,
         color: 'gray.100',
     },
     {
-        key: 'relentless',
+        key: 'Relentless',
         goal: 30,
         color: 'pink.100',
     },
     {
-        key: 'unstoppable',
+        key: 'Unstoppable',
         goal: 60,
         color: 'teal.100',
     },
     {
-        key: 'surpassingLimits',
+        key: 'SurpassingLimits',
         color: 'teal.200',
     },
     {
-        key: 'perseverance',
+        key: 'Perseverance',
         color: 'orange.100',
     },
     {
-        key: 'comebackKid',
+        key: 'ComebackKid',
         color: 'orange.200',
     },
 ];

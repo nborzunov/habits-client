@@ -15,10 +15,10 @@ export const useCreateAccount = (onSuccess: () => void) => {
         mutationFn: (data: {
             name: string;
             currency: Currency;
-            accountType: AccountType;
+            account_type: AccountType;
             amount: number;
         }) => {
-            return api.post('finance/account', { json: data }).json<Account[]>();
+            return api.post('account', { json: data }).json<Account[]>();
         },
         onSuccess: () => {
             toast({

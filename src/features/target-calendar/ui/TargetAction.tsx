@@ -24,7 +24,7 @@ interface TargetActionContext {
     onChangeTarget: (
         id: string | undefined,
         date: Date,
-        targetType: TargetType,
+        target_type: TargetType,
         value?: number,
     ) => void;
 }
@@ -56,16 +56,16 @@ export const TargetAction = memo(
             if (!target) {
                 return formattedDate;
             }
-            switch (target?.targetType) {
+            switch (target?.target_type) {
                 case TargetType.Done:
                     return t('habits:completedOn', {
-                        prefix: t(`habits:${habit.goalType}`, { count: habit.goal }),
+                        prefix: t(`habits:${habit.goal_type}`, { count: habit.goal }),
                         date: formattedDate,
                     });
                 case TargetType.Skip:
                     return t('habits:skipOn', { date: formattedDate });
             }
-        }, [target, formattedDate, habit?.goal, habit?.goalType, t]);
+        }, [target, formattedDate, habit?.goal, habit?.goal_type, t]);
 
         const onComplete = useCallback(() => {
             onChangeTarget(target?.id, date.toDate(), TargetType.Done);
@@ -114,8 +114,8 @@ export const TargetAction = memo(
                                         {label}
                                     </Text>
                                 )}
-                                {(target?.targetType !== TargetType.Done ||
-                                    (habit?.allowPartialCompletion &&
+                                {(target?.target_type !== TargetType.Done ||
+                                    (habit?.allow_partial_completion &&
                                         target?.value !== habit?.goal)) && (
                                     <TargetCell
                                         onClick={() => onComplete()}
@@ -123,9 +123,9 @@ export const TargetAction = memo(
                                         icon={Icons$.Complete}
                                     />
                                 )}
-                                {((habit?.allowPartialCompletion &&
+                                {((habit?.allow_partial_completion &&
                                     Number(target?.value) <= habit?.goal) ||
-                                    habit?.allowOverGoalCompletion) && (
+                                    habit?.allow_over_goal_completion) && (
                                     <TargetCell
                                         onClick={() =>
                                             openSetTargetDialog({
@@ -138,7 +138,7 @@ export const TargetAction = memo(
                                     />
                                 )}
 
-                                {target?.targetType !== TargetType.Skip && habit?.allowSkip && (
+                                {target?.target_type !== TargetType.Skip && habit?.allow_skip && (
                                     <TargetCell
                                         onClick={() => onSkip()}
                                         label={t('habits:operations.skip')}

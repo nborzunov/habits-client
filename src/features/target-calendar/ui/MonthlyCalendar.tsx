@@ -23,6 +23,9 @@ const cellSizes = {
     '2xl': 36,
 };
 
+export const CURRENT_YEAR = dayjs().year();
+export const START_YEAR = 2023;
+
 export const MonthlyCalendar = memo(() => {
     const { targets } = useContext(TargetActionContext);
 
@@ -52,12 +55,12 @@ export const MonthlyCalendar = memo(() => {
     const handleSetMonth = useCallback(
         (month: number) => {
             if (monthId === 12) {
-                if (year <= 2023) {
+                if (year <= CURRENT_YEAR) {
                     setYear(year + 1);
                     setMonthId(0);
                 }
             } else if (month === -1) {
-                if (year > 2022) {
+                if (year > START_YEAR) {
                     setYear(year - 1);
                     setMonthId(11);
                 }
@@ -103,7 +106,7 @@ export const MonthlyCalendar = memo(() => {
                         icon={<Icon as={Icons$.Right} />}
                         onClick={() => handleSetMonth(monthId + 1)}
                         isDisabled={
-                            (year > 2023 && monthId === 11) ||
+                            (year > CURRENT_YEAR && monthId === 11) ||
                             dayjs(`${year}-${monthId + 2}-1`) > today
                         }
                         size={'sm'}
@@ -229,13 +232,13 @@ const Cell = memo(
             lineHeight: sizePx,
             borderRadius: '50%',
             bg:
-                target && target.targetType === TargetType.Skip
+                target && target.target_type === TargetType.Skip
                     ? 'green.100'
                     : target
                     ? 'green.500'
                     : 'transparent',
             color:
-                target && target.targetType === TargetType.Skip
+                target && target.target_type === TargetType.Skip
                     ? 'gray.500'
                     : target
                     ? 'white'
@@ -247,7 +250,7 @@ const Cell = memo(
         };
         const hoverStyles = {
             bg:
-                target && target.targetType === TargetType.Skip
+                target && target.target_type === TargetType.Skip
                     ? 'green.200'
                     : target
                     ? 'green.600'

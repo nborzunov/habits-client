@@ -44,7 +44,7 @@ const AddTransactionDialog = createDialog(() => {
                         : 'visible'
                 }
             >
-                <ModalHeader>{t(`finance:transactionTypes.${mode}`)}</ModalHeader>
+                <ModalHeader>{t(`finance:transaction_types.${mode}`)}</ModalHeader>
                 <ModalCloseButton />
                 {mode !== AddTransactionMode.Transfer && (
                     <AddTransactionForm setMode={setMode} mode={mode} accounts={accounts} />

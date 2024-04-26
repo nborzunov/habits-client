@@ -1,12 +1,12 @@
 export const finance = {
     finance: 'Finance',
     addTransaction: 'Add Transaction',
-    transactionTypes: {
+    transaction_types: {
         income: 'Income',
         expense: 'Expense',
         transfer: 'Transfer',
     },
-    accountTypes: {
+    account_types: {
         cash: 'Cash',
         card: 'Card',
         deposit: 'Deposit',
@@ -64,7 +64,7 @@ export const finance = {
     newAccount: 'New Account',
     create: 'Create',
     name: 'Name',
-    accountType: 'Account Type',
+    account_type: 'Account Type',
     currency: 'Currency',
     selectCurrency: 'Select Currency',
     manageAccounts: 'Manage Accounts',

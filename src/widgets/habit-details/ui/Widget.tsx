@@ -64,69 +64,69 @@ export const Widget = memo(
                 {id === HabitsWidget.CURRENT_STREAK && (
                     <WidgetContent
                         title={t('habits:currentStreak.lower')}
-                        value={statistics.currentStreakCount}
+                        value={statistics.current_streak_count}
                         type='streak'
-                        startDate={statistics.currentStreakStartDate}
-                        footerValue={statistics.currentStreakCountThisWeek}
+                        startDate={statistics.current_streak_start_date}
+                        footerValue={statistics.current_streak_count_this_week}
                     />
                 )}
                 {id === HabitsWidget.COMPLETED_CHART && (
                     <TargetChart
-                        completed={statistics.completedCount}
-                        failed={statistics.failedCount}
+                        completed={statistics.completed_count}
+                        failed={statistics.failed_count}
                     />
                 )}
                 {id === HabitsWidget.COMPLETED_TARGETS && (
                     <WidgetContent
                         icon={Icons$.Complete}
                         title={t('habits:completedTargets.short')}
-                        value={statistics.completedCount}
+                        value={statistics.completed_count}
                         type='increase'
-                        footerValue={statistics.completedCountThisWeek}
+                        footerValue={statistics.completed_count_this_week}
                     />
                 )}
                 {id === HabitsWidget.FAILED_TARGETS && (
                     <WidgetContent
                         icon={Icons$.Cross}
                         title={t('habits:failedTargets.short')}
-                        value={statistics.failedCount}
+                        value={statistics.failed_count}
                         type='decrease'
-                        footerValue={statistics.failedCountThisWeek}
+                        footerValue={statistics.failed_count_this_week}
                     />
                 )}
                 {id === HabitsWidget.TOTAL_TARGETS && (
                     <WidgetContent
                         title={t('habits:totalDays')}
-                        value={statistics.totalCount}
+                        value={statistics.total_count}
                         type='none'
-                        footerValue={statistics.totalCountThisWeek}
+                        footerValue={statistics.total_count_this_week}
                     />
                 )}
                 {id === HabitsWidget.TOTAL_VALUES && (
                     <WidgetContent
-                        title={t(`habits:totalValues.${habit.goalType}`)}
-                        value={statistics.totalValuesCount}
+                        title={t(`habits:totalValues.${habit.goal_type}`)}
+                        value={statistics.total_values_count}
                         type='none'
-                        footerValue={statistics.totalValuesCountThisWeek}
-                        unit={habit.goalType}
+                        footerValue={statistics.total_values_count_this_week}
+                        unit={habit.goal_type}
                     />
                 )}
                 {id === HabitsWidget.COMPLETED_VALUES && (
                     <WidgetContent
-                        title={t(`habits:completedValues.${habit.goalType}`)}
-                        value={statistics.completedValues}
+                        title={t(`habits:completed_values.${habit.goal_type}`)}
+                        value={statistics.completed_values}
                         type='none'
-                        footerValue={statistics.completedValuesThisWeek}
-                        unit={habit.goalType}
+                        footerValue={statistics.completed_values_this_week}
+                        unit={habit.goal_type}
                     />
                 )}
                 {id === HabitsWidget.SKIPPED_TARGETS && (
                     <WidgetContent
                         icon={Icons$.ArrowRight}
                         title={t('habits:skippedTargets.short')}
-                        value={statistics.skippedCount}
+                        value={statistics.skipped_count}
                         type='none'
-                        footerValue={statistics.skippedCountThisWeek}
+                        footerValue={statistics.skipped_count_this_week}
                     />
                 )}
                 {id === HabitsWidget.YEARLY_CALENDAR && <YearlyCalendarLazy />}

@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 
 interface FormData {
     name: string;
-    accountType: AccountType | '';
+    account_type: AccountType | '';
     currency:
         | {
               id: Currency;
@@ -49,7 +49,7 @@ export const AddAccountDialog = createDialog(({ breadcrumbs }: Props) => {
 
     const defaultState: FormData = {
         name: '',
-        accountType: '',
+        account_type: '',
         currency: '',
         amount: '',
     };
@@ -68,7 +68,7 @@ export const AddAccountDialog = createDialog(({ breadcrumbs }: Props) => {
         mutate({
             name: data.name,
             currency: (data.currency && data.currency.id) as Currency,
-            accountType: data.accountType as AccountType,
+            account_type: data.account_type as AccountType,
             amount: Number(data.amount) || 0,
         });
     };
@@ -113,26 +113,26 @@ export const AddAccountDialog = createDialog(({ breadcrumbs }: Props) => {
                             />
                         </FormControl>
                         <FormControl isRequired>
-                            <FormLabel>{t('finance:accountType')}</FormLabel>
+                            <FormLabel>{t('finance:account_type')}</FormLabel>
                             <InputGroup>
                                 <HStack spacing={2}>
-                                    {Object.values(AccountType).map((accountType) => (
+                                    {Object.values(AccountType).map((account_type) => (
                                         <Button
-                                            key={accountType}
+                                            key={account_type}
                                             variant={
-                                                form.accountType === accountType
+                                                form.account_type === account_type
                                                     ? 'outline'
                                                     : 'solid'
                                             }
                                             colorScheme={
-                                                form.accountType === accountType
-                                                    ? getAccountTypeButtonColor(accountType)
+                                                form.account_type === account_type
+                                                    ? getAccountTypeButtonColor(account_type)
                                                     : 'gray'
                                             }
-                                            onClick={() => setValue('accountType', accountType)}
+                                            onClick={() => setValue('account_type', account_type)}
                                             w={'33%'}
                                         >
-                                            {t(`finance:accountTypes.${accountType}`)}
+                                            {t(`finance:account_types.${account_type}`)}
                                         </Button>
                                     ))}
                                 </HStack>

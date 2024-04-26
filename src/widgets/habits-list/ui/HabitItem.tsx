@@ -43,7 +43,7 @@ export const HabitItem = ({
         end?: number;
     };
 }) => {
-    const { habitId: selectedHabitId } = useParams();
+    const { habit_id: selectedHabitId } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -68,8 +68,8 @@ export const HabitItem = ({
     const { mutate: archiveHabit } = useArchiveHabit(habit.id);
     const { mutate: cleanData } = useCleanHabit(habit.id);
 
-    const selectHabit = (habitId: string) => {
-        navigate(`/habits/${habitId}`);
+    const selectHabit = (habit_id: string) => {
+        navigate(`/habits/${habit_id}`);
     };
 
     const menuRef = useRef<HTMLDivElement>(null);
@@ -179,7 +179,7 @@ export const HabitItem = ({
                             <Text fontSize='lg'>{habit.title}</Text>
 
                             <Text fontSize='sm' color='gray.600'>
-                                {t(`common:${habit.goalType}`, { count: habit.goal })}
+                                {t(`common:${habit.goal_type}`, { count: habit.goal })}
                             </Text>
                         </Flex>
                     </Flex>
@@ -222,7 +222,7 @@ export const HabitItem = ({
                     </Menu>
                 </Box>
 
-                {habit.totalGoal > 1 && (
+                {habit.total_goal > 1 && (
                     <Box width={'100%'}>
                         <ProgressBar {...progress} />
                     </Box>

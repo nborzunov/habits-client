@@ -16,7 +16,7 @@ export const AchievementsPage = () => {
                         {t('achievements:achievements')}
                     </Heading>
                     <Heading as='h3' size='md'>
-                        {t('achievements:completedCount', {
+                        {t('achievements:completed_count', {
                             count: achievements.filter((a) => a.completed).length,
                             total: achievements.length,
                         })}

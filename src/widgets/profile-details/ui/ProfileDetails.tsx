@@ -38,7 +38,7 @@ export const ProfileDetails = () => {
                     <Stack>
                         <Text fontWeight='semibold' fontSize='md' pl={4}>
                             {t('profile:joined', {
-                                date: dayjs(user.createdDate).from(dayjs()),
+                                date: dayjs(user.created_date).from(dayjs()),
                             })}
                         </Text>
                     </Stack>

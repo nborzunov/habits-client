@@ -11,12 +11,12 @@ import {
     ModalOverlay,
     Select,
 } from '@chakra-ui/react';
-import { openDialog, useDialog } from '@shared/hooks';
+import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};
-export const SettingsDialog = () => {
+export const SettingsDialog = createDialog(() => {
     const { t, i18n } = useTranslation();
 
     const dialog = useSettingsDialog();
@@ -80,7 +80,7 @@ export const SettingsDialog = () => {
             </ModalContent>
         </Modal>
     );
-};
+});
 
 export const openSettingsDialog = (props: Props) =>
     openDialog(SettingsDialog, {

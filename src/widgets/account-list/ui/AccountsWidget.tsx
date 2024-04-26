@@ -23,8 +23,8 @@ export const AccountsWidget = () => {
                         <Flex alignItems={'center'}>
                             <Icon
                                 as={
-                                    Icons$.accountTypes[
-                                        account.accountType as keyof Icon.accountTypes
+                                    Icons$.account_types[
+                                        account.account_type as keyof Icon.account_types
                                     ]
                                 }
                                 fontSize={'2xl'}

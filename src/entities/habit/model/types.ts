@@ -4,46 +4,49 @@ export interface Habit {
     periodicity: Periodicity;
     periodicityValue?: string;
     goal: number;
-    goalType: GoalType;
-    createDate: Date;
-    startDate: Date;
-    allowSkip: boolean;
-    allowPartialCompletion: boolean;
-    allowOverGoalCompletion: boolean;
-    canBeFinished: boolean;
-    totalGoal: number;
+    goal_type: GoalType;
+    created_date: Date;
+    start_date: Date;
+    allow_skip: boolean;
+    allow_partial_completion: boolean;
+    allow_over_goal_completion: boolean;
+    can_be_finished: boolean;
+    total_goal: number;
     statistics: TargetStatistics;
     targets: Target[];
 }
 
 export interface TargetStatistics {
-    currentStreakStartDate?: Date;
-    currentStreakCount: number;
-    currentStreakCountThisWeek: number;
-    currentStreakValues: number;
-    currentStreakValuesThisWeek: number;
-    failedCount: number;
-    failedCountThisWeek: number;
-    skippedCount: number;
-    skippedCountThisWeek: number;
-    totalCount: number;
-    totalCountThisWeek: number;
-    totalValuesCount: number;
-    totalValuesCountThisWeek: number;
-    completedCount: number;
-    completedCountThisWeek: number;
-    completedValues: number;
-    completedValuesThisWeek: number;
-    completedToday: boolean;
+    current_streak_start_date?: Date;
+    current_streak_count: number;
+    current_streak_count_this_week: number;
+    current_streak_values: number;
+    current_streak_values_this_week: number;
+    failed_count: number;
+    failed_count_this_week: number;
+    skipped_count: number;
+    skipped_count_this_week: number;
+    total_count: number;
+    total_count_this_week: number;
+    total_values_count: number;
+    total_values_count_this_week: number;
+    completed_count: number;
+    completed_count_this_week: number;
+    completed_values: number;
+    completed_values_this_week: number;
+    completed_today: boolean;
 }
 
-export type HabitData = Omit<Habit, 'id' | 'statistics' | 'targets' | 'createDate' | 'startDate'>;
+export type HabitData = Omit<
+    Habit,
+    'id' | 'statistics' | 'targets' | 'created_date' | 'start_date'
+>;
 
 export interface Target {
     id: string;
     date: Date;
-    createDate: Date;
-    targetType: TargetType;
+    created_date: Date;
+    target_type: TargetType;
     value: number;
 }
 
@@ -67,8 +70,8 @@ export enum TargetType {
 
 export interface CreateTargetData {
     id: string | undefined;
-    habitId: string;
+    habit_id: string;
     date: Date;
-    targetType: string;
+    target_type: string;
     value: number;
 }

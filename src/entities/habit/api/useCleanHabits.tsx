@@ -14,7 +14,7 @@ export const useCleanHabits = () => {
     return useMutation({
         mutationFn: () => {
             return api
-                .post(`habits/clean`)
+                .post(`targets/clean`)
                 .then(() =>
                     setHabits((prev) =>
                         prev.map((h) => ({

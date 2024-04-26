@@ -81,7 +81,13 @@ export const SelectFromPicklist = <
                     <PopoverHeader borderBottom={'none'} fontSize={'lg'} fontWeight={'semibold'}>
                         <Text> {title}</Text>
                     </PopoverHeader>
-                    <PopoverBody width={'100%'} boxShadow={'lg'}>
+                    <PopoverBody
+                        width={'100%'}
+                        boxShadow={'lg'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        justifyContent={'space-between'}
+                    >
                         {!items.length && noItemsWarning}
                         <Stack spacing={2} height={'350px'} overflowY={'auto'}>
                             {items.map((item) => (
@@ -100,21 +106,20 @@ export const SelectFromPicklist = <
                                     {children(item.value)}
                                 </Button>
                             ))}
-                            {addItem && (
-                                <GridItem>
-                                    <Button
-                                        leftIcon={<Icon as={Icons$.Add} />}
-                                        onClick={() => {
-                                            addItem();
-                                        }}
-                                        width={'100%'}
-                                        variant={'solid'}
-                                    >
-                                        {t('finance:add')}
-                                    </Button>
-                                </GridItem>
-                            )}
                         </Stack>
+                        {addItem && (
+                            <Button
+                                mt={2}
+                                leftIcon={<Icon as={Icons$.Add} />}
+                                onClick={() => {
+                                    addItem();
+                                }}
+                                width={'100%'}
+                                variant={'solid'}
+                            >
+                                {t('finance:add')}
+                            </Button>
+                        )}
                     </PopoverBody>
                 </PopoverContent>
             </Popover>

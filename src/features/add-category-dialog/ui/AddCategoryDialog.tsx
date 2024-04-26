@@ -47,10 +47,10 @@ interface FormData {
 }
 
 type Props = {
-    categoryType: CategoryType;
+    category_type: CategoryType;
 } & BreadcrumbsProps;
 
-const AddCategoryDialog = createDialog(({ breadcrumbs, categoryType }: Props) => {
+const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) => {
     const { t } = useTranslation();
     const dialog = useAddCategoryDialog();
 
@@ -77,8 +77,8 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, categoryType }: Props) =>
     const onFormSubmit = (data: FormData) => {
         mutate({
             ...data,
-            categoryType: categoryType,
-            default: false,
+            category_type: category_type,
+            is_default: false,
         });
     };
 
@@ -93,8 +93,8 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, categoryType }: Props) =>
         setValue('name', '');
     }, [dialog.visible, setValue]);
 
-    const icons = getCategoryIcons(categoryType);
-    const iconsComponents = getCategoryComponents(categoryType);
+    const icons = getCategoryIcons(category_type);
+    const iconsComponents = getCategoryComponents(category_type);
 
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>

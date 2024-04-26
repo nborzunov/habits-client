@@ -15,14 +15,14 @@ export const HabitsPage = () => {
                     <>
                         <HabitsList />
                         <Routes>
-                            <Route path={':habitId'} element={<HabitDetails />} />
+                            <Route path={':habit_id'} element={<HabitDetails />} />
                         </Routes>
                     </>
                 )}
                 {isMobile && (
                     <Routes>
                         <Route path={''} element={<HabitsList />} />
-                        <Route path={':habitId'} element={<HabitDetails />} />
+                        <Route path={':habit_id'} element={<HabitDetails />} />
                     </Routes>
                 )}
             </Flex>
