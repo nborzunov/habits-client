@@ -103,16 +103,7 @@ export const Layout = () => {
                             />
                         </DrawerContent>
                     </Drawer>
-                    <Box
-                        ml={{
-                            sm: '0',
-                            md: '20em',
-                            lg: '12em',
-                            xl: '14em',
-                            '2xl': '15.5em',
-                        }}
-                        transition='.3s ease'
-                    >
+                    <Box ml={'56px'} transition='.3s ease'>
                         <Box as='main' width={'100%'}>
                             <Outlet />
                         </Box>

@@ -1,8 +1,10 @@
-import { Box, Center, Heading, List, Spinner, Stack } from '@chakra-ui/react';
-import { completedHabitsState, uncompletedHabitsState } from '@entities/habit';
+import { Box, Button, Center, Heading, Icon, List, Spinner, Stack } from '@chakra-ui/react';
+import { completedHabitsState, uncompletedHabitsState, useCreateHabit } from '@entities/habit';
 import { useHabitsList } from '@entities/habit/api/useHabitsList';
-import { Habit } from '@entities/habit/model/types';
+import { Habit, HabitData } from '@entities/habit/model/types';
+import { useEditHabitDialog } from '@features/edit-habit-dialog';
 import { useMobile } from '@shared/hooks';
+import { Icons$ } from '@shared/lib';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
@@ -27,12 +29,23 @@ export const HabitsList = () => {
             end: habit.total_goal,
         };
     };
+
+    const editHabitDialog = useEditHabitDialog();
+    const { mutate: createHabit } = useCreateHabit(editHabitDialog.hide);
+
+    const onOpenCreateHabitDialog = () =>
+        editHabitDialog
+            .show({
+                createMode: true,
+            })
+            .then((h: HabitData) => createHabit(h));
+
     return (
         <Box
             borderRightColor='gray.200'
             borderRightWidth='2px'
             h='100vh'
-            minWidth={isMobile ? '100%' : '320px'}
+            minWidth={isMobile ? '100%' : '200px'}
         >
             <Header />
 
@@ -69,6 +82,18 @@ export const HabitsList = () => {
                         </List>
                     </Box>
                 )}
+
+                <Button
+                    colorScheme='blue'
+                    variant='solid'
+                    size='sm'
+                    mt={2}
+                    mx={3}
+                    width={'calc(100% - 24px)'}
+                    onClick={onOpenCreateHabitDialog}
+                >
+                    <Icon as={Icons$.Add} fontSize={'20px'} /> {t('habits:addHabit')}
+                </Button>
             </Box>
         </Box>
     );

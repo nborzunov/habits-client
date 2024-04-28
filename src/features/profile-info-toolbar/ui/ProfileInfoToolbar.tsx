@@ -1,5 +1,15 @@
-import { Avatar, Menu, MenuButton, MenuList, Stack, Text } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    Menu,
+    MenuButton,
+    MenuList,
+    Text,
+    Tooltip,
+    useMediaQuery,
+} from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
+import { MEDIA_QUERIES } from '@shared/const';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,18 +20,26 @@ export const ProfileInfoToolbar = () => {
     const user = useRecoilValue(activeUserState);
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const sizes = useMediaQuery(MEDIA_QUERIES);
+
+    const minimizeSidebar = !sizes[4];
 
     return (
         <Menu>
-            <MenuButton as={Stack} onClick={(e) => e.stopPropagation()}>
-                <Stack
-                    direction={'row'}
-                    spacing={3}
+            <Tooltip
+                label={user?.username}
+                placement='bottom'
+                isDisabled={!minimizeSidebar}
+                openDelay={500}
+            >
+                <MenuButton
+                    as={Box}
+                    onClick={(e) => e.stopPropagation()}
                     align={'center'}
-                    px='4'
-                    mx='4'
+                    width={!minimizeSidebar ? '100%' : '40px'}
+                    px={!minimizeSidebar ? '4' : '2'}
                     rounded='md'
-                    py='3'
+                    py={!minimizeSidebar ? '3' : '2'}
                     cursor='pointer'
                     color='gray.600'
                     _hover={{
@@ -34,15 +52,15 @@ export const ProfileInfoToolbar = () => {
                 >
                     <Avatar
                         color={'black'}
-                        size={'sm'}
+                        size={minimizeSidebar ? 'xs' : 'sm'}
                         colorScheme={'black'}
                         bgColor={'purple.300'}
                     />
 
-                    <Text>{user?.username}</Text>
-                </Stack>
-            </MenuButton>
-            <MenuList p={0} mx={4} zIndex={'dropdown'}>
+                    {!minimizeSidebar && <Text>{user?.username}</Text>}
+                </MenuButton>
+            </Tooltip>
+            <MenuList p={0} mx={4} zIndex={10000}>
                 <OperationMenuItem onClick={() => navigate('/me')} label={t('common:profile')} />
                 <OperationMenuItem onClick={() => navigate('/me/edit')} label={t('common:edit')} />
                 <OperationMenuItem

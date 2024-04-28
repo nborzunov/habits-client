@@ -11,9 +11,9 @@ import { TargetAction, TargetActionContext } from './TargetAction';
 const cellGaps = {
     sm: 6,
     md: 6,
-    lg: 8,
-    xl: 8,
-    '2xl': 9,
+    lg: 6,
+    xl: 6,
+    '2xl': 6,
 };
 const cellSizes = {
     sm: 36,
@@ -113,7 +113,11 @@ export const MonthlyCalendar = memo(() => {
                     />
                 </Tooltip>
             </Flex>
-            <Grid templateColumns={`repeat(7, ${cellSize}px)`} columnGap={`18px`} rowGap={'12px'}>
+            <Grid
+                templateColumns={`repeat(7, ${cellSize}px)`}
+                columnGap={`${cellGap}px`}
+                rowGap={`${cellGap}px`}
+            >
                 {getLoop(7).map((rowId) => (
                     <GridItem key={'grid-column' + monthId + rowId}>
                         <Box>

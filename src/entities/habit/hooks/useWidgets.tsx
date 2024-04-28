@@ -156,7 +156,7 @@ export const WIDGETS: {
         icon: Icons$.Calendar,
         desktop: {
             w: 2,
-            h: 1.5,
+            h: 3,
             x: 0,
             y: 4,
         },
@@ -190,7 +190,7 @@ export const WIDGETS: {
         icon: Icons$.Calendar,
         desktop: {
             w: 1,
-            h: 4,
+            h: 3.5,
             x: 2,
             y: 5,
         },

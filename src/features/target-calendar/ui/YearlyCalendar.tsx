@@ -11,16 +11,16 @@ import { TargetAction, TargetActionContext } from './TargetAction';
 const cellGaps = {
     sm: 2,
     md: 2,
-    lg: 2,
-    xl: 2,
-    '2xl': 2,
+    lg: 3,
+    xl: 3,
+    '2xl': 3,
 };
 const cellSizes = {
     sm: 10,
     md: 10,
-    lg: 10,
-    xl: 10,
-    '2xl': 10,
+    lg: 12,
+    xl: 12,
+    '2xl': 12,
 };
 
 export const YearlyCalendar = memo(() => {
@@ -43,12 +43,24 @@ export const YearlyCalendar = memo(() => {
 
     return (
         <Box>
-            <Flex p='2'>
-                <Grid gridTemplateColumns={`repeat(${isMobile ? 4 : 12}, 1fr) `}>
-                    {getLoop(12).map((i) => (
+            <Flex p='2' flexDirection='column'>
+                <Grid gridTemplateColumns={`repeat(${isMobile ? 4 : 6}, 1fr) `}>
+                    {getLoop(6).map((i) => (
                         <GridItem key={i}>
                             <Month
                                 monthId={i}
+                                gap={cellGap}
+                                size={cellSize}
+                                targetsMap={targetsMap}
+                            />
+                        </GridItem>
+                    ))}
+                </Grid>
+                <Grid gridTemplateColumns={`repeat(${isMobile ? 4 : 6}, 1fr) `} mt={4}>
+                    {getLoop(6).map((i) => (
+                        <GridItem key={i}>
+                            <Month
+                                monthId={6 + i}
                                 gap={cellGap}
                                 size={cellSize}
                                 targetsMap={targetsMap}

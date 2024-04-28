@@ -1,4 +1,5 @@
-import { Flex, Icon } from '@chakra-ui/react';
+import { Flex, Icon, Tooltip, useMediaQuery } from '@chakra-ui/react';
+import { MEDIA_QUERIES } from '@shared/const';
 import { LucideIcon } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { IconType } from 'react-icons/lib';
@@ -10,26 +11,32 @@ interface NavItemProps {
 
 export const NavItem = (props: PropsWithChildren<NavItemProps>) => {
     const { icon, children, ...rest } = props;
+
+    const sizes = useMediaQuery(MEDIA_QUERIES);
+    const minimizeSidebar = !sizes[4];
+
     return (
-        <Flex
-            align='center'
-            px='4'
-            mx='4'
-            rounded='md'
-            py='3'
-            cursor='pointer'
-            color='gray.600'
-            _hover={{
-                bg: 'purple.300',
-                color: 'whiteAlpha.900',
-            }}
-            role='group'
-            fontWeight='semibold'
-            transition='.15s ease'
-            {...rest}
-        >
-            {icon && <Icon mr='2' boxSize='4' as={icon} />}
-            {children}
-        </Flex>
+        <Tooltip label={children} placement='bottom' isDisabled={!minimizeSidebar} openDelay={500}>
+            <Flex
+                align='center'
+                width={!minimizeSidebar ? '100%' : '40px'}
+                px={!minimizeSidebar ? '4' : '3'}
+                rounded='md'
+                py={!minimizeSidebar ? '3' : '3'}
+                cursor='pointer'
+                color='gray.600'
+                _hover={{
+                    bg: 'purple.300',
+                    color: 'whiteAlpha.900',
+                }}
+                role='group'
+                fontWeight='semibold'
+                transition='.15s ease'
+                {...rest}
+            >
+                {icon && <Icon mr={!minimizeSidebar ? '2' : '0'} boxSize='4' as={icon} />}
+                {!minimizeSidebar && children}
+            </Flex>
+        </Tooltip>
     );
 };
