@@ -22,23 +22,25 @@ export const finance = {
     note: 'Note',
     enterNote: 'Enter Note',
     save: 'Save',
-    defaultIncomeCategories: {
+    defaultCategories: {
+        income: {
         salary: 'Salary',
         freelance: 'Freelance',
         rental: 'Rental Income',
         bonus: 'Bonus',
-    },
-    defaultExpenseCategories: {
-        groceries: 'Groceries',
-        dining: 'Dining Out',
-        home: 'Home',
-        utilities: 'Utilities',
-        bills: 'Bills',
-        taxes: 'Taxes',
-        transportation: 'Transportation',
-        entertainment: 'Entertainment',
-        healthcare: 'Healthcare',
-        education: 'Education',
+        },
+        expense: {
+            groceries: 'Groceries',
+            dining: 'Dining Out',
+            home: 'Home',
+            utilities: 'Utilities',
+            bills: 'Bills',
+            taxes: 'Taxes',
+            transportation: 'Transportation',
+            entertainment: 'Entertainment',
+            healthcare: 'Healthcare',
+            education: 'Education',
+        }
     },
     categoryColors: {
         'red': 'Red',

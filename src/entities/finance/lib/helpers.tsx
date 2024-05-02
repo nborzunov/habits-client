@@ -1,7 +1,6 @@
 import { Account } from '@entities/account';
-import { Category, CategoryType } from '@entities/category';
+import { Category } from '@entities/category';
 import { AddTransactionMode } from '@features/add-transaction-dialog';
-import { Icons$ } from '@shared/lib';
 import { PicklistItem } from '@shared/model/types';
 
 import { Currency } from '../model/types';
@@ -47,46 +46,9 @@ export const getAccountTypeColor = (account: Account) => {
 
 export const getCategoryName = (category: Category) => {
     if (category.is_default) {
-        if (category.category_type === 'expense') {
-            return `finance:defaultExpenseCategories.${category.name}`;
-        } else {
-            return `finance:defaultIncomeCategories.${category.name}`;
-        }
+        return `finance:defaultCategories.${category.category_type}.${category.name}`;
     }
     return category.name;
-};
-
-export const getCategoryIcons = (category_type: CategoryType) => {
-    switch (category_type) {
-        case CategoryType.Expense:
-            return Object.keys(Icons$.expenseIcons);
-        case CategoryType.Income:
-            return Object.keys(Icons$.incomeIcons);
-        default:
-            return [];
-    }
-};
-
-export const getCategoryIconsMap = (category_type: CategoryType) => {
-    switch (category_type) {
-        case CategoryType.Expense:
-            return Icons$.expenseIcons;
-        case CategoryType.Income:
-            return Icons$.incomeIcons;
-        default:
-            return {};
-    }
-};
-
-export const getCategoryComponents = (category_type: CategoryType) => {
-    switch (category_type) {
-        case CategoryType.Expense:
-            return Icons$.expenseIcons;
-        case CategoryType.Income:
-            return Icons$.incomeIcons;
-        default:
-            return null;
-    }
 };
 
 export const transformCategories = (categories: Category[]): PicklistItem<Category>[] => {

@@ -12,6 +12,7 @@ export const AchievementsGrid = () => {
 
     return (
         <Grid my={4} gridTemplateColumns={'repeat(auto-fit, minmax(450px, 1fr))'} gap={4}>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore */}
             <AchievementProgressDialog id='AchievementProgress' />
             {achievements.map((achievement) => (

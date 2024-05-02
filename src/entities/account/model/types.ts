@@ -13,4 +13,5 @@ export interface Account {
     currency: Currency;
     account_type: AccountType;
     amount: number;
+    a_order: number;
 }

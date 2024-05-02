@@ -1,9 +1,5 @@
 import api from '@/shared/lib/api';
-import { useToast } from '@chakra-ui/react';
-import { processError } from '@shared/lib';
-import { SetError } from '@shared/model/types';
-import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { createMutation } from 'react-query-kit';
 
 export interface FormData {
     currentPassword: string;
@@ -13,45 +9,7 @@ export interface FormData {
 
 export type ChangePasswordFields = keyof FormData;
 
-export const useChangePassword = (setError: SetError<ChangePasswordFields>) => {
-    const { t } = useTranslation();
-    const toast = useToast();
-
-    return useMutation({
-        mutationFn: (data: { currentPassword: string; newPassword: string }) => {
-            return api
-                .post('users/me/change-password', { json: data })
-                .json()
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('profile:successfullyUpdated'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((error) => {
-                    processError<ChangePasswordFields>(
-                        t,
-                        error,
-                        (errorMessage) => {
-                            toast({
-                                title: t('common:error'),
-                                description: errorMessage,
-                                status: 'error',
-                                duration: 3000,
-                                isClosable: true,
-                            });
-                        },
-                        (field, message) => {
-                            setError(field, {
-                                type: 'custom',
-                                message: message,
-                            });
-                        },
-                    );
-                });
-        },
-    });
-};
+export const useChangePassword = createMutation({
+    mutationFn: (data: { currentPassword: string; newPassword: string }) =>
+        api.post('users/me/change-password', { json: data }).json(),
+});

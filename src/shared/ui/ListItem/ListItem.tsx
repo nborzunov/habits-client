@@ -10,6 +10,19 @@ interface ListItemProps {
     onDelete: (id: string) => void;
     onEdit: (id: string) => void;
 }
+// export default function Card({ isDragging, text }) {
+
+//     return (
+//         <div >
+//             {text}
+//         </div>
+//     )
+// }
+
+export const ItemTypes = {
+    Account: 'account',
+};
+
 export const ListItem = (props: ListItemProps) => {
     return (
         <Flex width='100%' alignItems='center' justifyContent={'space-between'} h='36px'>
@@ -28,7 +41,7 @@ export const ListItem = (props: ListItemProps) => {
                     {props.label}
                 </Text>
             </Flex>
-            <HStack spacing={3}>
+            <HStack spacing={2} mr={2}>
                 <Tooltip label={t('common:edit')}>
                     <IconButton
                         icon={<Icon as={Icons$.Edit} />}

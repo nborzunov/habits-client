@@ -6,9 +6,11 @@ import {
     DrawerOverlay,
     Skeleton,
     useDisclosure,
+    useMediaQuery,
 } from '@chakra-ui/react';
 import { useAchievementsWS } from '@entities/achievement';
 import { useActiveUser } from '@entities/auth';
+import { MEDIA_QUERIES } from '@shared/const';
 import { setTitle, useMobile } from '@shared/hooks';
 import { Sidebar } from '@shared/ui/Layout';
 import { createContext, useEffect } from 'react';
@@ -33,6 +35,10 @@ export const Layout = () => {
     const { t } = useTranslation();
     const isMobile = useMobile();
     const location = useLocation();
+
+    const sizes = useMediaQuery(MEDIA_QUERIES);
+    const minimizeSidebar = !sizes[4];
+
     useAchievementsWS();
 
     useEffect(() => {
@@ -53,6 +59,7 @@ export const Layout = () => {
     if (location.pathname === '/') {
         return <Navigate to='/habits' />;
     }
+
     return (
         <Skeleton isLoaded={isFetched}>
             <Box
@@ -103,7 +110,7 @@ export const Layout = () => {
                             />
                         </DrawerContent>
                     </Drawer>
-                    <Box ml={'56px'} transition='.3s ease'>
+                    <Box ml={!minimizeSidebar ? '220px' : '56px'} transition='.3s ease'>
                         <Box as='main' width={'100%'}>
                             <Outlet />
                         </Box>

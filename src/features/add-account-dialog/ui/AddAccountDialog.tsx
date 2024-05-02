@@ -14,13 +14,16 @@ import {
     ModalFooter,
     ModalHeader,
     Stack,
+    useToast,
 } from '@chakra-ui/react';
 import { useCreateAccount } from '@entities/account';
 import { AccountType } from '@entities/account';
 import { Currency, getCurrency } from '@entities/finance';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
+import { handleError, handleSuccess } from '@shared/lib';
 import { Breadcrumbs, BreadcrumbsProps } from '@shared/ui/Breadcrumbs';
 import { SelectFromPicklist } from '@shared/ui/Form';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -42,9 +45,20 @@ type Props = {} & BreadcrumbsProps;
 export const AddAccountDialog = createDialog(({ breadcrumbs }: Props) => {
     const dialog = useAddAccountDialog();
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
+    const toast = useToast();
 
-    const { mutate } = useCreateAccount(() => {
-        dialog.hide();
+    const { mutate } = useCreateAccount({
+        onSuccess: () => {
+            handleSuccess({
+                toast,
+                description: 'finance:accountCreated',
+            });
+
+            dialog.hide();
+            return queryClient.invalidateQueries(['accounts']);
+        },
+        onError: (err) => handleError({ toast, err }),
     });
 
     const defaultState: FormData = {

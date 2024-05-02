@@ -9,10 +9,12 @@ import {
     MenuButton,
     MenuList,
     Text,
+    useToast,
 } from '@chakra-ui/react';
 import {
     Habit,
     HabitData,
+    habitsState,
     useArchiveHabit,
     useCleanHabit,
     useDeleteHabit,
@@ -20,13 +22,14 @@ import {
 } from '@entities/habit';
 import { useEditHabitDialog } from '@features/edit-habit-dialog';
 import { openEditHabitDialog } from '@features/edit-habit-dialog/ui/EditHabitDialog';
-import { Icons$ } from '@shared/lib';
+import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import { MouseEventHandler, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
+import { useSetRecoilState } from 'recoil';
 
 import { CompletedCheckbox } from './CompletedCheckbox';
 
@@ -44,10 +47,12 @@ export const HabitItem = ({
     };
 }) => {
     const { habit_id: selectedHabitId } = useParams();
+    const selected = selectedHabitId && habit.id === selectedHabitId;
+
     const navigate = useNavigate();
     const { t } = useTranslation();
-
-    const selected = selectedHabitId && habit.id === selectedHabitId;
+    const toast = useToast();
+    const setHabits = useSetRecoilState(habitsState);
 
     useEffect(() => {
         if (selected) {
@@ -63,7 +68,19 @@ export const HabitItem = ({
 
     const editHabitDialog = useEditHabitDialog();
 
-    const { mutate: editHabit } = useEditHabit(habit.id, editHabitDialog.hide);
+    const { mutate: editHabit } = useEditHabit({
+        onSuccess: (newHabit) => {
+            setHabits((prev) => prev.map((h) => (h.id === habit.id ? newHabit : h)));
+            handleSuccess({
+                toast,
+                description: 'finance:successfullyUpdated',
+            });
+        },
+        onError: (err) => {
+            handleError({ toast, err });
+            editHabitDialog.hide();
+        },
+    });
     const { mutate: deleteHabit } = useDeleteHabit(habit.id);
     const { mutate: archiveHabit } = useArchiveHabit(habit.id);
     const { mutate: cleanData } = useCleanHabit(habit.id);
@@ -147,7 +164,12 @@ export const HabitItem = ({
     const onEditHabit = () =>
         openEditHabitDialog({
             initialState: habit,
-        }).then((h: HabitData) => editHabit(h));
+        }).then((h: HabitData) =>
+            editHabit({
+                habit_id: habit.id,
+                data: h,
+            }),
+        );
 
     return (
         <>

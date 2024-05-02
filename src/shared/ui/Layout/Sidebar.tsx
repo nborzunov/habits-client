@@ -38,6 +38,8 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
     return (
         <Box
             as='nav'
+            borderRightColor='gray.200'
+            borderRightWidth='2px'
             pos='fixed'
             top='0'
             left='0'
@@ -47,7 +49,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
             overflowY='auto'
             bg='white'
             {...props}
-            width={isMobile ? '100%' : minimizeSidebar ? '56px' : props.width}
+            width={isMobile ? '100%' : minimizeSidebar ? '56px' : '220px'}
         >
             <Flex px={!minimizeSidebar ? 8 : 5} py='6' align='center'>
                 {!minimizeSidebar ? (
@@ -80,6 +82,8 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                     spacing={minimizeSidebar ? 2 : 0}
                     px={minimizeSidebar ? '2' : '4'}
                     w={minimizeSidebar ? '40px' : 'auto'}
+                    zIndex='dropdown'
+                    position='relative'
                 >
                     <ProfileInfoToolbar />
 

@@ -9,16 +9,23 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Stack,
+    useToast,
 } from '@chakra-ui/react';
-import { CategoryType, useCategoriesByType } from '@entities/category';
-import { useDeleteCategory } from '@entities/category/api/useDeleteCategory';
-import { getCategoryIconsMap } from '@entities/finance/lib/helpers';
+import {
+    Category,
+    CategoryType,
+    useCategories,
+    useDeleteCategory,
+    useReorderCategories,
+} from '@entities/category';
+import { useTransactions } from '@entities/transaction';
 import { useAddCategoryDialog } from '@features/add-category-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
+import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { ListItem } from '@shared/ui/ListItem';
-import React from 'react';
+import { SortableList } from '@shared/ui/SortableList';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -27,9 +34,34 @@ interface Props {
 
 const CategoryManagementDialog = createDialog(({ mode }: Props) => {
     const { t } = useTranslation();
-    const categories = useCategoriesByType(mode as unknown as CategoryType);
+    const toast = useToast();
     const dialog = useCategoryManagementDialog();
     const addCategoryDialog = useAddCategoryDialog();
+
+    const [prevCategories, setPrevCategories] = useState<Category[]>([]);
+
+    const { data: categories = [], refetch: refetchCategories } = useCategories({
+        select: (data) => (prevCategories.length > 0 ? prevCategories : data[mode]),
+        onSuccess: () => {
+            setPrevCategories([]);
+        },
+    });
+
+    const { mutate: reorderAccounts } = useReorderCategories({
+        onSuccess: () => refetchCategories(),
+        onError: (err) => handleError({ toast, err }),
+    });
+
+    const onDrag = (items: Category[]) => {
+        setPrevCategories(items);
+
+        const itemsToUpdate = items
+            .map((item, index) => ({ ...item, c_order: index }))
+            .filter((item, index) => item.id !== categories[index].id)
+            .map(({ id, c_order }) => ({ id: id, c_order: c_order }));
+
+        reorderAccounts(itemsToUpdate);
+    };
 
     const openAddCategoryDialog = () =>
         addCategoryDialog.show({
@@ -45,7 +77,19 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
             category_type: mode as unknown as CategoryType,
         });
 
-    const { mutate: deleteCategory } = useDeleteCategory();
+    const { refetch: refetchTransactions } = useTransactions();
+
+    const { mutate: deleteCategory } = useDeleteCategory({
+        onSuccess: () => {
+            refetchCategories();
+            refetchTransactions();
+            handleSuccess({
+                toast,
+                description: 'finance:categoryDeleted',
+            });
+        },
+        onError: (err) => handleError({ toast, err }),
+    });
 
     const onDelete = (category_id: string) => {
         openConfirmationDialog({
@@ -63,7 +107,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
             <ModalContent mx={4} visibility={addCategoryDialog.visible ? 'hidden' : 'visible'}>
                 <ModalHeader>{t(`finance:categories.categoryManagement`)}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody mt={3}>
                     {!categories.length && (
                         <Alert status='info'>
                             <AlertIcon />
@@ -71,26 +115,32 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
                         </Alert>
                     )}
 
-                    <Stack spacing={3} mt={3}>
-                        {categories.map(({ value: category }) => {
-                            const categoryIconsMap = getCategoryIconsMap(category.category_type);
+                    <SortableList
+                        items={categories}
+                        onChange={onDrag}
+                        renderItem={(category) => {
+                            const categoryIconsMap = Icons$.categoryIcons[category.category_type];
+
                             return (
-                                <ListItem
-                                    id={category.id}
-                                    key={category.id}
-                                    color={category.color}
-                                    icon={
-                                        categoryIconsMap[
-                                            category.icon as keyof typeof categoryIconsMap
-                                        ]
-                                    }
-                                    label={category.name}
-                                    onEdit={() => alert('TODO')}
-                                    onDelete={() => onDelete(category.id)}
-                                />
+                                <SortableList.Item id={category.id}>
+                                    <ListItem
+                                        id={category.id}
+                                        key={category.id}
+                                        color={category.color}
+                                        icon={
+                                            categoryIconsMap[
+                                                category.icon as keyof typeof categoryIconsMap
+                                            ]
+                                        }
+                                        label={category.name}
+                                        onEdit={() => alert('TODO')}
+                                        onDelete={() => onDelete(category.id)}
+                                    />
+                                    <SortableList.DragHandle />
+                                </SortableList.Item>
                             );
-                        })}
-                    </Stack>
+                        }}
+                    />
                 </ModalBody>
 
                 <ModalFooter>

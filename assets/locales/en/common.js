@@ -73,4 +73,5 @@ export const common = {
     settings: 'Settings',
     logout: 'Logout',
     habits: 'Habits',
+    reorder: 'Reorder'
 };

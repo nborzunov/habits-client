@@ -15,13 +15,14 @@ import {
     ModalHeader,
     Stack,
     theme,
+    useToast,
 } from '@chakra-ui/react';
 import { useCreateCategory } from '@entities/category';
 import { CategoryType } from '@entities/category';
-import { getCategoryComponents, getCategoryIcons } from '@entities/finance';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import { Icons$ } from '@shared/lib';
+import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { Breadcrumbs, BreadcrumbsProps } from '@shared/ui/Breadcrumbs';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,10 @@ const colors = [
     'pink',
 ] as const;
 type SelectedColor = (typeof colors)[number];
-type SelectedIcon = keyof typeof Icons$.expenseIcons | keyof typeof Icons$.incomeIcons | null;
+type SelectedIcon =
+    | keyof typeof Icons$.categoryIcons.expense
+    | keyof typeof Icons$.categoryIcons.income
+    | null;
 
 interface FormData {
     name: string;
@@ -52,10 +56,21 @@ type Props = {
 
 const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) => {
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
     const dialog = useAddCategoryDialog();
+    const toast = useToast();
 
-    const { mutate } = useCreateCategory(() => {
-        dialog.hide();
+    const { mutate: createCategory } = useCreateCategory({
+        onSuccess: () => {
+            handleSuccess({
+                toast,
+                description: 'finance:categoryCreated',
+            });
+
+            dialog.hide();
+            return queryClient.invalidateQueries(['categories']);
+        },
+        onError: (err) => handleError({ toast, err }),
     });
 
     const defaultState: FormData = {
@@ -75,7 +90,7 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) =
     });
 
     const onFormSubmit = (data: FormData) => {
-        mutate({
+        createCategory({
             ...data,
             category_type: category_type,
             is_default: false,
@@ -93,8 +108,7 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) =
         setValue('name', '');
     }, [dialog.visible, setValue]);
 
-    const icons = getCategoryIcons(category_type);
-    const iconsComponents = getCategoryComponents(category_type);
+    const iconsComponents = Icons$.categoryIcons[category_type];
 
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
@@ -121,49 +135,51 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) =
 
                             <Grid templateColumns={'repeat(7, 1fr)'} gap={2}>
                                 {iconsComponents &&
-                                    icons.map((icon: any) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        const LucideIcon = iconsComponents[icon];
-                                        return (
-                                            <GridItem
-                                                key={icon}
-                                                onClick={() => setValue('icon', icon)}
-                                                bg={
-                                                    icon === form.icon
-                                                        ? `${form.color}.400`
-                                                        : 'gray.100'
-                                                }
-                                                p={2}
-                                                display='flex'
-                                                justifyContent={'center'}
-                                                alignItems={'center'}
-                                                rounded={'xl'}
-                                                border={'1px solid'}
-                                                borderColor={'gray.200'}
-                                                cursor='pointer'
-                                                transition='background-color .2s, color .2s'
-                                                dropShadow={'lg'}
-                                                _hover={{
-                                                    bg:
-                                                        icon === form.icon
-                                                            ? `${form.color}.500`
-                                                            : 'gray.200',
-                                                }}
-                                            >
-                                                <Icon
+                                    Object.keys(Icons$.categoryIcons[category_type]).map(
+                                        (icon: any) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            const LucideIcon = iconsComponents[icon];
+                                            return (
+                                                <GridItem
                                                     key={icon}
-                                                    size={32}
-                                                    as={LucideIcon}
-                                                    color={
+                                                    onClick={() => setValue('icon', icon)}
+                                                    bg={
                                                         icon === form.icon
-                                                            ? 'white'
-                                                            : theme.colors.gray[700]
+                                                            ? `${form.color}.400`
+                                                            : 'gray.100'
                                                     }
-                                                />
-                                            </GridItem>
-                                        );
-                                    })}
+                                                    p={2}
+                                                    display='flex'
+                                                    justifyContent={'center'}
+                                                    alignItems={'center'}
+                                                    rounded={'xl'}
+                                                    border={'1px solid'}
+                                                    borderColor={'gray.200'}
+                                                    cursor='pointer'
+                                                    transition='background-color .2s, color .2s'
+                                                    dropShadow={'lg'}
+                                                    _hover={{
+                                                        bg:
+                                                            icon === form.icon
+                                                                ? `${form.color}.500`
+                                                                : 'gray.200',
+                                                    }}
+                                                >
+                                                    <Icon
+                                                        key={icon}
+                                                        size={32}
+                                                        as={LucideIcon}
+                                                        color={
+                                                            icon === form.icon
+                                                                ? 'white'
+                                                                : theme.colors.gray[700]
+                                                        }
+                                                    />
+                                                </GridItem>
+                                            );
+                                        },
+                                    )}
                             </Grid>
                         </FormControl>
 

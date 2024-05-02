@@ -45,7 +45,7 @@ export const HabitsList = () => {
             borderRightColor='gray.200'
             borderRightWidth='2px'
             h='100vh'
-            minWidth={isMobile ? '100%' : '200px'}
+            minWidth={isMobile ? '100%' : '240px'}
         >
             <Header />
 

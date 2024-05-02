@@ -1,13 +1,13 @@
 import api from '@/shared/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { createQuery } from 'react-query-kit';
 
 import { achievementsData } from '../model/const';
 import { Achievement, BaseAchievement } from '../model/types';
 
-export const useAchievements = () => {
-    return useQuery<Achievement[]>({
+export const useAchievements = () =>
+    createQuery({
         queryKey: ['achievements'],
-        queryFn: async () =>
+        fetcher: async () =>
             api
                 .get('achievements/')
                 .json<BaseAchievement[]>()
@@ -24,4 +24,3 @@ export const useAchievements = () => {
                 ),
         initialData: [],
     });
-};

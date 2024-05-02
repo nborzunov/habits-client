@@ -9,33 +9,56 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Stack,
+    useToast,
 } from '@chakra-ui/react';
-import { useAccounts } from '@entities/account';
+import { Account, useAccounts, useReorderAccounts } from '@entities/account';
 import { getAccountTypeColor } from '@entities/finance';
 import { useAddAccountDialog } from '@features/add-account-dialog';
-import { openAddAccountDialog } from '@features/add-account-dialog/ui/AddAccountDialog';
+import { openAddAccountDialog } from '@features/add-account-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import { Icons$ } from '@shared/lib';
+import { Icons$, handleError } from '@shared/lib';
 import { ListItem } from '@shared/ui/ListItem';
-import React from 'react';
+import { SortableList } from '@shared/ui/SortableList';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};
 const AccountManagementDialog = createDialog((_props: Props) => {
     const { t } = useTranslation();
+    const toast = useToast();
     const dialog = useAccountManagementDialog();
 
     const addAccountDialog = useAddAccountDialog();
+    const [prevAccounts, setPrevAccounts] = useState<Account[]>([]);
 
-    const { data: accounts } = useAccounts();
+    const { data: accounts = [], refetch: refetchAccounts } = useAccounts({
+        select: (data) => (prevAccounts.length > 0 ? prevAccounts : data),
+        onSuccess: () => {
+            setPrevAccounts([]);
+        },
+    });
 
+    const { mutate: reorderAccounts } = useReorderAccounts({
+        onSuccess: () => refetchAccounts(),
+        onError: (err) => handleError({ toast, err }),
+    });
+
+    const onDrag = (items: Account[]) => {
+        setPrevAccounts(items);
+
+        const itemsToUpdate = items
+            .map((item, index) => ({ ...item, a_order: index }))
+            .filter((item, index) => item.id !== accounts[index].id)
+            .map(({ id, a_order }) => ({ id: id, a_order: a_order }));
+
+        reorderAccounts(itemsToUpdate);
+    };
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
             <ModalContent mx={4} visibility={addAccountDialog.visible ? 'hidden' : 'visible'}>
                 <ModalHeader>{t(`finance:accountManagement`)}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody mt={3}>
                     {!accounts.length && (
                         <Alert status='info'>
                             <AlertIcon />
@@ -43,23 +66,24 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                         </Alert>
                     )}
 
-                    <Stack spacing={3} mt={3}>
-                        {accounts.map((account) => (
-                            <ListItem
-                                id={account.id}
-                                key={account.id}
-                                color={getAccountTypeColor(account) as string}
-                                icon={
-                                    Icons$.account_types[
-                                        account.name as keyof typeof Icons$.account_types
-                                    ]
-                                }
-                                label={account.name}
-                                onDelete={async () => alert('TODO')}
-                                onEdit={async () => alert('TODO')}
-                            />
-                        ))}
-                    </Stack>
+                    <SortableList
+                        items={accounts}
+                        onChange={onDrag}
+                        renderItem={(account) => (
+                            <SortableList.Item id={account.id}>
+                                <ListItem
+                                    id={account.id}
+                                    key={account.id}
+                                    color={getAccountTypeColor(account) as string}
+                                    icon={Icons$.account_types[account.account_type]}
+                                    label={account.name}
+                                    onDelete={async () => alert('TODO')}
+                                    onEdit={async () => alert('TODO')}
+                                />
+                                <SortableList.DragHandle />
+                            </SortableList.Item>
+                        )}
+                    />
                 </ModalBody>
 
                 <ModalFooter>

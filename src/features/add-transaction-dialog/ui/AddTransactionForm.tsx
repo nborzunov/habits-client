@@ -15,18 +15,25 @@ import {
     ModalBody,
     Stack,
     Tooltip,
+    useToast,
 } from '@chakra-ui/react';
 import { Account } from '@entities/account';
-import { Category, CategoryType, useCategoriesByType } from '@entities/category';
-import { getAccountTypeColor, getCurrency, getModeButtonColor } from '@entities/finance';
+import { Category, CategoryType, useCategories } from '@entities/category';
+import {
+    getAccountTypeColor,
+    getCurrency,
+    getModeButtonColor,
+    transformCategories,
+} from '@entities/finance';
 import { TransactionType, useCreateTransaction } from '@entities/transaction';
 import { useAccountManagementDialog } from '@features/account-management-dialog';
 import { useAddAccountDialog } from '@features/add-account-dialog';
 import { useAddCategoryDialog } from '@features/add-category-dialog';
 import { openCategoryManagementDialog } from '@features/category-management-dialog';
-import { Icons$ } from '@shared/lib';
+import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { validationRules } from '@shared/ui/Form';
 import { FormField, SelectFromPicklist } from '@shared/ui/Form';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -73,8 +80,18 @@ export const AddTransactionForm = ({
         defaultValues: defaultState,
     });
 
-    const { mutate } = useCreateTransaction(() => {
-        handleClose();
+    const queryClient = useQueryClient();
+    const toast = useToast();
+    const { mutate: createTransaction } = useCreateTransaction({
+        onSuccess: () => {
+            handleSuccess({
+                toast,
+                description: 'finance:transactionCreated',
+            });
+            handleClose();
+            return queryClient.invalidateQueries(['transactions']);
+        },
+        onError: (err) => handleError({ toast, err }),
     });
 
     const onFormSubmit = (data: {
@@ -90,7 +107,7 @@ export const AddTransactionForm = ({
             .add(currentTime.minute(), 'minute')
             .add(currentTime.second(), 'second');
 
-        mutate({
+        createTransaction({
             created_date: created_date.toDate(),
             account_id: data.account?.id as string,
             category_id: data.category?.id as string,
@@ -102,12 +119,12 @@ export const AddTransactionForm = ({
 
     const [form, setForm] = useState(defaultState);
 
-    const categories = useCategoriesByType(mode as unknown as CategoryType);
+    const { data: categories = [] } = useCategories({
+        select: (data) => transformCategories(data[mode as unknown as CategoryType]),
+    });
 
     const addAccountDialog = useAddAccountDialog();
-
     const accountManagementDialog = useAccountManagementDialog();
-
     const addCategoryDialog = useAddCategoryDialog();
 
     const openAddAccountDialog = useCallback(
@@ -139,7 +156,7 @@ export const AddTransactionForm = ({
                     },
                 ],
 
-                category_type: mode as unknown as CategoryType,
+                category_type: mode,
             }),
         [t, addCategoryDialog, mode],
     );
@@ -231,11 +248,7 @@ export const AddTransactionForm = ({
                         {(account) => (
                             <Flex width='100%' alignItems='center'>
                                 <Icon
-                                    as={
-                                        Icons$.account_types[
-                                            account.account_type as keyof typeof Icons$.account_types
-                                        ]
-                                    }
+                                    as={Icons$.account_types[account.account_type]}
                                     fontSize={'4xl'}
                                     color={`${getAccountTypeColor(account)}.500`}
                                     p={2}
@@ -281,8 +294,8 @@ export const AddTransactionForm = ({
                             <Flex width='100%' alignItems='center' h='36px'>
                                 <Icon
                                     as={
-                                        Icons$.expenseIcons[
-                                            category.icon as keyof typeof Icons$.expenseIcons
+                                        Icons$.categoryIcons[category.category_type][
+                                            category.icon as keyof (typeof Icons$.categoryIcons)[CategoryType]
                                         ]
                                     }
                                     fontSize={'4xl'}

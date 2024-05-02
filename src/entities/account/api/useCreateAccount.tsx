@@ -1,47 +1,14 @@
 import api from '@/shared/lib/api';
-import { useToast } from '@chakra-ui/react';
 import { Currency } from '@entities/finance';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { createMutation } from 'react-query-kit';
 
 import { Account, AccountType } from '../model/types';
 
-export const useCreateAccount = (onSuccess: () => void) => {
-    const queryClient = useQueryClient();
-    const { t } = useTranslation();
-    const toast = useToast();
-
-    return useMutation({
-        mutationFn: (data: {
-            name: string;
-            currency: Currency;
-            account_type: AccountType;
-            amount: number;
-        }) => {
-            return api.post('account', { json: data }).json<Account[]>();
-        },
-        onSuccess: () => {
-            toast({
-                title: t('common:success'),
-                description: t('finance:accountCreated'),
-                status: 'success',
-                duration: 1000,
-                isClosable: true,
-            });
-
-            onSuccess();
-            return queryClient.invalidateQueries(['accounts']);
-        },
-        // TODO: fix any
-        onError: (err: any) => {
-            toast({
-                title: t('common:error'),
-                description:
-                    err.status === 401 ? t('common:invalidCredentials') : t('common:serverError'),
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            });
-        },
-    });
-};
+export const useCreateAccount = createMutation({
+    mutationFn: (data: {
+        name: string;
+        currency: Currency;
+        account_type: AccountType;
+        amount: number;
+    }) => api.post('account', { json: data }).json<Account[]>(),
+});

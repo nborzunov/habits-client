@@ -2,11 +2,12 @@ import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
 import { EditProFileData, useEditProfile } from '@entities/profile';
 import { useTitle } from '@shared/hooks';
+import { handleError, handleSuccess } from '@shared/lib';
 import { FieldsConfig, FormField, validationRules } from '@shared/ui/Form';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 interface Props {
     initialState: EditProFileData;
@@ -30,7 +31,17 @@ export const EditProfile = ({ initialState }: Props) => {
         defaultValues: initialState,
     });
 
-    const { mutate: editProfile } = useEditProfile();
+    const setActiveUser = useSetRecoilState(activeUserState);
+    const { mutate: editProfile } = useEditProfile({
+        onSuccess: (newUserData) => {
+            setActiveUser(newUserData);
+            handleSuccess({
+                toast,
+                description: 'profile:successfullyUpdated',
+            });
+        },
+        onError: (err) => handleError({ toast, err }),
+    });
 
     const onFormError = () => {
         toast({

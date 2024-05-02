@@ -2,6 +2,7 @@ import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
 import { ChangePasswordFields, useChangePassword } from '@entities/profile';
 import { useMobile, useTitle } from '@shared/hooks';
+import { handleSuccess, processError } from '@shared/lib';
 import { FieldsConfig, FormField, validationRules } from '@shared/ui/Form';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -31,7 +32,35 @@ export const ChangePassword = () => {
         defaultValues: initialState,
     });
 
-    const { mutate: changePassword } = useChangePassword(setError);
+    const { mutate: changePassword } = useChangePassword({
+        onSuccess: () =>
+            handleSuccess({
+                toast,
+                description: 'profile:successfullyUpdated',
+            }),
+
+        onError: (error) => {
+            processError<ChangePasswordFields>(
+                t,
+                error,
+                (errorMessage) => {
+                    toast({
+                        title: t('common:error'),
+                        description: errorMessage,
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                },
+                (field, message) => {
+                    setError(field, {
+                        type: 'custom',
+                        message: message,
+                    });
+                },
+            );
+        },
+    });
 
     const onFormError = () => {
         toast({

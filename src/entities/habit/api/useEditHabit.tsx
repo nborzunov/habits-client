@@ -1,47 +1,9 @@
-import { useToast } from '@chakra-ui/react';
 import api from '@shared/lib/api';
-import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { createMutation } from 'react-query-kit';
 
 import { Habit, HabitData } from '../model/types';
-import { habitsState } from '../store/atoms';
 
-export const useEditHabit = (habit_id: string, onClose: () => void) => {
-    const setHabits = useSetRecoilState(habitsState);
-    const { t } = useTranslation();
-    const toast = useToast();
-
-    return useMutation({
-        mutationFn: (data: HabitData) => {
-            return api
-                .put(`habits/${habit_id}`, { json: data })
-                .json<Habit>()
-                .then((newHabit) => {
-                    setHabits((prev) => prev.map((h) => (h.id === habit_id ? newHabit : h)));
-                })
-                .then(() =>
-                    toast({
-                        title: t('common:success'),
-                        description: t('habits:successfullyUpdated'),
-                        status: 'success',
-                        duration: 1000,
-                        isClosable: true,
-                    }),
-                )
-                .catch((err) =>
-                    toast({
-                        title: t('common:error'),
-                        description:
-                            err.status === 401
-                                ? t('common:invalidCredentials')
-                                : t('common:serverError'),
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    }),
-                )
-                .finally(() => onClose());
-        },
-    });
-};
+export const useEditHabit = createMutation({
+    mutationFn: ({ habit_id, data }: { habit_id: string; data: HabitData }) =>
+        api.put(`habits/${habit_id}`, { json: data }).json<Habit>(),
+});
