@@ -13,8 +13,12 @@ import {
 } from '@chakra-ui/react';
 import { Account, useAccounts, useReorderAccounts } from '@entities/account';
 import { getAccountTypeColor } from '@entities/finance';
-import { useAddAccountDialog } from '@features/add-account-dialog';
-import { openAddAccountDialog } from '@features/add-account-dialog';
+import {
+    openCreateAccountDialog,
+    openEditAccountDialog,
+    useCreateAccountDialog,
+    useEditAccountDialog,
+} from '@features/manage-account-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { Icons$, handleError } from '@shared/lib';
 import { ListItem } from '@shared/ui/ListItem';
@@ -27,8 +31,9 @@ const AccountManagementDialog = createDialog((_props: Props) => {
     const { t } = useTranslation();
     const toast = useToast();
     const dialog = useAccountManagementDialog();
+    const addAccountDialog = useCreateAccountDialog();
+    const editAccountDialog = useEditAccountDialog();
 
-    const addAccountDialog = useAddAccountDialog();
     const [prevAccounts, setPrevAccounts] = useState<Account[]>([]);
 
     const { data: accounts = [], refetch: refetchAccounts } = useAccounts({
@@ -55,7 +60,12 @@ const AccountManagementDialog = createDialog((_props: Props) => {
     };
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
-            <ModalContent mx={4} visibility={addAccountDialog.visible ? 'hidden' : 'visible'}>
+            <ModalContent
+                mx={4}
+                visibility={
+                    addAccountDialog.visible || editAccountDialog.visible ? 'hidden' : 'visible'
+                }
+            >
                 <ModalHeader>{t(`finance:accountManagement`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody mt={3}>
@@ -74,11 +84,24 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                                 <ListItem
                                     id={account.id}
                                     key={account.id}
-                                    color={getAccountTypeColor(account) as string}
+                                    color={getAccountTypeColor(account.account_type) as string}
                                     icon={Icons$.account_types[account.account_type]}
                                     label={account.name}
                                     onDelete={async () => alert('TODO')}
-                                    onEdit={async () => alert('TODO')}
+                                    onEdit={async () =>
+                                        openEditAccountDialog({
+                                            account,
+                                            breadcrumbs: [
+                                                {
+                                                    label: t('finance:accountManagement'),
+                                                    onClick: editAccountDialog.hide,
+                                                },
+                                                {
+                                                    label: account.name,
+                                                },
+                                            ],
+                                        })
+                                    }
                                 />
                                 <SortableList.DragHandle />
                             </SortableList.Item>
@@ -96,7 +119,7 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                             type='submit'
                             size={'md'}
                             onClick={() =>
-                                openAddAccountDialog({
+                                openCreateAccountDialog({
                                     breadcrumbs: [
                                         {
                                             label: t('finance:accountManagement'),

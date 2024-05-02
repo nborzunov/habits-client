@@ -15,3 +15,17 @@ export interface Account {
     amount: number;
     a_order: number;
 }
+
+export interface CreateAccountData {
+    name: string;
+    account_type: AccountType | '';
+    currency: Currency | '';
+    amount: number | '';
+}
+
+export interface AccountData {
+    name: string;
+    account_type: AccountType;
+    currency: Currency;
+    amount: number;
+}

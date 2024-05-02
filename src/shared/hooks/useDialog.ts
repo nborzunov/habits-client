@@ -26,3 +26,5 @@ export const useDialog = (props: any) => {
         show: dialog.show as unknown as <T extends {}>(props: T) => Promise<any>,
     };
 };
+
+export type Dialog = ReturnType<typeof useDialog>;

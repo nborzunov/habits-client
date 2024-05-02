@@ -35,18 +35,18 @@ export const SelectFromPicklist = <
     noItemsWarning,
     editButton,
     addItem,
-    children,
+    renderItem,
 }: {
     name: string;
     title: string;
     items: PicklistItem<T>[];
-    value: T | undefined;
+    value?: T;
     onChange: (value: T) => void;
     // TODO: fix any
     noItemsWarning?: any;
     editButton?: any;
     addItem?: any;
-    children: (value: T) => JSX.Element;
+    renderItem: (value: T) => JSX.Element | string;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { t } = useTranslation();
@@ -102,7 +102,7 @@ export const SelectFromPicklist = <
                                     colorScheme={value?.id === item.id ? 'blue' : undefined}
                                     variant={value?.id === item.id ? 'outline' : 'solid'}
                                 >
-                                    {children(item.value)}
+                                    {renderItem(item.value)}
                                 </Button>
                             ))}
                         </Stack>

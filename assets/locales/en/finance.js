@@ -81,4 +81,5 @@ export const finance = {
     icon: 'Icon',
     color: 'Color',
     confirmCategoryDelete: 'Are you sure you want to delete this category? \nThis will delete all transactions associated with it.',
+    accountUpdated: 'Account updated',
 };

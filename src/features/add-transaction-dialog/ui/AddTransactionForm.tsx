@@ -27,9 +27,9 @@ import {
 } from '@entities/finance';
 import { TransactionType, useCreateTransaction } from '@entities/transaction';
 import { useAccountManagementDialog } from '@features/account-management-dialog';
-import { useAddAccountDialog } from '@features/add-account-dialog';
 import { useAddCategoryDialog } from '@features/add-category-dialog';
 import { openCategoryManagementDialog } from '@features/category-management-dialog';
+import { useCreateAccountDialog } from '@features/manage-account-dialog';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { validationRules } from '@shared/ui/Form';
 import { FormField, SelectFromPicklist } from '@shared/ui/Form';
@@ -123,11 +123,11 @@ export const AddTransactionForm = ({
         select: (data) => transformCategories(data[mode as unknown as CategoryType]),
     });
 
-    const addAccountDialog = useAddAccountDialog();
+    const addAccountDialog = useCreateAccountDialog();
     const accountManagementDialog = useAccountManagementDialog();
     const addCategoryDialog = useAddCategoryDialog();
 
-    const openAddAccountDialog = useCallback(
+    const openCreateAccountDialog = useCallback(
         () =>
             addAccountDialog.show({
                 breadcrumbs: [
@@ -243,14 +243,13 @@ export const AddTransactionForm = ({
                                 ></IconButton>
                             </Tooltip>
                         }
-                        addItem={openAddAccountDialog}
-                    >
-                        {(account) => (
+                        addItem={openCreateAccountDialog}
+                        renderItem={(account) => (
                             <Flex width='100%' alignItems='center'>
                                 <Icon
                                     as={Icons$.account_types[account.account_type]}
                                     fontSize={'4xl'}
-                                    color={`${getAccountTypeColor(account)}.500`}
+                                    color={`${getAccountTypeColor(account.account_type)}.500`}
                                     p={2}
                                     borderRadius={'xl'}
                                     boxShadow={'sm'}
@@ -258,7 +257,7 @@ export const AddTransactionForm = ({
                                 <span>{account.name}</span>
                             </Flex>
                         )}
-                    </SelectFromPicklist>
+                    />
                     <SelectFromPicklist
                         name={t('finance:category')}
                         title={t('finance:selectCategory')}
@@ -289,8 +288,7 @@ export const AddTransactionForm = ({
                             </>
                         }
                         addItem={openAddCategoryDialog}
-                    >
-                        {(category) => (
+                        renderItem={(category) => (
                             <Flex width='100%' alignItems='center' h='36px'>
                                 <Icon
                                     as={
@@ -307,7 +305,7 @@ export const AddTransactionForm = ({
                                 <span>{category.name}</span>
                             </Flex>
                         )}
-                    </SelectFromPicklist>
+                    />
 
                     <FormControl>
                         <FormLabel>{t('finance:amount')}</FormLabel>

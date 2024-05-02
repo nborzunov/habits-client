@@ -1,9 +1,9 @@
 import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useAccounts } from '@entities/account/api/useAccounts';
 import { useAccountManagementDialog } from '@features/account-management-dialog';
-import { useAddAccountDialog } from '@features/add-account-dialog/ui/AddAccountDialog';
-import { useAddCategoryDialog } from '@features/add-category-dialog/ui/AddCategoryDialog';
+import { useAddCategoryDialog } from '@features/add-category-dialog';
 import { useCategoryManagementDialog } from '@features/category-management-dialog';
+import { useCreateAccountDialog } from '@features/manage-account-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,9 +16,9 @@ const AddTransactionDialog = createDialog(() => {
     const [mode, setMode] = useState<AddTransactionMode>(AddTransactionMode.Expense);
     const { t } = useTranslation();
 
-    const { data: accounts } = useAccounts();
+    const { data: accounts = [] } = useAccounts();
 
-    const addAccountDialog = useAddAccountDialog();
+    const addAccountDialog = useCreateAccountDialog();
     const accountManagementDialog = useAccountManagementDialog();
     const addCategoryDialog = useAddCategoryDialog();
     const categoryManagementDialog = useCategoryManagementDialog();

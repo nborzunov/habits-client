@@ -1,4 +1,4 @@
-import { Account } from '@entities/account';
+import { AccountType } from '@entities/account';
 import { Category } from '@entities/category';
 import { AddTransactionMode } from '@features/add-transaction-dialog';
 import { PicklistItem } from '@shared/model/types';
@@ -31,8 +31,8 @@ export const getTransactionTypeColor = (transaction_type: string) => {
             return 'blue.500';
     }
 };
-export const getAccountTypeColor = (account: Account) => {
-    switch (account.account_type) {
+export const getAccountTypeColor = (account_type: AccountType) => {
+    switch (account_type) {
         case 'cash':
             return 'orange';
         case 'card':
