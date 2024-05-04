@@ -17,7 +17,7 @@ import {
     openEditAccountDialog,
     useCreateAccountDialog,
     useEditAccountDialog,
-} from '@features/manage-account-dialog';
+} from '@features/manage-account';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
@@ -28,10 +28,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};
-const AccountManagementDialog = createDialog((_props: Props) => {
+const AccountListDialog = createDialog((_props: Props) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
-    const dialog = useAccountManagementDialog();
+    const dialog = useAccountListDialog();
     const addAccountDialog = useCreateAccountDialog();
     const editAccountDialog = useEditAccountDialog();
 
@@ -88,7 +88,7 @@ const AccountManagementDialog = createDialog((_props: Props) => {
             account,
             breadcrumbs: [
                 {
-                    label: t('finance:accountManagement'),
+                    label: t('finance:accountList'),
                     onClick: editAccountDialog.hide,
                 },
                 {
@@ -105,7 +105,7 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                     addAccountDialog.visible || editAccountDialog.visible ? 'hidden' : 'visible'
                 }
             >
-                <ModalHeader>{t(`finance:accountManagement`)}</ModalHeader>
+                <ModalHeader>{t(`finance:accountList`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody mt={3}>
                     {!accounts.length && (
@@ -148,7 +148,7 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                                 openCreateAccountDialog({
                                     breadcrumbs: [
                                         {
-                                            label: t('finance:accountManagement'),
+                                            label: t('finance:accountList'),
                                             onClick: addAccountDialog.hide,
                                         },
                                         {
@@ -167,10 +167,10 @@ const AccountManagementDialog = createDialog((_props: Props) => {
     );
 });
 
-export const openAccountManagementDialog = (props: Props) =>
-    openDialog(AccountManagementDialog, {
+export const openAccountListDialog = (props: Props) =>
+    openDialog(AccountListDialog, {
         id: 'AccountManagement',
         ...props,
     });
 
-export const useAccountManagementDialog = () => useDialog(AccountManagementDialog);
+export const useAccountListDialog = () => useDialog(AccountListDialog);

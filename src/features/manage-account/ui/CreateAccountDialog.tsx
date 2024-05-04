@@ -1,5 +1,4 @@
-import { useCreateAccount } from '@entities/account';
-import { CreateAccountData } from '@entities/account/model/types';
+import { CreateAccountData, useCreateAccount } from '@entities/account';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { handleError, handleSuccess } from '@shared/lib';
 import { BreadcrumbsProps } from '@shared/ui/Breadcrumbs';

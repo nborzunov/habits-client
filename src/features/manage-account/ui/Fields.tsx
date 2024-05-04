@@ -7,13 +7,11 @@ import {
     InputGroup,
     InputRightElement,
 } from '@chakra-ui/react';
-import { AccountType } from '@entities/account';
+import { AccountType, CreateAccountData } from '@entities/account';
 import { Currency, getAccountTypeColor, getCurrency } from '@entities/finance';
 import { SelectFromPicklist } from '@shared/ui/Form';
 import { UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
-import { CreateAccountData } from '../model/types';
 
 export const NameField = ({
     value,

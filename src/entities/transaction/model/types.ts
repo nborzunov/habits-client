@@ -15,3 +15,9 @@ export enum TransactionType {
     Income = 'income',
     Expense = 'expense',
 }
+
+export enum AddTransactionMode {
+    Income = 'income',
+    Expense = 'expense',
+    Transfer = 'transfer',
+}

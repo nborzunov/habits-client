@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 export const AchievementsPage = () => {
     const { t } = useTranslation();
 
-    const { data: achievements } = useAchievements();
+    const { data: achievements = [] } = useAchievements();
     return (
         <Box>
             <Flex p={4} flexDir={'column'}>

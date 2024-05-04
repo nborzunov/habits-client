@@ -25,10 +25,10 @@ import {
     transformCategories,
 } from '@entities/finance';
 import { TransactionType, useCreateTransaction } from '@entities/transaction';
-import { useAccountManagementDialog } from '@features/account-management-dialog';
-import { useAddCategoryDialog } from '@features/add-category-dialog';
-import { openCategoryManagementDialog } from '@features/category-management-dialog';
-import { useCreateAccountDialog } from '@features/manage-account-dialog';
+import { openAccountListDialog } from '@features/account-list';
+import { openCategoryListDialog } from '@features/category-list';
+import { useCreateAccountDialog } from '@features/manage-account';
+import { useCreateCategoryDialog } from '@features/manage-category';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { validationRules } from '@shared/ui/Form';
 import { FormField, SelectFromPicklist } from '@shared/ui/Form';
@@ -55,7 +55,7 @@ const defaultState: {
     note: '',
 };
 
-export const AddTransactionForm = ({
+export const TransactionForm = ({
     accounts,
     mode,
     setMode,
@@ -120,8 +120,7 @@ export const AddTransactionForm = ({
     });
 
     const addAccountDialog = useCreateAccountDialog();
-    const accountManagementDialog = useAccountManagementDialog();
-    const addCategoryDialog = useAddCategoryDialog();
+    const createCategoryDialog = useCreateCategoryDialog();
 
     const openCreateAccountDialog = useCallback(
         () =>
@@ -139,13 +138,13 @@ export const AddTransactionForm = ({
         [t, addAccountDialog],
     );
 
-    const openAddCategoryDialog = useCallback(
+    const openCreateCategoryDialog = useCallback(
         () =>
-            addCategoryDialog.show({
+            createCategoryDialog.show({
                 breadcrumbs: [
                     {
                         label: t('finance:addTransaction'),
-                        onClick: addCategoryDialog.hide,
+                        onClick: createCategoryDialog.hide,
                     },
                     {
                         label: t(`finance:categories.newCategory`),
@@ -154,7 +153,7 @@ export const AddTransactionForm = ({
 
                 category_type: mode,
             }),
-        [t, addCategoryDialog, mode],
+        [t, createCategoryDialog, mode],
     );
 
     const clearForm = useCallback(() => {
@@ -235,7 +234,7 @@ export const AddTransactionForm = ({
                                     aria-label={'manage accounts'}
                                     size={'xs'}
                                     variant={'ghost'}
-                                    onClick={() => accountManagementDialog.show({})}
+                                    onClick={() => openAccountListDialog({})}
                                 ></IconButton>
                             </Tooltip>
                         }
@@ -268,7 +267,7 @@ export const AddTransactionForm = ({
                                     size={'xs'}
                                     variant={'ghost'}
                                     onClick={() =>
-                                        openCategoryManagementDialog({
+                                        openCategoryListDialog({
                                             mode: mode as unknown as CategoryType,
                                         })
                                     }
@@ -283,7 +282,7 @@ export const AddTransactionForm = ({
                                 </Alert>
                             </>
                         }
-                        addItem={openAddCategoryDialog}
+                        addItem={openCreateCategoryDialog}
                         renderItem={(category) => (
                             <Flex width='100%' alignItems='center' h='36px'>
                                 <Icon

@@ -18,7 +18,7 @@ import {
     Text,
     Tooltip,
 } from '@chakra-ui/react';
-import { GoalType, HabitData, Periodicity } from '@entities/habit/model/types';
+import { GoalType, HabitData, Periodicity } from '@entities/habit';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { FormField } from '@shared/ui/Form';
 import { NumericInput } from '@shared/ui/Form/NumericInput';

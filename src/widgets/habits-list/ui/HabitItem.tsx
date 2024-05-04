@@ -19,8 +19,7 @@ import {
     useDeleteHabit,
     useEditHabit,
 } from '@entities/habit';
-import { useEditHabitDialog } from '@features/edit-habit-dialog';
-import { openEditHabitDialog } from '@features/edit-habit-dialog/ui/EditHabitDialog';
+import { openEditHabitDialog, useEditHabitDialog } from '@features/manage-habit';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';

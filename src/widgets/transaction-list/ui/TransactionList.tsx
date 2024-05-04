@@ -26,7 +26,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TransactionList = () => {
-    const { data } = useTransactions();
+    const { data: transactions = [] } = useTransactions();
     const { t } = useTranslation();
 
     const groupByDate = (transactions: Transaction[]): Record<string, Transaction[]> => {
@@ -40,7 +40,7 @@ export const TransactionList = () => {
         }, {});
     };
 
-    const groupedTransactions = groupByDate(data);
+    const groupedTransactions = groupByDate(transactions);
     return (
         <Box>
             <Tabs>
@@ -153,10 +153,12 @@ export const TransactionList = () => {
                                                                     fontSize={'4xl'}
                                                                     mr={2}
                                                                     color={`${getAccountTypeColor(
-                                                                        transaction.account,
+                                                                        transaction.account
+                                                                            .account_type,
                                                                     )}.500`}
                                                                     bg={`${getAccountTypeColor(
-                                                                        transaction.account,
+                                                                        transaction.account
+                                                                            .account_type,
                                                                     )}.50`}
                                                                     p={2}
                                                                     borderRadius={'xl'}

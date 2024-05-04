@@ -8,26 +8,28 @@ import {
     ModalHeader,
     Stack,
 } from '@chakra-ui/react';
-import { AccountData, CreateAccountData } from '@entities/account/model/types';
+import { CategoryData, CategoryType } from '@entities/category';
 import { Dialog } from '@shared/hooks';
 import { Breadcrumbs, BreadcrumbsProps } from '@shared/ui/Breadcrumbs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AccountTypeField, AmountField, CurrencyField, NameField } from './Fields';
+import { ColorField, IconField, NameField } from './Fields';
 
-export const AccountForm = ({
+export const CategoryForm = ({
     dialog,
     initialState,
     actionButtonLabel,
     breadcrumbs,
+    category_type,
     onSubmit,
 }: {
     actionButtonLabel: string;
-    initialState: CreateAccountData;
+    initialState: CategoryData;
     dialog: Dialog;
-    onSubmit: (data: AccountData) => void;
+    category_type: CategoryType;
+    onSubmit: (data: CategoryData) => void;
 } & BreadcrumbsProps) => {
     const { t } = useTranslation();
 
@@ -42,16 +44,8 @@ export const AccountForm = ({
         defaultValues: initialState,
     });
 
-    const onFormSubmit = (data: CreateAccountData) => {
-        if (!data.name || !data.account_type || !data.currency) {
-            return;
-        }
-        onSubmit({
-            name: data.name,
-            currency: data.currency,
-            account_type: data.account_type,
-            amount: Number(data.amount) || 0,
-        });
+    const onFormSubmit = (data: CategoryData) => {
+        onSubmit(data);
     };
 
     const [form, setForm] = useState(initialState);
@@ -64,9 +58,10 @@ export const AccountForm = ({
     useEffect(() => {
         setForm(initialState);
         setValue('name', initialState.name);
-        setValue('account_type', initialState.account_type);
-        setValue('currency', initialState.currency);
-        setValue('amount', initialState.amount);
+        setValue('icon', initialState.icon);
+        setValue('color', initialState.color);
+        setValue('category_type', initialState.category_type);
+        setValue('is_default', initialState.is_default);
     }, [initialState, setValue]);
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
@@ -79,13 +74,15 @@ export const AccountForm = ({
 
                 <ModalBody as={Stack} spacing={3}>
                     <NameField value={form.name} registerProps={register('name')} />
-                    <AccountTypeField value={form.account_type} setValue={setValue} />
-                    <CurrencyField value={form.currency} setValue={setValue} />
-                    <AmountField
-                        value={form.amount}
-                        currency={form.currency}
-                        registerProps={register('amount')}
+
+                    <IconField
+                        value={form.icon}
+                        color={form.color}
+                        category_type={category_type}
+                        setValue={setValue}
                     />
+
+                    <ColorField value={form.color} setValue={setValue} />
                 </ModalBody>
 
                 <ModalFooter display={'flex'} justifyContent={'end'} columnGap={3}>

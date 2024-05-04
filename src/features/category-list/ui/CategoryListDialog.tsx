@@ -17,7 +17,12 @@ import {
     useDeleteCategory,
     useReorderCategories,
 } from '@entities/category';
-import { openAddCategoryDialog, useAddCategoryDialog } from '@features/add-category-dialog';
+import {
+    openCreateCategoryDialog,
+    openEditCategoryDialog,
+    useCreateCategoryDialog,
+    useEditCategoryDialog,
+} from '@features/manage-category';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
@@ -31,11 +36,12 @@ interface Props {
     mode: CategoryType;
 }
 
-const CategoryManagementDialog = createDialog(({ mode }: Props) => {
+const CategoryListDialog = createDialog(({ mode }: Props) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
-    const dialog = useCategoryManagementDialog();
-    const addCategoryDialog = useAddCategoryDialog();
+    const dialog = useCategoryListDialog();
+    const createCategoryDialog = useCreateCategoryDialog();
+    const editCategoryDialog = useEditCategoryDialog();
 
     const [prevCategories, setPrevCategories] = useState<Category[]>([]);
 
@@ -63,11 +69,11 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
     };
 
     const onCreate = () => {
-        openAddCategoryDialog({
+        openCreateCategoryDialog({
             breadcrumbs: [
                 {
                     label: t('finance:addTransaction'),
-                    onClick: addCategoryDialog.hide,
+                    onClick: createCategoryDialog.hide,
                 },
                 {
                     label: t(`finance:categories.newCategory`),
@@ -89,6 +95,21 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
         onError: handleError,
     });
 
+    const onEdit = (category: Category) => {
+        openEditCategoryDialog({
+            category,
+            breadcrumbs: [
+                {
+                    label: t('finance:addTransaction'),
+                    onClick: createCategoryDialog.hide,
+                },
+                {
+                    label: category.name,
+                },
+            ],
+        });
+    };
+
     const onDelete = (category: Category) => {
         openConfirmationDialog({
             title: t('finance:deleteCategory', { category_name: category.name }),
@@ -103,8 +124,15 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
 
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
-            <ModalContent mx={4} visibility={addCategoryDialog.visible ? 'hidden' : 'visible'}>
-                <ModalHeader>{t(`finance:categories.categoryManagement`)}</ModalHeader>
+            <ModalContent
+                mx={4}
+                visibility={
+                    createCategoryDialog.visible || editCategoryDialog.visible
+                        ? 'hidden'
+                        : 'visible'
+                }
+            >
+                <ModalHeader>{t(`finance:categories.categoryList`)}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody mt={3}>
                     {!categories.length && (
@@ -132,7 +160,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
                                             ]
                                         }
                                         label={category.name}
-                                        onEdit={() => alert('TODO')}
+                                        onEdit={() => onEdit(category)}
                                         onDelete={() => onDelete(category)}
                                     />
                                     <SortableList.DragHandle />
@@ -162,10 +190,10 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
     );
 });
 
-export const openCategoryManagementDialog = (props: Props) =>
-    openDialog(CategoryManagementDialog, {
+export const openCategoryListDialog = (props: Props) =>
+    openDialog(CategoryListDialog, {
         id: 'CategoryManagement',
         ...props,
     });
 
-export const useCategoryManagementDialog = () => useDialog(CategoryManagementDialog);
+export const useCategoryListDialog = () => useDialog(CategoryListDialog);

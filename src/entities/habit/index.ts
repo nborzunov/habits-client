@@ -2,9 +2,9 @@ export {
     type Habit,
     type HabitData,
     type Target,
-    type Periodicity,
-    type GoalType,
-    type TargetType,
+    Periodicity,
+    GoalType,
+    TargetType,
 } from './model/types';
 export { useWidgets } from './hooks/useWidgets';
 export * from './api';

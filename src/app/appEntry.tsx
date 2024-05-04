@@ -7,7 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
 
-import './i18n.ts';
+import './i18n';
 import './index.css';
 import { BaseLayout } from './layouts/BaseLayout';
 import { QueryProvider } from './providers/QueryProvider';

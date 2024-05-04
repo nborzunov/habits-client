@@ -62,14 +62,7 @@ export const Layout = () => {
 
     return (
         <Skeleton isLoaded={isFetched}>
-            <Box
-                as='section'
-                bg='gray.50'
-                _dark={{
-                    bg: 'gray.700',
-                }}
-                minH='100vh'
-            >
+            <Box as='section' bg='gray.50' minH='100vh'>
                 <LayoutContext.Provider
                     value={{
                         isMenuOpened: isOpen,

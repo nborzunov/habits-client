@@ -1,15 +1,15 @@
 import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useAccounts } from '@entities/account/api/useAccounts';
-import { useAccountManagementDialog } from '@features/account-management-dialog';
-import { useAddCategoryDialog } from '@features/add-category-dialog';
-import { useCategoryManagementDialog } from '@features/category-management-dialog';
-import { useCreateAccountDialog } from '@features/manage-account-dialog';
+import { useAccountListDialog } from '@features/account-list';
+import { useCategoryListDialog } from '@features/category-list';
+import { useCreateAccountDialog } from '@features/manage-account';
+import { useCreateCategoryDialog } from '@features/manage-category';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddTransactionMode } from '../model/types';
-import { AddTransactionForm } from './AddTransactionForm';
+import { TransactionForm } from './TransactionForm';
 
 type Props = {};
 const AddTransactionDialog = createDialog(() => {
@@ -19,9 +19,9 @@ const AddTransactionDialog = createDialog(() => {
     const { data: accounts = [] } = useAccounts();
 
     const addAccountDialog = useCreateAccountDialog();
-    const accountManagementDialog = useAccountManagementDialog();
-    const addCategoryDialog = useAddCategoryDialog();
-    const categoryManagementDialog = useCategoryManagementDialog();
+    const accountListDialog = useAccountListDialog();
+    const createCategoryDialog = useCreateCategoryDialog();
+    const categoryListDialog = useCategoryListDialog();
 
     const dialog = useAddTransactionDialog();
 
@@ -37,9 +37,9 @@ const AddTransactionDialog = createDialog(() => {
                 p={0}
                 visibility={
                     addAccountDialog.visible ||
-                    accountManagementDialog.visible ||
-                    addCategoryDialog.visible ||
-                    categoryManagementDialog.visible
+                    accountListDialog.visible ||
+                    createCategoryDialog.visible ||
+                    categoryListDialog.visible
                         ? 'hidden'
                         : 'visible'
                 }
@@ -47,7 +47,7 @@ const AddTransactionDialog = createDialog(() => {
                 <ModalHeader>{t(`finance:transaction_types.${mode}`)}</ModalHeader>
                 <ModalCloseButton />
                 {mode !== AddTransactionMode.Transfer && (
-                    <AddTransactionForm setMode={setMode} mode={mode} accounts={accounts} />
+                    <TransactionForm setMode={setMode} mode={mode} accounts={accounts} />
                 )}
             </ModalContent>
         </Modal>

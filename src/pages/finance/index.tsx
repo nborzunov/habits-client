@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
-import { OpenAddTransactionDialogAction } from '@features/add-transaction-dialog';
+import { OpenAddTransactionDialogAction } from '@features/manage-transaction';
 import { Icons$ } from '@shared/lib';
 import { AccountList } from '@widgets/account-list';
 import { FinanceWidgets } from '@widgets/finance-dashboard';

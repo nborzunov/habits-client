@@ -1,6 +1,6 @@
 import { AccountType } from '@entities/account';
 import { Category } from '@entities/category';
-import { AddTransactionMode } from '@features/add-transaction-dialog';
+import { AddTransactionMode } from '@entities/transaction';
 import { PicklistItem } from '@shared/model/types';
 
 import { Currency } from '../model/types';

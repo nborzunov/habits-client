@@ -11,3 +11,11 @@ export enum CategoryType {
     Income = 'income',
     Expense = 'expense',
 }
+
+export interface CategoryData {
+    name: string;
+    icon: string;
+    color: string;
+    category_type: CategoryType;
+    is_default: boolean;
+}

@@ -2,7 +2,7 @@ import { Box, Button, Center, Heading, Icon, List, Spinner, Stack } from '@chakr
 import { completedHabitsState, uncompletedHabitsState, useCreateHabit } from '@entities/habit';
 import { useHabitsList } from '@entities/habit/api/useHabitsList';
 import { Habit, HabitData } from '@entities/habit/model/types';
-import { useEditHabitDialog } from '@features/edit-habit-dialog';
+import { useEditHabitDialog } from '@features/manage-habit';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import React from 'react';

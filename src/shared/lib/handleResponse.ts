@@ -6,7 +6,7 @@ export const handleSuccess = (params: { title?: string; description: string }) =
         title: t(params.title || 'common:success'),
         description: t(params.description),
         status: 'success',
-        duration: 1000,
+        duration: 3000,
         isClosable: true,
     });
 };
