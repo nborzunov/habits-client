@@ -64,7 +64,7 @@ export const Layout = () => {
         <Skeleton isLoaded={isFetched}>
             <Box
                 as='section'
-                bg='blue.50'
+                bg='gray.50'
                 _dark={{
                     bg: 'gray.700',
                 }}

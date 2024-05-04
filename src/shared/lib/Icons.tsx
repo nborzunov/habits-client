@@ -35,39 +35,15 @@ import {
     Video,
     Wifi,
 } from 'lucide-react';
+import { AiOutlineArrowLeft, AiOutlineCheckCircle, AiOutlineFire } from 'react-icons/ai';
+import { BiArrowToBottom, BiArrowToTop, BiTransfer } from 'react-icons/bi';
+import { BsFillPiggyBankFill } from 'react-icons/bs';
+import { FaFighterJet, FaMoneyCheckAlt } from 'react-icons/fa';
 import {
-    AiOutlineArrowLeft,
-    AiOutlineCheckCircle,
-    AiOutlineFire,
-    BiArrowToBottom,
-    BiArrowToTop,
-    BiTransfer,
-    BsFillPiggyBankFill,
-    FaFighterJet,
-    FaMoneyCheckAlt,
+    FiArrowRight,
     FiAward,
     FiBarChart2,
     FiCalendar,
-    FiLogOut,
-    FiSearch,
-    FiSettings,
-    GiBrain,
-    GiLaurelsTrophy,
-    GiRunningShoe,
-    IoCardOutline,
-    IoCashOutline,
-    IoIosTimer,
-    IoIosTrophy,
-    IoMdFitness,
-    MdFlashOn,
-    MdOutlineArchive,
-    MdSchool,
-    MdStars,
-    MdTimer,
-    RiBankLine,
-} from 'react-icons/all';
-import {
-    FiArrowRight,
     FiCheck,
     FiChevronLeft,
     FiChevronRight,
@@ -81,16 +57,23 @@ import {
     FiGrid,
     FiHome,
     FiInbox,
+    FiLogOut,
     FiMenu,
     FiPieChart,
     FiPlus,
     FiRotateCcw,
     FiSave,
+    FiSearch,
+    FiSettings,
     FiTrash,
     FiTrash2,
 } from 'react-icons/fi';
+import { GiBrain, GiLaurelsTrophy, GiRunningShoe } from 'react-icons/gi';
 import { HiFire } from 'react-icons/hi';
-import { IoIosNotificationsOutline } from 'react-icons/io';
+import { IoIosNotificationsOutline, IoIosTimer, IoIosTrophy, IoMdFitness } from 'react-icons/io';
+import { IoCardOutline, IoCashOutline } from 'react-icons/io5';
+import { MdFlashOn, MdOutlineArchive, MdSchool, MdStars, MdTimer } from 'react-icons/md';
+import { RiBankLine } from 'react-icons/ri';
 import { RxCross2 } from 'react-icons/rx';
 
 export const Icons$ = {
