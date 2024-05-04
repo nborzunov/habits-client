@@ -1,4 +1,3 @@
-import { useToast } from '@chakra-ui/react';
 import { useCreateAccount } from '@entities/account';
 import { CreateAccountData } from '@entities/account/model/types';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
@@ -20,7 +19,6 @@ const createAccountInitialState: CreateAccountData = {
 
 const CreateAccountDialog = createDialog(({ breadcrumbs }: Props) => {
     const { t } = useTranslation();
-    const toast = useToast();
     const queryClient = useQueryClient();
     const dialog = useCreateAccountDialog();
 
@@ -30,11 +28,10 @@ const CreateAccountDialog = createDialog(({ breadcrumbs }: Props) => {
             queryClient.invalidateQueries(['accounts']);
 
             handleSuccess({
-                toast,
                 description: 'finance:accountCreated',
             });
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     return (

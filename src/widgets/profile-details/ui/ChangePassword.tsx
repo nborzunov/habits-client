@@ -35,7 +35,6 @@ export const ChangePassword = () => {
     const { mutate: changePassword } = useChangePassword({
         onSuccess: () =>
             handleSuccess({
-                toast,
                 description: 'profile:successfullyUpdated',
             }),
 

@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 export const TransactionsWidget = () => {
     const { t } = useTranslation();
-    const { data } = useTransactions();
+    const { data = [] } = useTransactions();
     const transactions = data.slice(0, 3);
 
     return (
@@ -27,11 +27,7 @@ export const TransactionsWidget = () => {
                     <Flex width={'100%'} justifyContent={'space-between'}>
                         <Flex alignItems={'center'}>
                             <Icon
-                                as={
-                                    Icons$.transaction_types[
-                                        transaction.transaction_type as keyof Icon.transaction_types
-                                    ]
-                                }
+                                as={Icons$.transaction_types[transaction.transaction_type]}
                                 fontSize={'2xl'}
                                 mr={4}
                                 color={getTransactionTypeColor(transaction.transaction_type)}
@@ -45,15 +41,12 @@ export const TransactionsWidget = () => {
                                 </Text>
                                 <Flex alignItems={'center'} mt={1}>
                                     <Icon
-                                        as={
-                                            Icons$.account_types[
-                                                transaction.account
-                                                    .account_type as keyof Icon.account_types
-                                            ]
-                                        }
+                                        as={Icons$.account_types[transaction.account.account_type]}
                                         fontSize={'lg'}
                                         mr={1.5}
-                                        color={getAccountTypeColor(transaction.account)}
+                                        color={getAccountTypeColor(
+                                            transaction.account.account_type,
+                                        )}
                                     />
                                     <Text fontWeight='semibold' fontSize='md'>
                                         {transaction.account.name}

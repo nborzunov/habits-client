@@ -1,4 +1,3 @@
-import { useToast } from '@chakra-ui/react';
 import { Account, useEditAccount } from '@entities/account';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { handleError, handleSuccess } from '@shared/lib';
@@ -14,7 +13,6 @@ type Props = {
 
 const EditAccountDialog = createDialog(({ account, breadcrumbs }: Props) => {
     const { t } = useTranslation();
-    const toast = useToast();
     const queryClient = useQueryClient();
     const dialog = useEditAccountDialog();
 
@@ -24,11 +22,10 @@ const EditAccountDialog = createDialog(({ account, breadcrumbs }: Props) => {
             queryClient.invalidateQueries(['accounts']);
 
             handleSuccess({
-                toast,
                 description: 'finance:accountUpdated',
             });
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     return (

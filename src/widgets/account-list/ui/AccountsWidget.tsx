@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 export const AccountsWidget = () => {
     const { t } = useTranslation();
-    const { data } = useAccounts();
+    const { data = [] } = useAccounts();
     const accounts = data.slice(0, 3);
 
     return (
@@ -22,14 +22,10 @@ export const AccountsWidget = () => {
                     <Flex width={'100%'} justifyContent={'space-between'}>
                         <Flex alignItems={'center'}>
                             <Icon
-                                as={
-                                    Icons$.account_types[
-                                        account.account_type as keyof Icon.account_types
-                                    ]
-                                }
+                                as={Icons$.account_types[account.account_type]}
                                 fontSize={'2xl'}
                                 mr={4}
-                                color={getAccountTypeColor(account)}
+                                color={getAccountTypeColor(account.account_type)}
                             />
                             <Flex flexDirection={'column'}>
                                 <Text fontWeight='bold' fontSize='lg' color='gray.600'>

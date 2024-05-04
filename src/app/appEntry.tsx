@@ -1,4 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
+import { ToastContainer } from '@shared/const/toast';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <QueryProvider>
                     <NiceModal.Provider>
                         <BaseLayout />
+                        <ToastContainer />
                     </NiceModal.Provider>
                 </QueryProvider>
             </RecoilRoot>

@@ -15,7 +15,6 @@ import {
     ModalHeader,
     Stack,
     theme,
-    useToast,
 } from '@chakra-ui/react';
 import { useCreateCategory } from '@entities/category';
 import { CategoryType } from '@entities/category';
@@ -58,19 +57,17 @@ const AddCategoryDialog = createDialog(({ breadcrumbs, category_type }: Props) =
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const dialog = useAddCategoryDialog();
-    const toast = useToast();
 
     const { mutate: createCategory } = useCreateCategory({
         onSuccess: () => {
             handleSuccess({
-                toast,
                 description: 'finance:categoryCreated',
             });
 
             dialog.hide();
-            return queryClient.invalidateQueries(['categories']);
+            queryClient.invalidateQueries(['categories']);
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     const defaultState: FormData = {

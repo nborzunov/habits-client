@@ -9,7 +9,6 @@ import {
     MenuButton,
     MenuList,
     Text,
-    useToast,
 } from '@chakra-ui/react';
 import {
     Habit,
@@ -51,7 +50,6 @@ export const HabitItem = ({
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const toast = useToast();
     const setHabits = useSetRecoilState(habitsState);
 
     useEffect(() => {
@@ -72,12 +70,11 @@ export const HabitItem = ({
         onSuccess: (newHabit) => {
             setHabits((prev) => prev.map((h) => (h.id === habit.id ? newHabit : h)));
             handleSuccess({
-                toast,
                 description: 'finance:successfullyUpdated',
             });
         },
         onError: (err) => {
-            handleError({ toast, err });
+            handleError(err);
             editHabitDialog.hide();
         },
     });

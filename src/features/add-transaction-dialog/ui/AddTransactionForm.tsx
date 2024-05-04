@@ -15,7 +15,6 @@ import {
     ModalBody,
     Stack,
     Tooltip,
-    useToast,
 } from '@chakra-ui/react';
 import { Account } from '@entities/account';
 import { Category, CategoryType, useCategories } from '@entities/category';
@@ -35,12 +34,26 @@ import { validationRules } from '@shared/ui/Form';
 import { FormField, SelectFromPicklist } from '@shared/ui/Form';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AddTransactionMode } from '../model/types';
 import { useAddTransactionDialog } from './AddTransactionDialog';
+
+const defaultState: {
+    created_date: string;
+    account: Account | undefined;
+    category: Category | undefined;
+    amount: number | '';
+    note: string;
+} = {
+    created_date: dayjs().format('YYYY-MM-DD'),
+    account: undefined,
+    category: undefined,
+    amount: '',
+    note: '',
+};
 
 export const AddTransactionForm = ({
     accounts,
@@ -53,22 +66,7 @@ export const AddTransactionForm = ({
 }) => {
     const { t } = useTranslation();
     const dialog = useAddTransactionDialog();
-    const defaultState: {
-        created_date: string;
-        account: Account | undefined;
-        category: Category | undefined;
-        amount: number | '';
-        note: string;
-    } = useMemo(
-        () => ({
-            created_date: dayjs().format('YYYY-MM-DD'),
-            account: undefined,
-            category: undefined,
-            amount: '',
-            note: '',
-        }),
-        [],
-    );
+
     const {
         register,
         formState: { errors, isSubmitting },
@@ -81,17 +79,15 @@ export const AddTransactionForm = ({
     });
 
     const queryClient = useQueryClient();
-    const toast = useToast();
     const { mutate: createTransaction } = useCreateTransaction({
         onSuccess: () => {
             handleSuccess({
-                toast,
                 description: 'finance:transactionCreated',
             });
             handleClose();
-            return queryClient.invalidateQueries(['transactions']);
+            queryClient.invalidateQueries(['transactions']);
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     const onFormSubmit = (data: {
@@ -168,7 +164,7 @@ export const AddTransactionForm = ({
         setValue('note', '');
         setForm(defaultState);
         setMode(AddTransactionMode.Expense);
-    }, [setValue, setMode, defaultState]);
+    }, [setValue, setMode]);
 
     const handleClose = useCallback(() => {
         clearForm();

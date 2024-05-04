@@ -10,14 +10,6 @@ interface ListItemProps {
     onDelete: (id: string) => void;
     onEdit: (id: string) => void;
 }
-// export default function Card({ isDragging, text }) {
-
-//     return (
-//         <div >
-//             {text}
-//         </div>
-//     )
-// }
 
 export const ItemTypes = {
     Account: 'account',

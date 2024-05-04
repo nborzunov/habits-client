@@ -1,7 +1,8 @@
+import { toast } from '@shared/const/toast';
 import { t } from 'i18next';
 
-export const handleSuccess = (params: { toast: any; title?: string; description: string }) => {
-    params.toast({
+export const handleSuccess = (params: { title?: string; description: string }) => {
+    toast({
         title: t(params.title || 'common:success'),
         description: t(params.description),
         status: 'success',
@@ -10,11 +11,10 @@ export const handleSuccess = (params: { toast: any; title?: string; description:
     });
 };
 
-export const handleError = (params: { toast: any; err: any }) => {
-    params.toast({
+export const handleError = (err: any) => {
+    toast({
         title: t('common:error'),
-        description:
-            params.err.status === 401 ? t('common:invalidCredentials') : t('common:serverError'),
+        description: err.status === 401 ? t('common:invalidCredentials') : t('common:serverError'),
         status: 'error',
         duration: 3000,
         isClosable: true,

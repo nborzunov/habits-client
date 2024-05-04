@@ -8,7 +8,7 @@ import { AchievementProgressDialog } from './ui/AchievementProgressDialog';
 export const AchievementsGrid = () => {
     // TODO: compare to friend ...
 
-    const { data: achievements } = useAchievements();
+    const { data: achievements = [] } = useAchievements();
 
     return (
         <Grid my={4} gridTemplateColumns={'repeat(auto-fit, minmax(450px, 1fr))'} gap={4}>

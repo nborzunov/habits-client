@@ -36,11 +36,10 @@ export const EditProfile = ({ initialState }: Props) => {
         onSuccess: (newUserData) => {
             setActiveUser(newUserData);
             handleSuccess({
-                toast,
                 description: 'profile:successfullyUpdated',
             });
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     const onFormError = () => {

@@ -9,7 +9,6 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    useToast,
 } from '@chakra-ui/react';
 import {
     Category,
@@ -18,13 +17,13 @@ import {
     useDeleteCategory,
     useReorderCategories,
 } from '@entities/category';
-import { useTransactions } from '@entities/transaction';
-import { useAddCategoryDialog } from '@features/add-category-dialog';
+import { openAddCategoryDialog, useAddCategoryDialog } from '@features/add-category-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { Icons$, handleError, handleSuccess } from '@shared/lib';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { ListItem } from '@shared/ui/ListItem';
 import { SortableList } from '@shared/ui/SortableList';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +33,7 @@ interface Props {
 
 const CategoryManagementDialog = createDialog(({ mode }: Props) => {
     const { t } = useTranslation();
-    const toast = useToast();
+    const queryClient = useQueryClient();
     const dialog = useCategoryManagementDialog();
     const addCategoryDialog = useAddCategoryDialog();
 
@@ -49,7 +48,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
 
     const { mutate: reorderAccounts } = useReorderCategories({
         onSuccess: () => refetchCategories(),
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
     const onDrag = (items: Category[]) => {
@@ -63,8 +62,8 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
         reorderAccounts(itemsToUpdate);
     };
 
-    const openAddCategoryDialog = () =>
-        addCategoryDialog.show({
+    const onCreate = () => {
+        openAddCategoryDialog({
             breadcrumbs: [
                 {
                     label: t('finance:addTransaction'),
@@ -76,29 +75,29 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
             ],
             category_type: mode as unknown as CategoryType,
         });
-
-    const { refetch: refetchTransactions } = useTransactions();
+    };
 
     const { mutate: deleteCategory } = useDeleteCategory({
         onSuccess: () => {
-            refetchCategories();
-            refetchTransactions();
+            queryClient.invalidateQueries(['categories']);
+            queryClient.invalidateQueries(['transactions']);
+
             handleSuccess({
-                toast,
                 description: 'finance:categoryDeleted',
             });
         },
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
     });
 
-    const onDelete = (category_id: string) => {
+    const onDelete = (category: Category) => {
         openConfirmationDialog({
-            title: t('common:delete'),
-            text: t('finance:confirmCategoryDelete'),
-            cancelText: t('common:cancel'),
+            title: t('finance:deleteCategory', { category_name: category.name }),
+            // TODO: show amount of transactions that will be deleted
+            text: t('finance:deleteCategoryWarning'),
             okText: t('common:delete'),
+            cancelText: t('common:cancel'),
         })
-            .then(() => deleteCategory(category_id))
+            .then(() => deleteCategory(category.id))
             .catch(() => {});
     };
 
@@ -134,7 +133,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
                                         }
                                         label={category.name}
                                         onEdit={() => alert('TODO')}
-                                        onDelete={() => onDelete(category.id)}
+                                        onDelete={() => onDelete(category)}
                                     />
                                     <SortableList.DragHandle />
                                 </SortableList.Item>
@@ -152,7 +151,7 @@ const CategoryManagementDialog = createDialog(({ mode }: Props) => {
                             colorScheme='green'
                             type='submit'
                             size={'md'}
-                            onClick={() => openAddCategoryDialog()}
+                            onClick={() => onCreate()}
                         >
                             {t('finance:categories.newCategory')}
                         </Button>

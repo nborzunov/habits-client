@@ -9,9 +9,8 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    useToast,
 } from '@chakra-ui/react';
-import { Account, useAccounts, useReorderAccounts } from '@entities/account';
+import { Account, useAccounts, useDeleteAccount, useReorderAccounts } from '@entities/account';
 import { getAccountTypeColor } from '@entities/finance';
 import {
     openCreateAccountDialog,
@@ -20,16 +19,18 @@ import {
     useEditAccountDialog,
 } from '@features/manage-account-dialog';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import { Icons$, handleError } from '@shared/lib';
+import { Icons$, handleError, handleSuccess } from '@shared/lib';
+import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { ListItem } from '@shared/ui/ListItem';
 import { SortableList } from '@shared/ui/SortableList';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};
 const AccountManagementDialog = createDialog((_props: Props) => {
     const { t } = useTranslation();
-    const toast = useToast();
+    const queryClient = useQueryClient();
     const dialog = useAccountManagementDialog();
     const addAccountDialog = useCreateAccountDialog();
     const editAccountDialog = useEditAccountDialog();
@@ -45,7 +46,18 @@ const AccountManagementDialog = createDialog((_props: Props) => {
 
     const { mutate: reorderAccounts } = useReorderAccounts({
         onSuccess: () => refetchAccounts(),
-        onError: (err) => handleError({ toast, err }),
+        onError: handleError,
+    });
+
+    const { mutate: deleteCategory } = useDeleteAccount({
+        onSuccess: () => {
+            queryClient.invalidateQueries(['transactions']);
+            queryClient.invalidateQueries(['accounts']);
+            handleSuccess({
+                description: 'finance:accountDeleted',
+            });
+        },
+        onError: handleError,
     });
 
     const onDrag = (items: Account[]) => {
@@ -57,6 +69,33 @@ const AccountManagementDialog = createDialog((_props: Props) => {
             .map(({ id, a_order }) => ({ id: id, a_order: a_order }));
 
         reorderAccounts(itemsToUpdate);
+    };
+
+    const onDelete = (account: Account) => {
+        openConfirmationDialog({
+            title: t('finance:deleteAccount', { account_name: account.name }),
+            // TODO: show amount of transactions that will be deleted
+            text: t('finance:deleteAccountWarning'),
+            okText: t('common:delete'),
+            cancelText: t('common:cancel'),
+        })
+            .then(() => deleteCategory(account.id))
+            .catch(() => {});
+    };
+
+    const onEdit = (account: Account) => {
+        openEditAccountDialog({
+            account,
+            breadcrumbs: [
+                {
+                    label: t('finance:accountManagement'),
+                    onClick: editAccountDialog.hide,
+                },
+                {
+                    label: account.name,
+                },
+            ],
+        });
     };
     return (
         <Modal isOpen={dialog.visible} onClose={dialog.hide} closeOnOverlayClick={false}>
@@ -87,21 +126,8 @@ const AccountManagementDialog = createDialog((_props: Props) => {
                                     color={getAccountTypeColor(account.account_type) as string}
                                     icon={Icons$.account_types[account.account_type]}
                                     label={account.name}
-                                    onDelete={async () => alert('TODO')}
-                                    onEdit={async () =>
-                                        openEditAccountDialog({
-                                            account,
-                                            breadcrumbs: [
-                                                {
-                                                    label: t('finance:accountManagement'),
-                                                    onClick: editAccountDialog.hide,
-                                                },
-                                                {
-                                                    label: account.name,
-                                                },
-                                            ],
-                                        })
-                                    }
+                                    onDelete={() => onDelete(account)}
+                                    onEdit={() => onEdit(account)}
                                 />
                                 <SortableList.DragHandle />
                             </SortableList.Item>

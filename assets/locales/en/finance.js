@@ -80,6 +80,11 @@ export const finance = {
     upcoming: 'Upcoming',
     icon: 'Icon',
     color: 'Color',
-    confirmCategoryDelete: 'Are you sure you want to delete this category? \nThis will delete all transactions associated with it.',
     accountUpdated: 'Account updated',
+    deleteCategory: 'Delete Category "{{category_name}}"',
+    deleteCategoryWarning: 'Are you sure you want to delete this category? \nThis will delete all transactions associated with it.',
+    categoryDeleted: 'Category deleted',
+    deleteAccount: 'Delete Account "{{account_name}}"',
+    deleteAccountWarning: 'Are you sure you want to delete this account? \nThis will delete all transactions associated with it.',
+    accountDeleted: 'Account deleted',
 };
