@@ -37,7 +37,7 @@ export const Layout = () => {
     const location = useLocation();
 
     const sizes = useMediaQuery(MEDIA_QUERIES);
-    const minimizeSidebar = !sizes[4];
+    const minimizeSidebar = false;
 
     useAchievementsWS();
 

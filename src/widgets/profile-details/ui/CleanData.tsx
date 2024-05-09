@@ -3,7 +3,6 @@ import { activeUserState } from '@entities/auth';
 import { useCleanHabits, useDeleteHabits } from '@entities/habit';
 import { useTitle } from '@shared/hooks';
 import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 

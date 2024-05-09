@@ -15,7 +15,6 @@ import { Achievement } from '@entities/achievement';
 import { createDialog, openDialog } from '@shared/hooks';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import dayjs from 'dayjs';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 

@@ -4,7 +4,7 @@ import { Habit, TargetType } from '@entities/habit/model/types';
 import { TargetAction, TargetActionContext } from '@features/target-calendar';
 import { Icons$, getCorrectDate } from '@shared/lib';
 import dayjs from 'dayjs';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const CompletedCheckbox = ({

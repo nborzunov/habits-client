@@ -12,7 +12,6 @@ import {
     Select,
 } from '@chakra-ui/react';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};

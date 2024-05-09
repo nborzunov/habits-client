@@ -1,6 +1,5 @@
 import { Button, Grid, GridItem, Heading, Stack, Text } from '@chakra-ui/react';
 import { useTitle } from '@shared/hooks';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';

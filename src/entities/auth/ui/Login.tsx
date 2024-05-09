@@ -2,7 +2,6 @@ import { Button, Checkbox, HStack, Heading, Link, Stack, Text, useToast } from '
 import { useTitle } from '@shared/hooks';
 import { Back } from '@shared/ui/Back';
 import { FieldsConfig, FormField, validationRules } from '@shared/ui/Form';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';

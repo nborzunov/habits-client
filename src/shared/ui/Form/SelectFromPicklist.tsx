@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import { Icons$ } from '@shared/lib';
 import { PicklistItem } from '@shared/model/types';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const SelectFromPicklist = <

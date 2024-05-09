@@ -2,7 +2,7 @@ import { Stack } from '@chakra-ui/react';
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import type { Active, UniqueIdentifier } from '@dnd-kit/core';
 import { SortableContext, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import React, { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { DragHandle, SortableItem, SortableOverlay } from './';
@@ -55,7 +55,7 @@ export function SortableList<T extends BaseItem>({ items, onChange, renderItem }
                     role='application'
                 >
                     {items.map((item) => (
-                        <React.Fragment key={item.id}>{renderItem(item)}</React.Fragment>
+                        <Fragment key={item.id}>{renderItem(item)}</Fragment>
                     ))}
                 </Stack>
             </SortableContext>

@@ -13,7 +13,7 @@ import { Habit, Target, TargetType } from '@entities/habit/model/types';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
+import { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { openSetTargetDialog } from './SetTargetDialog';

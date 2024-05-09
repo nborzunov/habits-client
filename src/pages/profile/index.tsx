@@ -3,7 +3,7 @@ import { activeUserState } from '@entities/auth';
 import { ProfileInfoToolbar } from '@features/profile-info-toolbar';
 import { useMobile } from '@shared/hooks';
 import { MobileMenu } from '@shared/ui/Layout/MobileMenu';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 

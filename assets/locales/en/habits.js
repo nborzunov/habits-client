@@ -90,4 +90,5 @@ export const habits = {
     can_be_finished: 'Can be finished',
     finishIf: 'Finish if ',
     chartNoData: 'No data to show',
+    createNewHabit: 'Create new habit',
 };

@@ -16,7 +16,6 @@ import { useMobile, useTitle } from '@shared/hooks';
 import { FormField } from '@shared/ui/Form';
 import { validationRules } from '@shared/ui/Form';
 import { FieldsConfig } from '@shared/ui/Form/types';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';

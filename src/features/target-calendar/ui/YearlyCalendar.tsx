@@ -3,7 +3,7 @@ import { Target, TargetType } from '@entities/habit/model/types';
 import { useMobile, useRelativeSize } from '@shared/hooks';
 import { getLoopCallback } from '@shared/lib';
 import dayjs from 'dayjs';
-import React, { memo, useCallback, useContext, useMemo } from 'react';
+import { memo, useCallback, useContext, useMemo } from 'react';
 
 import { CURRENT_YEAR } from './MonthlyCalendar';
 import { TargetAction, TargetActionContext } from './TargetAction';

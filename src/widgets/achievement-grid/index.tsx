@@ -1,6 +1,5 @@
 import { Grid } from '@chakra-ui/react';
 import { useAchievements } from '@entities/achievement';
-import React from 'react';
 
 import { AchievementCard } from './ui/AchievementCard';
 import { AchievementProgressDialog } from './ui/AchievementProgressDialog';

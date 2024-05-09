@@ -11,7 +11,6 @@ import {
 import { activeUserState } from '@entities/auth';
 import { MEDIA_QUERIES } from '@shared/const';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useRecoilValue } from 'recoil';
@@ -22,7 +21,7 @@ export const ProfileInfoToolbar = () => {
     const { t } = useTranslation();
     const sizes = useMediaQuery(MEDIA_QUERIES);
 
-    const minimizeSidebar = !sizes[4];
+    const minimizeSidebar = false;
 
     return (
         <Flex zIndex='dropdown' position='relative'>

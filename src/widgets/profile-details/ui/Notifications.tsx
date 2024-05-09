@@ -1,7 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
 import { useTitle } from '@shared/hooks';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 

@@ -1,5 +1,4 @@
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const ProgressBar = ({

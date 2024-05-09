@@ -1,6 +1,5 @@
 import { Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import { Icons$ } from '@shared/lib/Icons';
-import React from 'react';
 
 export const Back = ({ size }: { size: any }) => {
     return (

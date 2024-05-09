@@ -3,7 +3,7 @@ import type { DraggableSyntheticListeners, UniqueIdentifier } from '@dnd-kit/cor
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Icons$ } from '@shared/lib';
-import React, { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 

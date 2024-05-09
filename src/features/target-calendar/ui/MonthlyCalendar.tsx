@@ -3,7 +3,7 @@ import { Target, TargetType } from '@entities/habit/model/types';
 import { useRelativeSize } from '@shared/hooks';
 import { Icons$, getLoopCallback } from '@shared/lib';
 import dayjs from 'dayjs';
-import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TargetAction, TargetActionContext } from './TargetAction';

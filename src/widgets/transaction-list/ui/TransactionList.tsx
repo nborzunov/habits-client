@@ -22,7 +22,6 @@ import {
 import { Transaction, useTransactions } from '@entities/transaction';
 import { Icons$ } from '@shared/lib';
 import dayjs from 'dayjs';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TransactionList = () => {

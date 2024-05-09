@@ -2,7 +2,7 @@ import { Box, Icon, IconButton } from '@chakra-ui/react';
 import { HabitsWidget } from '@entities/habit/hooks/useWidgets';
 import { Habit } from '@entities/habit/model/types';
 import { Icons$ } from '@shared/lib';
-import React, { lazy, memo } from 'react';
+import { lazy, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TargetChart } from './TargetChart';

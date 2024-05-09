@@ -5,7 +5,7 @@ import { useCategoryListDialog } from '@features/category-list';
 import { useCreateAccountDialog } from '@features/manage-account';
 import { useCreateCategoryDialog } from '@features/manage-category';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddTransactionMode } from '../model/types';

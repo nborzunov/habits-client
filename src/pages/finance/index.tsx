@@ -4,7 +4,6 @@ import { Icons$ } from '@shared/lib';
 import { AccountList } from '@widgets/account-list';
 import { FinanceWidgets } from '@widgets/finance-dashboard';
 import { TransactionList } from '@widgets/transaction-list';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 

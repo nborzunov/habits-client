@@ -1,7 +1,6 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useAchievements } from '@entities/achievement';
 import { AchievementsGrid } from '@widgets/achievement-grid';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const AchievementsPage = () => {

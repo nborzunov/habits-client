@@ -12,7 +12,7 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import { Icons$ } from '@shared/lib/Icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { ErrorWrapper } from './ErrorWrapper';
 import { FormFieldProps } from './types';

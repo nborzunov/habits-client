@@ -5,7 +5,6 @@ import { Habit, HabitData } from '@entities/habit/model/types';
 import { useEditHabitDialog } from '@features/manage-habit';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 

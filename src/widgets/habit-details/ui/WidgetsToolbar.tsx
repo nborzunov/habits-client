@@ -1,7 +1,6 @@
 import { Button, HStack, Icon, IconButton, Tooltip } from '@chakra-ui/react';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const WidgetsToolbar = ({

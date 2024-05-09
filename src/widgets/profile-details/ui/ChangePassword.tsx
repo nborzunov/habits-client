@@ -4,7 +4,7 @@ import { ChangePasswordFields, useChangePassword } from '@entities/profile';
 import { useMobile, useTitle } from '@shared/hooks';
 import { handleSuccess, processError } from '@shared/lib';
 import { FieldsConfig, FormField, validationRules } from '@shared/ui/Form';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';

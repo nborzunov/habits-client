@@ -8,7 +8,7 @@ import {
     Button,
 } from '@chakra-ui/react';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 interface Props {
     title: string;

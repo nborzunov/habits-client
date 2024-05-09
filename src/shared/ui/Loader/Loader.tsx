@@ -1,5 +1,5 @@
 import { Center, Spinner } from '@chakra-ui/react';
-import React, { PropsWithChildren, Suspense } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 
 export const Loader = ({ children }: PropsWithChildren) => {
     return (

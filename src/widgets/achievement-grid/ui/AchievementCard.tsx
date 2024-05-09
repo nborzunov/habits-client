@@ -14,7 +14,6 @@ import { openDialog } from '@shared/hooks';
 import { Icons$ } from '@shared/lib/Icons';
 import { ProgressBar } from '@shared/ui/ProgressBar';
 import dayjs from 'dayjs';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const AchievementCard = ({

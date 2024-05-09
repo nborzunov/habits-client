@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, Stack, Text, useMediaQuery } from '@chakra-ui/react';
+import { Box, BoxProps, Divider, Flex, Stack, Text, Wrap, useMediaQuery } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
 import { habitsState } from '@entities/habit';
 import { ProfileInfoToolbar } from '@features/profile-info-toolbar';
@@ -6,7 +6,6 @@ import { MEDIA_QUERIES } from '@shared/const';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import { openSettingsDialog } from '@widgets/settings/ui/SettingsDialog';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -33,7 +32,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
     };
 
     const sizes = useMediaQuery(MEDIA_QUERIES);
-    const minimizeSidebar = !sizes[4];
+    const minimizeSidebar = false;
 
     return (
         <Box
@@ -77,9 +76,8 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                 aria-label='Main Navigation'
                 height={'calc(100% - 84px)'}
             >
-                <Stack
-                    direction='column'
-                    spacing={minimizeSidebar ? 2 : 0}
+                <Flex
+                    flexDir='column'
                     px={minimizeSidebar ? '2' : '4'}
                     w={minimizeSidebar ? '40px' : 'auto'}
                     zIndex='dropdown'
@@ -87,20 +85,26 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                 >
                     <ProfileInfoToolbar />
 
-                    <NavLink to='habits'>
-                        <NavItem icon={Icons$.Inbox}>{t('habits:allHabits')}</NavItem>
-                    </NavLink>
+                    <Wrap my={4}>
+                        <Divider />
+                    </Wrap>
 
-                    <NavLink to='finance'>
-                        <NavItem icon={Icons$.Finance}>{t('finance:finance')}</NavItem>
-                    </NavLink>
-                    <NavLink to='achievements'>
-                        <NavItem icon={Icons$.Award}>{t('achievements:achievements')}</NavItem>
-                    </NavLink>
-                    {/*<NavLink to='dashboard'>*/}
-                    {/*    <NavItem icon={Icons$.Dashboard}>Dashboard</NavItem>*/}
-                    {/*</NavLink>*/}
-                </Stack>
+                    <Stack direction='column' spacing={minimizeSidebar ? 2 : 0}>
+                        <NavLink to='habits'>
+                            <NavItem icon={Icons$.Inbox}>{t('habits:allHabits')}</NavItem>
+                        </NavLink>
+
+                        <NavLink to='finance'>
+                            <NavItem icon={Icons$.Finance}>{t('finance:finance')}</NavItem>
+                        </NavLink>
+                        <NavLink to='achievements'>
+                            <NavItem icon={Icons$.Award}>{t('achievements:achievements')}</NavItem>
+                        </NavLink>
+                        {/*<NavLink to='dashboard'>*/}
+                        {/*    <NavItem icon={Icons$.Dashboard}>Dashboard</NavItem>*/}
+                        {/*</NavLink>*/}
+                    </Stack>
+                </Flex>
                 <Stack
                     direction='column'
                     spacing={minimizeSidebar ? 2 : 0}

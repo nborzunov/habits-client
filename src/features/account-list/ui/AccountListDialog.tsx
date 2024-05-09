@@ -24,7 +24,7 @@ import { openConfirmationDialog } from '@shared/ui/ConfirmationDialog';
 import { ListItem } from '@shared/ui/ListItem';
 import { SortableList } from '@shared/ui/SortableList';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {};

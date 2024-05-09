@@ -3,7 +3,7 @@ import { ToastContainer } from '@shared/const/toast';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RecoilRoot } from 'recoil';
 
@@ -18,7 +18,7 @@ import '/node_modules/react-resizable/css/styles.css';
 dayjs.extend(relativeTime);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
+    <StrictMode>
         <ThemeProvider>
             <RecoilRoot>
                 <QueryProvider>
@@ -29,5 +29,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 </QueryProvider>
             </RecoilRoot>
         </ThemeProvider>
-    </React.StrictMode>,
+    </StrictMode>,
 );

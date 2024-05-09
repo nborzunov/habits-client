@@ -13,7 +13,7 @@ export const NavItem = (props: PropsWithChildren<NavItemProps>) => {
     const { icon, children, ...rest } = props;
 
     const sizes = useMediaQuery(MEDIA_QUERIES);
-    const minimizeSidebar = !sizes[4];
+    const minimizeSidebar = false;
 
     return (
         <Tooltip label={children} placement='bottom' isDisabled={!minimizeSidebar} openDelay={500}>
