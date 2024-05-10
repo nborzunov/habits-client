@@ -38,8 +38,8 @@ export const WidgetsList = ({
                                 borderWidth='2px'
                                 p='3'
                             >
-                                <Flex justifyContent={'space-between'}>
-                                    <Flex alignItems={'center'}>
+                                <Flex justify={'space-between'}>
+                                    <Flex align={'center'}>
                                         <Icon
                                             as={WIDGETS[widget].icon}
                                             color='green.500'

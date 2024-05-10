@@ -198,8 +198,8 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
 
                             <Flex
                                 gap={2}
-                                flexDir={'row'}
-                                alignItems='center'
+                                direction={'row'}
+                                align='center'
                                 justify='space-between'
                                 color={!createMode || !form.can_be_finished ? 'gray.500' : ''}
                             >

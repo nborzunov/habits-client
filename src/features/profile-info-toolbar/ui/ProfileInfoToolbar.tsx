@@ -47,7 +47,7 @@ export const ProfileInfoToolbar = () => {
                             color: 'whiteAlpha.900',
                         }}
                     >
-                        <Flex alignItems='center' columnGap={3}>
+                        <Flex align='center' columnGap={3}>
                             <Avatar
                                 color={'black'}
                                 size={minimizeSidebar ? 'xs' : 'sm'}

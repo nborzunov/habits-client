@@ -49,7 +49,7 @@ const HabitDetailsContent = ({ habit }: { habit: Habit }) => {
 
     return (
         <Loader>
-            <Flex m={0} width='100%' maxWidth={'1600px'} flexDir={'column'}>
+            <Flex m={0} width='100%' maxWidth={'1600px'} direction={'column'}>
                 <HabitDetails.Header title={habit.title}>
                     <HabitDetails.WidgetsToolbar
                         handleSaveLayout={handleSaveLayout}

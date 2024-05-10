@@ -39,14 +39,13 @@ export const ProfilePage = () => {
                 bg: 'gray.700',
             }}
             minH='100vh'
-            display={'flex'}
-            alignItems={'start'}
-            justifyContent={'center'}
-            flexWrap='wrap'
+            align={'start'}
+            justify={'center'}
+            wrap='wrap'
         >
             <Box maxW={'3xl'} minH={'xs'} width={'100%'} height={'auto'}>
                 {isMobile && (
-                    <Flex mb={4} justifyContent={'space-between'}>
+                    <Flex mb={4} justify={'space-between'}>
                         <MobileMenu />
                         <ProfileInfoToolbar />
                     </Flex>

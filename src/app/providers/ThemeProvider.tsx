@@ -2,7 +2,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { BREAKPOINTS } from '@shared/const';
 import { PropsWithChildren } from 'react';
 
-const theme = extendTheme({
+export const theme = extendTheme({
     colors: {
         blue: {
             50: '#F6F8FA',

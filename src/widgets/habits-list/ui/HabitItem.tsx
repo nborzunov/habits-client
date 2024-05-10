@@ -168,8 +168,8 @@ export const HabitItem = ({
         );
 
     return (
-        <>
-            <Box
+
+        <Flex
                 width={'100%'}
                 onClick={onHabitClick}
                 bg={selected ? 'blackAlpha.50' : 'transparent'}
@@ -180,20 +180,19 @@ export const HabitItem = ({
                 }}
                 p={2}
                 px={4}
-                display='flex'
-                flexDir={'column'}
-                justifyContent='space-between'
-                alignItems='center'
+            direction={'column'}
+            justify='space-between'
+            align='center'
             >
-                <Box w={'100%'} display='flex' justifyContent='space-between' alignItems='center'>
-                    <Flex alignItems={'center'} justifyContent={'center'}>
+            <Flex w={'100%'} justify='space-between' align='center'>
+                <Flex align={'center'} justify={'center'}>
                         <CompletedCheckbox
                             value={completed}
                             habit={habit}
                             innerRef={completedRef}
                         />
 
-                        <Flex flexDir='column' justifyContent='center' onClick={onHabitClick}>
+                    <Flex direction='column' justify='center' onClick={onHabitClick}>
                             <Text fontSize='lg'>{habit.title}</Text>
 
                             <Text fontSize='sm' color='gray.600'>
@@ -238,15 +237,15 @@ export const HabitItem = ({
                             />
                         </MenuList>
                     </Menu>
-                </Box>
+                </Flex>
 
                 {habit.total_goal > 1 && (
                     <Box width={'100%'}>
                         <ProgressBar {...progress} />
                     </Box>
                 )}
-            </Box>
-        </>
+        </Flex>
+
     );
 };
 

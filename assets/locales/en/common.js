@@ -75,4 +75,7 @@ export const common = {
     habits: 'Habits',
     reorder: 'Reorder',
     update: 'Update',
+
+    seeAll: 'See all',
+    seeAllCount: 'See all ({{count}})',
 };

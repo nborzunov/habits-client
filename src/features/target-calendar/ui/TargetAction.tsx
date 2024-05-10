@@ -13,7 +13,7 @@ import { Habit, Target, TargetType } from '@entities/habit/model/types';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import dayjs, { Dayjs } from 'dayjs';
-import { PropsWithChildren, memo, useCallback, useContext, useMemo } from 'react';
+import { PropsWithChildren, createContext, memo, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { openSetTargetDialog } from './SetTargetDialog';
@@ -29,7 +29,7 @@ interface TargetActionContext {
     ) => void;
 }
 
-export const TargetActionContext = React.createContext<TargetActionContext>({} as any);
+export const TargetActionContext = createContext<TargetActionContext>({} as any);
 
 export const TargetAction = memo(
     ({
@@ -180,7 +180,7 @@ const TargetCell = memo(
                     color: 'whiteAlpha.900',
                 }}
             >
-                <Flex alignItems={'center'} align='center'>
+                <Flex align='center'>
                     <Icon as={icon} mr={2} />
                     <Text>{label}</Text>
                 </Flex>

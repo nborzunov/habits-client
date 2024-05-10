@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Stack, Text } from '@chakra-ui/react';
+import { Button, Divider, Flex, Stack, Text } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,11 +9,10 @@ export const WidgetWrapper = ({
     linkText,
     children,
 }: PropsWithChildren<{ title: string; data: any[]; link: string; linkText: string }>) => (
-    <Box
+    <Flex
         borderRadius='xl'
         p='2'
-        display='flex'
-        flexDirection='column'
+        direction='column'
         height={'100%'}
         position={'relative'}
         w={'450px'}
@@ -22,14 +21,14 @@ export const WidgetWrapper = ({
         bg={'white'}
         boxShadow={'sm'}
     >
-        <Flex justifyContent={'space-between'} alignItems={'center'}>
+        <Flex justify={'space-between'} align={'center'}>
             <Text fontWeight='bold' letterSpacing='wide' fontSize='lg' color='gray.700' pb={2}>
                 {title}
             </Text>
         </Flex>
 
         <Divider h={'2px'} />
-        <Flex pt={4} px={2} h='261px' flexDir='column' justifyContent={'space-between'}>
+        <Flex pt={4} px={2} h='261px' direction='column' justify={'space-between'}>
             <Stack spacing={3}>{children}</Stack>
 
             <Link to={link}>
@@ -38,5 +37,5 @@ export const WidgetWrapper = ({
                 </Button>
             </Link>
         </Flex>
-    </Box>
+    </Flex>
 );

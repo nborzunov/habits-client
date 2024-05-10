@@ -1,7 +1,6 @@
 import {
     Alert,
     AlertIcon,
-    Box,
     Button,
     Flex,
     FormControl,
@@ -240,7 +239,7 @@ export const TransactionForm = ({
                         }
                         addItem={openCreateAccountDialog}
                         renderItem={(account) => (
-                            <Flex width='100%' alignItems='center'>
+                            <Flex width='100%' align='center'>
                                 <Icon
                                     as={Icons$.account_types[account.account_type]}
                                     fontSize={'4xl'}
@@ -284,7 +283,7 @@ export const TransactionForm = ({
                         }
                         addItem={openCreateCategoryDialog}
                         renderItem={(category) => (
-                            <Flex width='100%' alignItems='center' h='36px'>
+                            <Flex width='100%' align='center' h='36px'>
                                 <Icon
                                     as={
                                         Icons$.categoryIcons[category.category_type][
@@ -329,7 +328,7 @@ export const TransactionForm = ({
                     </FormControl>
                 </Stack>
 
-                <Box py={4} display={'flex'} justifyContent={'end'}>
+                <Flex py={4} justify={'end'}>
                     <Button
                         colorScheme='blue'
                         mr={3}
@@ -352,7 +351,7 @@ export const TransactionForm = ({
                     >
                         {t('finance:save')}
                     </Button>
-                </Box>
+                </Flex>
             </ModalBody>
         </>
     );

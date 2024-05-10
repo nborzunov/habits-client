@@ -43,7 +43,7 @@ export const YearlyCalendar = memo(() => {
 
     return (
         <Box>
-            <Flex p='2' flexDirection='column'>
+            <Flex p='2' direction='column'>
                 <Grid gridTemplateColumns={`repeat(${isMobile ? 4 : 6}, 1fr) `}>
                     {getLoop(6).map((i) => (
                         <GridItem key={i}>

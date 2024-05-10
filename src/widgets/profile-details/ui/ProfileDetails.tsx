@@ -15,7 +15,7 @@ export const ProfileDetails = () => {
     return (
         <Box mx='auto'>
             <Stack>
-                <Flex justifyContent={'space-between'}>
+                <Flex justify={'space-between'}>
                     <Flex>
                         <Avatar
                             src={user.image}
@@ -28,7 +28,7 @@ export const ProfileDetails = () => {
                             height={'4.5em'}
                             mr={'4'}
                         />
-                        <Flex flexDirection={'column'} justifyContent={'space-evenly'}>
+                        <Flex direction={'column'} justify={'space-evenly'}>
                             <Text fontWeight='bold' fontSize='lg'>
                                 {user.name} {user.surname}
                             </Text>

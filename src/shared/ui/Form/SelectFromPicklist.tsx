@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    Flex,
     FormControl,
     FormLabel,
     Icon,
@@ -82,9 +83,9 @@ export const SelectFromPicklist = <
                     <PopoverBody
                         width={'100%'}
                         boxShadow={'lg'}
-                        display={'flex'}
-                        flexDirection={'column'}
-                        justifyContent={'space-between'}
+                        as={Flex}
+                        direction={'column'}
+                        justify={'space-between'}
                     >
                         {!items.length && noItemsWarning}
                         <Stack spacing={2} height={'350px'} overflowY={'auto'}>

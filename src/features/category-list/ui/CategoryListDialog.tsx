@@ -1,8 +1,8 @@
 import {
     Alert,
     AlertIcon,
-    Box,
     Button,
+    Flex,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -171,7 +171,7 @@ const CategoryListDialog = createDialog(({ mode }: Props) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Box display={'flex'} justifyContent={'end'}>
+                    <Flex justify={'end'}>
                         <Button colorScheme='blue' mr={3} size={'md'} onClick={dialog.hide}>
                             {t('common:close')}
                         </Button>
@@ -183,7 +183,7 @@ const CategoryListDialog = createDialog(({ mode }: Props) => {
                         >
                             {t('finance:categories.newCategory')}
                         </Button>
-                    </Box>
+                    </Flex>
                 </ModalFooter>
             </ModalContent>
         </Modal>

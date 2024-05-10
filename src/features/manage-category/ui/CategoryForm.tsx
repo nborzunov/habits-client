@@ -1,5 +1,6 @@
 import {
     Button,
+    Flex,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -85,7 +86,7 @@ export const CategoryForm = ({
                     <ColorField value={form.color} setValue={setValue} />
                 </ModalBody>
 
-                <ModalFooter display={'flex'} justifyContent={'end'} columnGap={3}>
+                <ModalFooter as={Flex} justify={'end'} columnGap={3}>
                     <Button colorScheme='blue' size={'md'} onClick={dialog.hide}>
                         {t('common:close')}
                     </Button>

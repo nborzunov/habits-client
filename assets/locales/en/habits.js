@@ -91,4 +91,8 @@ export const habits = {
     finishIf: 'Finish if ',
     chartNoData: 'No data to show',
     createNewHabit: 'Create new habit',
+    todaysHabits: 'Todays Habits',
+    daily: 'Daily',
+    weekly: 'Weekly',
+    monthly: 'Monthly',
 };

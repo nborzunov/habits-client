@@ -1,18 +1,14 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
+import { Box, Center, useColorModeValue } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
 
 export const AuthContainer = ({ children }: PropsWithChildren) => {
     return (
-        <Box
-            as='section'
+        <Center
             bg='blue.50'
             _dark={{
                 bg: 'gray.700',
             }}
             minH='100vh'
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
         >
             <Box
                 rounded={'lg'}
@@ -28,6 +24,6 @@ export const AuthContainer = ({ children }: PropsWithChildren) => {
             >
                 {children}
             </Box>
-        </Box>
+        </Center>
     );
 };

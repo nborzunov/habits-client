@@ -1,4 +1,6 @@
 import { Flex, Grid, GridItem, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
+import { TodaysHabits } from '@features/todays-habits';
+import { TorchChart } from '@features/torch-chart';
 import { Icons$ } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 
@@ -20,20 +22,22 @@ const BentoItem = ({
             borderColor='gray.200'
             borderRadius='2xl'
             p='4'
-            boxShadow='md'
+            boxShadow='lg'
         >
-            <Flex alignItems='center' justifyContent='center' h='100%' fontWeight='semibold'>
-                {children}
-            </Flex>
+            {children}
         </GridItem>
     );
 };
 export const HabitsPage = () => {
     const { t } = useTranslation();
     return (
-        <Flex h='100vh' direction='column'>
-            <Flex justifyContent='space-between' m='6' mb='3'>
-                <Flex flexDir='column'>
+        <Flex
+            h='100vh'
+            direction='column'
+            bgGradient='linear(to-t, blue.50, blue.50, whiteAlpha.50)'
+        >
+            <Flex justify='space-between' m='5' mb='2.5'>
+                <Flex direction='column'>
                     <Heading fontSize='24px'>Hello, Nikolay👋</Heading>
                     <Text color='gray.500'>Let&apos;s check your stats today!</Text>
                 </Flex>
@@ -52,37 +56,47 @@ export const HabitsPage = () => {
             <Grid
                 templateRows={'repeat(3, 1fr)'}
                 templateColumns={'repeat(4, 1fr)'}
-                gap={4}
-                m='6'
-                mt='3'
+                gap='4'
+                m='5'
+                mt='2.5'
                 h='calc(100vh - 100px)'
             >
                 <BentoItem colSpan={1} rowSpan={1}>
-                    <div>Todays Habits</div>
+                    <TodaysHabits />
                 </BentoItem>
 
                 <BentoItem colSpan={2} rowSpan={1}>
-                    <div>Torch chart</div>
+                    <TorchChart />
                 </BentoItem>
 
                 <BentoItem colSpan={1} rowSpan={1}>
-                    <div>Cheer chart</div>
+                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
+                        Cheer chart
+                    </Flex>
                 </BentoItem>
 
                 <BentoItem colSpan={2} rowSpan={1}>
-                    <div>Weekly habits calendar</div>
+                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
+                        Weekly habits calendar
+                    </Flex>
                 </BentoItem>
 
                 <BentoItem colSpan={2} rowSpan={2}>
-                    <div>Pie chart</div>
+                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
+                        Pie chart
+                    </Flex>
                 </BentoItem>
 
                 <BentoItem colSpan={1} rowSpan={1}>
-                    <div>Friends activity</div>
+                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
+                        Friends activity
+                    </Flex>
                 </BentoItem>
 
                 <BentoItem colSpan={1} rowSpan={1}>
-                    <div>Profile stats</div>
+                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
+                        Profile stats
+                    </Flex>
                 </BentoItem>
             </Grid>
         </Flex>

@@ -26,7 +26,7 @@ export const OperationMenuItem = ({
             fontWeight='semibold'
             transition='.15s ease'
         >
-            <Flex alignItems={'center'}>
+            <Flex align={'center'}>
                 {icon && <Icon as={icon} mr={2} />}
                 <Text>{label}</Text>
             </Flex>

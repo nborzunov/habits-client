@@ -80,8 +80,8 @@ export const ChangeEmail = ({ initialState }: Props) => {
                 {t('common:changeEmail')}
             </Heading>
             <Stack spacing={4}>
-                <Flex justifyContent={'space-between'}>
-                    <Flex alignItems={'center'} justifyContent={'space-between'} width={'100%'}>
+                <Flex justify={'space-between'}>
+                    <Flex align={'center'} justify={'space-between'} width={'100%'}>
                         <FormControl width={'100%'}>
                             <FormLabel
                                 lineHeight={'40px'}

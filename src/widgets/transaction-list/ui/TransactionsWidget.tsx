@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import {
     WidgetWrapper,
     getAccountTypeColor,
@@ -23,23 +23,23 @@ export const TransactionsWidget = () => {
             linkText={t('finance:showAll')}
         >
             {transactions.map((transaction) => (
-                <Box key={transaction.id} display={'flex'} alignItems={'center'}>
-                    <Flex width={'100%'} justifyContent={'space-between'}>
-                        <Flex alignItems={'center'}>
+                <Flex key={transaction.id} align={'center'}>
+                    <Flex width={'100%'} justify={'space-between'}>
+                        <Flex align={'center'}>
                             <Icon
                                 as={Icons$.transaction_types[transaction.transaction_type]}
                                 fontSize={'2xl'}
                                 mr={4}
                                 color={getTransactionTypeColor(transaction.transaction_type)}
                             />
-                            <Flex flexDirection={'column'}>
+                            <Flex direction={'column'}>
                                 <Text fontWeight='bold' fontSize='lg' color='gray.600'>
                                     {transaction.note || t('finance:emptyNote')}{' '}
                                     <Text as={'span'} fontWeight={'semibold'}>
                                         ({t(getCategoryName(transaction.category))})
                                     </Text>
                                 </Text>
-                                <Flex alignItems={'center'} mt={1}>
+                                <Flex align={'center'} mt={1}>
                                     <Icon
                                         as={Icons$.account_types[transaction.account.account_type]}
                                         fontSize={'lg'}
@@ -61,7 +61,7 @@ export const TransactionsWidget = () => {
                             <span>{getCurrency(transaction.account.currency)}</span>
                         </Text>
                     </Flex>
-                </Box>
+                </Flex>
             ))}
         </WidgetWrapper>
     );

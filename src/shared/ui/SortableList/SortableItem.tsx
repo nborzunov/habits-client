@@ -54,7 +54,7 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
                 ref={setNodeRef}
                 style={style}
                 listStyleType='none'
-                alignItems='center'
+                align='center'
                 bg={isDragging ? 'blue.50' : 'white'}
             >
                 {children}

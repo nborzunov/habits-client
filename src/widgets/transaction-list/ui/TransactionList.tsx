@@ -75,17 +75,16 @@ export const TransactionList = () => {
                                         </Text>
                                         <Stack spacing={3}>
                                             {transactions.map((transaction) => (
-                                                <Box
+                                                <Flex
                                                     key={transaction.id}
-                                                    display={'flex'}
-                                                    alignItems={'center'}
+                                                    align={'center'}
                                                 >
                                                     <Grid
                                                         width='100%'
                                                         gridTemplateColumns={'2.5fr 1.5fr 1fr'}
                                                     >
                                                         <GridItem>
-                                                            <Flex alignItems={'center'}>
+                                                            <Flex align={'center'}>
                                                                 <Icon
                                                                     as={
                                                                         Icons$.transaction_types[
@@ -99,7 +98,7 @@ export const TransactionList = () => {
                                                                         transaction.transaction_type,
                                                                     )}
                                                                 />
-                                                                <Flex flexDirection={'column'}>
+                                                                <Flex direction={'column'}>
                                                                     <Text
                                                                         fontWeight='bold'
                                                                         fontSize='lg'
@@ -122,10 +121,7 @@ export const TransactionList = () => {
                                                                             )
                                                                         </Text>
                                                                     </Text>
-                                                                    <Flex
-                                                                        alignItems={'center'}
-                                                                        mt={1}
-                                                                    >
+                                                                    <Flex align={'center'} mt={1}>
                                                                         <Text
                                                                             fontWeight='semibold'
                                                                             fontSize='md'
@@ -141,7 +137,7 @@ export const TransactionList = () => {
                                                             </Flex>
                                                         </GridItem>
                                                         <GridItem>
-                                                            <Flex alignItems={'center'} h={'100%'}>
+                                                            <Flex align={'center'} h={'100%'}>
                                                                 <Icon
                                                                     as={
                                                                         Icons$.account_types[
@@ -173,7 +169,7 @@ export const TransactionList = () => {
                                                             </Flex>
                                                         </GridItem>
                                                         <GridItem>
-                                                            <Flex alignItems={'center'} h={'100%'}>
+                                                            <Flex align={'center'} h={'100%'}>
                                                                 <Text
                                                                     as={Flex}
                                                                     fontWeight='semibold'
@@ -203,7 +199,7 @@ export const TransactionList = () => {
                                                             </Flex>
                                                         </GridItem>
                                                     </Grid>
-                                                </Box>
+                                                </Flex>
                                             ))}
                                         </Stack>
                                     </Box>

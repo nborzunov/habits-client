@@ -4,8 +4,8 @@ import { Icons$ } from '@shared/lib';
 export const Dashboard = () => {
     return (
         <Box>
-            <Flex justifyContent='space-between' p='6' py='8'>
-                <Flex flexDir='column'>
+            <Flex justify='space-between' p='6' py='8'>
+                <Flex direction='column'>
                     <Heading fontSize='24px'>Hello, Nikolay👋</Heading>
                     <Text color='gray.500'>Let&apos;s check your stats today!</Text>
                 </Flex>

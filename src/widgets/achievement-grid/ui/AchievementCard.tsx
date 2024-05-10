@@ -54,7 +54,7 @@ export const AchievementCard = ({
                     h={alertView ? '80px' : '100px'}
                     borderRadius={'xl'}
                     bg={achievement.completed ? 'yellow.300' : achievement.color}
-                    alignItems={'center'}
+                    align={'center'}
                     justify={'center'}
                     my={'auto'}
                 >

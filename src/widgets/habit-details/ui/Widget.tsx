@@ -1,4 +1,4 @@
-import { Box, Icon, IconButton } from '@chakra-ui/react';
+import { Center, Icon, IconButton } from '@chakra-ui/react';
 import { HabitsWidget } from '@entities/habit/hooks/useWidgets';
 import { Habit } from '@entities/habit/model/types';
 import { Icons$ } from '@shared/lib';
@@ -36,14 +36,11 @@ export const Widget = memo(
         const statistics = habit.statistics;
 
         return (
-            <Box
+            <Center
                 borderRadius='xl'
                 borderColor={'gray.200'}
                 borderWidth='2px'
                 p='2'
-                display='flex'
-                justifyContent='center'
-                alignItems={'center'}
                 height={'100%'}
                 position={'relative'}
                 bg={'gray.50'}
@@ -131,7 +128,7 @@ export const Widget = memo(
                 )}
                 {id === HabitsWidget.YEARLY_CALENDAR && <YearlyCalendarLazy />}
                 {id === HabitsWidget.MONTHLY_CALENDAR && <MonthlyCalendarLazy />}
-            </Box>
+            </Center>
         );
     },
 );

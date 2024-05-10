@@ -17,8 +17,8 @@ export const ItemTypes = {
 
 export const ListItem = (props: ListItemProps) => {
     return (
-        <Flex width='100%' alignItems='center' justifyContent={'space-between'} h='36px'>
-            <Flex alignItems='center'>
+        <Flex width='100%' align='center' justify={'space-between'} h='36px'>
+            <Flex align='center'>
                 <Icon
                     bg={`${props.color}.400`}
                     color='white'

@@ -9,7 +9,7 @@ export const AchievementsPage = () => {
     const { data: achievements = [] } = useAchievements();
     return (
         <Box>
-            <Flex p={4} flexDir={'column'}>
+            <Flex p={4} direction={'column'}>
                 <Flex justify={'space-between'}>
                     <Heading as='h3' size='md'>
                         {t('achievements:achievements')}

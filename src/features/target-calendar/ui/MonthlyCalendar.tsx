@@ -75,8 +75,8 @@ export const MonthlyCalendar = memo(() => {
 
     return (
         <Box p='2' textAlign={'center'} height={`${cellSize * 7 + cellGap * 6 + 60}px`}>
-            <Flex justifyContent={'space-between'} alignItems={'center'} width={'100%'} pb={'2'}>
-                <Flex alignItems={'center'}>
+            <Flex justify={'space-between'} align={'center'} width={'100%'} pb={'2'}>
+                <Flex align={'center'}>
                     <Tooltip label={t('common:date.previousMonth')} placement={'top'}>
                         <IconButton
                             aria-label='left'

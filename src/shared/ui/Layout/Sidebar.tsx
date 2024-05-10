@@ -69,7 +69,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
             </Flex>
             <Flex
                 direction='column'
-                justifyContent={'space-between'}
+                justify={'space-between'}
                 as='nav'
                 fontSize='sm'
                 color='gray.500'
@@ -77,7 +77,7 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
                 height={'calc(100% - 84px)'}
             >
                 <Flex
-                    flexDir='column'
+                    direction='column'
                     px={minimizeSidebar ? '2' : '4'}
                     w={minimizeSidebar ? '40px' : 'auto'}
                     zIndex='dropdown'

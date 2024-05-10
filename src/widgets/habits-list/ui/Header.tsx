@@ -8,8 +8,8 @@ export const Header = () => {
 
     return (
         <>
-            <Flex justifyContent='space-between' alignItems='center' p={4}>
-                <Flex alignItems={'center'}>
+            <Flex justify='space-between' align='center' p={4}>
+                <Flex align={'center'}>
                     <MobileMenu />
                     <Heading as='h3' size='md'>
                         {t('habits:allHabits')}

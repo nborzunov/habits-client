@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import { useAccounts } from '@entities/account/api/useAccounts';
 import { getAccountTypeColor, getCurrency } from '@entities/finance';
 import { WidgetWrapper } from '@entities/finance';
@@ -18,16 +18,16 @@ export const AccountsWidget = () => {
             linkText={t('finance:showAll')}
         >
             {accounts.map((account) => (
-                <Box key={account.id} display={'flex'} alignItems={'center'}>
-                    <Flex width={'100%'} justifyContent={'space-between'}>
-                        <Flex alignItems={'center'}>
+                <Flex key={account.id} align={'center'}>
+                    <Flex width={'100%'} justify={'space-between'}>
+                        <Flex align={'center'}>
                             <Icon
                                 as={Icons$.account_types[account.account_type]}
                                 fontSize={'2xl'}
                                 mr={4}
                                 color={getAccountTypeColor(account.account_type)}
                             />
-                            <Flex flexDirection={'column'}>
+                            <Flex direction={'column'}>
                                 <Text fontWeight='bold' fontSize='lg' color='gray.600'>
                                     {account.name}
                                 </Text>
@@ -37,7 +37,7 @@ export const AccountsWidget = () => {
                             </Flex>
                         </Flex>
                     </Flex>
-                </Box>
+                </Flex>
             ))}
         </WidgetWrapper>
     );

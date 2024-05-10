@@ -1,8 +1,8 @@
 import {
     Alert,
     AlertIcon,
-    Box,
     Button,
+    Flex,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -136,7 +136,7 @@ const AccountListDialog = createDialog((_props: Props) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Box display={'flex'} justifyContent={'end'}>
+                    <Flex justify={'end'}>
                         <Button colorScheme='blue' mr={3} size={'md'} onClick={dialog.hide}>
                             {t('common:close')}
                         </Button>
@@ -160,7 +160,7 @@ const AccountListDialog = createDialog((_props: Props) => {
                         >
                             {t('finance:newAccount')}
                         </Button>
-                    </Box>
+                    </Flex>
                 </ModalFooter>
             </ModalContent>
         </Modal>

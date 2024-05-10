@@ -1,5 +1,6 @@
 import {
     Button,
+    Center,
     FormControl,
     FormLabel,
     Grid,
@@ -64,12 +65,10 @@ export const IconField = ({
                         return (
                             <GridItem
                                 key={icon}
+                                as={Center}
                                 onClick={() => setValue('icon', icon)}
                                 bg={icon === value ? `${color}.400` : 'gray.100'}
                                 p={2}
-                                display='flex'
-                                justifyContent={'center'}
-                                alignItems={'center'}
                                 rounded={'xl'}
                                 border={'1px solid'}
                                 borderColor={'gray.200'}

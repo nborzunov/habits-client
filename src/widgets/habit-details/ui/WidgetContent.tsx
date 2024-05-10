@@ -47,13 +47,13 @@ export const WidgetContent = memo(
         }, [type, footerValue]);
 
         return (
-            <Flex justifyContent='space-between' w='100%'>
-                <Flex alignItems='center'>
+            <Flex justify='space-between' w='100%'>
+                <Flex align='center'>
                     {type === 'streak' && (
                         <Icon color='red.500' as={Icons$.Streak} h='8' w='8' mr='2' />
                     )}
-                    <Flex flexDir='column' justifyContent='center' h='100%'>
-                        <Flex alignItems='center'>
+                    <Flex direction='column' justify='center' h='100%'>
+                        <Flex align='center'>
                             {type !== 'streak' && icon && <Icon as={icon as any} mr='1' />}
                             <Text fontWeight='normal' letterSpacing='wide' fontSize='md'>
                                 {title}
@@ -64,7 +64,7 @@ export const WidgetContent = memo(
                         </Text>
 
                         <Tooltip label={t('habits:currentWeek')}>
-                            <Flex alignItems='center' color={color} mb='2' cursor={'pointer'}>
+                            <Flex align='center' color={color} mb='2' cursor={'pointer'}>
                                 {footerIcon && <Icon as={footerIcon} />}
                                 <Text
                                     color='inherit'
@@ -82,7 +82,7 @@ export const WidgetContent = memo(
                 </Flex>
 
                 {type === 'streak' && startDate && (
-                    <Flex alignItems='center'>
+                    <Flex align='center'>
                         <Text
                             textTransform='uppercase'
                             fontSize='12px'

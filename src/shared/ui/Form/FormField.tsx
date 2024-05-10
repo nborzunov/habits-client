@@ -37,7 +37,7 @@ export const FormField = ({
     return (
         <ErrorWrapper error={validationError}>
             <FormControl isInvalid={validationError} isRequired={isRequired}>
-                <Flex flexDirection={direction} justifyContent={'space-between'}>
+                <Flex direction={direction} justify={'space-between'}>
                     <FormLabel mr={3} mb={0} lineHeight={'40px'} width='100%' maxWidth={minWidth}>
                         {label}
                         {direction === 'row' && ':'}

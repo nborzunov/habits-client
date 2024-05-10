@@ -8,8 +8,8 @@ export const Header = ({ children, title }: PropsWithChildren<{ title: string }>
     const isMobile = useMobile();
 
     return (
-        <Flex alignItems={'center'} justifyContent={'space-between'} px={4} pt={2}>
-            <Flex alignItems={'center'}>
+        <Flex align={'center'} justify={'space-between'} px={4} pt={2}>
+            <Flex align={'center'}>
                 {isMobile && (
                     <Link to={'/habits'}>
                         <Back
