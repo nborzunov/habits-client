@@ -75,10 +75,7 @@ export const TransactionList = () => {
                                         </Text>
                                         <Stack spacing={3}>
                                             {transactions.map((transaction) => (
-                                                <Flex
-                                                    key={transaction.id}
-                                                    align={'center'}
-                                                >
+                                                <Flex key={transaction.id} align={'center'}>
                                                     <Grid
                                                         width='100%'
                                                         gridTemplateColumns={'2.5fr 1.5fr 1fr'}

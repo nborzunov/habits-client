@@ -168,84 +168,78 @@ export const HabitItem = ({
         );
 
     return (
-
         <Flex
-                width={'100%'}
-                onClick={onHabitClick}
-                bg={selected ? 'blackAlpha.50' : 'transparent'}
-                transition='all 0.2s ease'
-                _hover={{
-                    bg: selected ? 'blackAlpha.200' : 'blackAlpha.50',
-                    cursor: 'pointer',
-                }}
-                p={2}
-                px={4}
+            width={'100%'}
+            onClick={onHabitClick}
+            bg={selected ? 'blackAlpha.50' : 'transparent'}
+            transition='all 0.2s ease'
+            _hover={{
+                bg: selected ? 'blackAlpha.200' : 'blackAlpha.50',
+                cursor: 'pointer',
+            }}
+            p={2}
+            px={4}
             direction={'column'}
             justify='space-between'
             align='center'
-            >
+        >
             <Flex w={'100%'} justify='space-between' align='center'>
                 <Flex align={'center'} justify={'center'}>
-                        <CompletedCheckbox
-                            value={completed}
-                            habit={habit}
-                            innerRef={completedRef}
-                        />
+                    <CompletedCheckbox value={completed} habit={habit} innerRef={completedRef} />
 
                     <Flex direction='column' justify='center' onClick={onHabitClick}>
-                            <Text fontSize='lg'>{habit.title}</Text>
+                        <Text fontSize='lg'>{habit.title}</Text>
 
-                            <Text fontSize='sm' color='gray.600'>
-                                {t(`common:${habit.goal_type}`, { count: habit.goal })}
-                            </Text>
-                        </Flex>
+                        <Text fontSize='sm' color='gray.600'>
+                            {t(`common:${habit.goal_type}`, { count: habit.goal })}
+                        </Text>
                     </Flex>
-
-                    <Menu>
-                        <MenuButton
-                            as={IconButton}
-                            aria-label='Options'
-                            icon={<Icon as={Icons$.Menu} />}
-                            variant='ghost'
-                            size='sm'
-                            onClick={(e) => e.stopPropagation()}
-                        />
-                        <MenuList p={0} ref={menuRef}>
-                            <OperationMenuItem
-                                onClick={onEditHabit}
-                                icon={Icons$.Edit}
-                                label={t('common:edit')}
-                            />
-
-                            {habit.targets.length > 0 && (
-                                <OperationMenuItem
-                                    onClick={onCleanHabit}
-                                    icon={Icons$.Delete}
-                                    label={t('habits:cleanTargets')}
-                                />
-                            )}
-
-                            <OperationMenuItem
-                                onClick={() => cleanData()}
-                                icon={Icons$.Archive}
-                                label={t('habits:archive')}
-                            />
-                            <OperationMenuItem
-                                onClick={onDeleteHabit}
-                                icon={Icons$.TrashBin}
-                                label={t('habits:delete')}
-                            />
-                        </MenuList>
-                    </Menu>
                 </Flex>
 
-                {habit.total_goal > 1 && (
-                    <Box width={'100%'}>
-                        <ProgressBar {...progress} />
-                    </Box>
-                )}
-        </Flex>
+                <Menu>
+                    <MenuButton
+                        as={IconButton}
+                        aria-label='Options'
+                        icon={<Icon as={Icons$.Menu} />}
+                        variant='ghost'
+                        size='sm'
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    <MenuList p={0} ref={menuRef}>
+                        <OperationMenuItem
+                            onClick={onEditHabit}
+                            icon={Icons$.Edit}
+                            label={t('common:edit')}
+                        />
 
+                        {habit.targets.length > 0 && (
+                            <OperationMenuItem
+                                onClick={onCleanHabit}
+                                icon={Icons$.Delete}
+                                label={t('habits:cleanTargets')}
+                            />
+                        )}
+
+                        <OperationMenuItem
+                            onClick={() => cleanData()}
+                            icon={Icons$.Archive}
+                            label={t('habits:archive')}
+                        />
+                        <OperationMenuItem
+                            onClick={onDeleteHabit}
+                            icon={Icons$.TrashBin}
+                            label={t('habits:delete')}
+                        />
+                    </MenuList>
+                </Menu>
+            </Flex>
+
+            {habit.total_goal > 1 && (
+                <Box width={'100%'}>
+                    <ProgressBar {...progress} />
+                </Box>
+            )}
+        </Flex>
     );
 };
 
