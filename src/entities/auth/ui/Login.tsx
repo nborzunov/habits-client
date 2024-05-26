@@ -45,7 +45,12 @@ export const Login = () => {
         {
             field: 'username',
             label: t('profile:username.field'),
-            validationProps: register('username', validationRules.text(6)),
+            validationProps: register(
+                'username',
+                validationRules.text({
+                    minLength: 6,
+                }),
+            ),
         },
 
         {

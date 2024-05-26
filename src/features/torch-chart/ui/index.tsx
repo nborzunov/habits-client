@@ -1,11 +1,4 @@
-import {
-    Box,
-    Flex,
-    Grid,
-    GridItem,
-    Text,
-    Tooltip,
-} from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Text, Tooltip } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 

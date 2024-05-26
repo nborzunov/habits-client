@@ -1,4 +1,4 @@
-import { Periodicity } from '../../../src/entities/habit/model/types';
+import { FrequencyType } from '../../../src/entities/habit/model/types';
 
 export const habits = {
     noHabits: 'Пока нет привычек, давайте создадим одну!',
@@ -63,12 +63,12 @@ export const habits = {
     goal_type: 'Тип цели',
     timesTitle: 'Повторения',
     minutesTitle: 'Минуты',
-    periodicity: 'Периодичность',
-    periodicityOptions: {
-        [Periodicity.Daily]: 'Ежедневно',
-        [Periodicity.Weekly]: 'Еженедельно',
-        [Periodicity.Monthly]: 'Ежемесячно',
-        [Periodicity.Custom]: 'Любая',
+    frequencyType: 'Периодичность',
+    frequencyTypeOptions: {
+        [FrequencyType.Daily]: 'Ежедневно',
+        [FrequencyType.Weekly]: 'Еженедельно',
+        [FrequencyType.Monthly]: 'Ежемесячно',
+        [FrequencyType.Custom]: 'Любая',
     },
     allowOverGoal: 'Разрешить превышение цели',
     allowPartial: 'Разрешить частичное выполнение',

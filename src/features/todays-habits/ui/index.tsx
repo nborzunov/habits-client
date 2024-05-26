@@ -9,15 +9,9 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
+import { Icons$ } from '@shared/lib';
 import { Bed, Book, Footprints } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
-// TODO: move to constants
-const Icons = {
-    bed: Bed,
-    book: Book,
-    footprints: Footprints,
-};
 
 export const TodaysHabits = () => {
     const { t } = useTranslation();
@@ -26,19 +20,19 @@ export const TodaysHabits = () => {
         {
             title: 'Sleep',
             color: 'red',
-            icon: 'bed',
+            icon: 'sleep',
             progress: 80,
         },
         {
             title: 'Reading',
             color: 'blue',
-            icon: 'book',
+            icon: 'reading',
             progress: 47,
         },
         {
             title: 'Running',
             color: 'green',
-            icon: 'footprints',
+            icon: 'walk',
             progress: 13,
         },
     ];
@@ -67,7 +61,7 @@ export const TodaysHabits = () => {
 
 // TODO: fix any
 const HabitCard = ({ habit }: { habit: any }) => {
-    const LucideIcon = Icons[habit.icon as keyof typeof Icons];
+    const LucideIcon = Icons$.habitIcons[habit.icon as keyof typeof Icons$.habitIcons];
     const color = theme.colors[habit.color][500];
 
     return (

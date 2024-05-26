@@ -26,6 +26,6 @@
             "@*": ["src/*"]
         }
     },
-    "include": ["vite.config.ts", "**/*.ts", "**/*.tsx", "src/features/category-management-dialog/ui/CategoryManagementDialog.tsx"],
+    "include": ["vite.config.ts", "**/*.ts", "**/*.tsx"],
     "exclude": ["node_modules"]
 }

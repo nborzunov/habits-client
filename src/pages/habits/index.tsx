@@ -1,4 +1,6 @@
 import { Flex, Grid, GridItem, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
+import { CheerChart } from '@features/cheer-chart';
+import { openCreateHabitDialog } from '@features/manage-habit';
 import { TodaysHabits } from '@features/todays-habits';
 import { TorchChart } from '@features/torch-chart';
 import { Icons$ } from '@shared/lib';
@@ -49,7 +51,7 @@ export const HabitsPage = () => {
                         icon={<Icon as={Icons$.Add} />}
                         aria-label={'create-new-habit'}
                         borderRadius={'lg'}
-                        onClick={() => {}} // TODO
+                        onClick={() => openCreateHabitDialog({})} // TODO
                     />
                 </Tooltip>
             </Flex>
@@ -70,9 +72,7 @@ export const HabitsPage = () => {
                 </BentoItem>
 
                 <BentoItem colSpan={1} rowSpan={1}>
-                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
-                        Cheer chart
-                    </Flex>
+                    <CheerChart />
                 </BentoItem>
 
                 <BentoItem colSpan={2} rowSpan={1}>

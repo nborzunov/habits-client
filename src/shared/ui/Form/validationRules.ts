@@ -19,11 +19,22 @@ export const validationRules = {
             message: 'profile:password.newPassword.format',
         },
     }),
-    text: (minLength: number) => ({
-        required: 'profile:field.required',
+    required: (requiredMessage: string) => ({
+        required: { message: requiredMessage || 'profile:field.required' },
+    }),
+    text: ({
+        minLength,
+        requiredMessage,
+        minLengthMessage,
+    }: {
+        minLength: number;
+        requiredMessage?: string;
+        minLengthMessage?: string;
+    }) => ({
+        required: requiredMessage || 'profile:field.required',
         minLength: {
             value: minLength,
-            message: minLength === 3 ? 'profile:field.minLength.3' : 'profile:field.minLength.6',
+            message: minLengthMessage || `profile:field.minLength.${minLength}`,
         },
     }),
     longText: () => ({

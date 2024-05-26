@@ -48,19 +48,34 @@ export const Signup = () => {
         {
             field: 'name',
             label: t('profile:name'),
-            validationProps: register('name', validationRules.text(3)),
+            validationProps: register(
+                'name',
+                validationRules.text({
+                    minLength: 3,
+                }),
+            ),
         },
         {
             field: 'surname',
             label: t('profile:surname'),
-            validationProps: register('surname', validationRules.text(3)),
+            validationProps: register(
+                'surname',
+                validationRules.text({
+                    minLength: 3,
+                }),
+            ),
         },
     ];
     const otherFieldsConfig: FieldsConfig<'username' | 'email' | 'password'> = [
         {
             field: 'username',
             label: t('profile:username.field'),
-            validationProps: register('username', validationRules.text(6)),
+            validationProps: register(
+                'username',
+                validationRules.text({
+                    minLength: 6,
+                }),
+            ),
         },
         {
             field: 'email',

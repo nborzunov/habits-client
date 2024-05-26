@@ -2,7 +2,7 @@ export {
     type Habit,
     type HabitData,
     type Target,
-    Periodicity,
+    FrequencyType,
     GoalType,
     TargetType,
 } from './model/types';

@@ -14,3 +14,7 @@ export const MediaQueries = {
     '2xl': `(min-width: ${BREAKPOINTS['2xl']}em)`,
 };
 export const MEDIA_QUERIES = Object.values(MediaQueries);
+
+export const colors: Array<
+    'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'cyan' | 'purple' | 'pink' | 'gray'
+> = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'cyan', 'purple', 'pink', 'gray'];

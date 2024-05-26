@@ -42,17 +42,6 @@ export const finance = {
             education: 'Education',
         }
     },
-    categoryColors: {
-        'red': 'Red',
-        'orange': 'Orange',
-        'yellow': 'Yellow',
-        'green': 'Green',
-        'teal': 'Teal',
-        'blue': 'Blue',
-        'cyan': 'Cyan',
-        'purple': 'Purple',
-        'pink': 'Pink',
-    },
     categories: {
         manageCategories: 'Manage Categories',
         categoryList: 'Category Management',

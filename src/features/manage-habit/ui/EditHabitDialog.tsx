@@ -18,7 +18,7 @@ import {
     Text,
     Tooltip,
 } from '@chakra-ui/react';
-import { GoalType, HabitData, Periodicity } from '@entities/habit';
+import { FrequencyType, GoalType, HabitData } from '@entities/habit';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { FormField } from '@shared/ui/Form';
 import { NumericInput } from '@shared/ui/Form/NumericInput';
@@ -31,7 +31,7 @@ const defaultState = {
     title: '',
     goal: 1,
     goal_type: GoalType.Times,
-    periodicity: Periodicity.Daily,
+    frequencyType: FrequencyType.Daily,
     allow_skip: false,
     allow_partial_completion: false,
     allow_over_goal_completion: false,
@@ -65,7 +65,7 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
             title: initialState?.title ?? defaultState.title,
             goal: initialState?.goal ?? defaultState.goal,
             goal_type: initialState?.goal_type ?? defaultState.goal_type,
-            periodicity: initialState?.periodicity ?? defaultState.periodicity,
+            frequencyType: initialState?.frequencyType ?? defaultState.frequencyType,
             allow_skip: initialState?.allow_skip ?? defaultState.allow_skip,
             allow_partial_completion:
                 initialState?.allow_partial_completion ?? defaultState.allow_partial_completion,
@@ -117,7 +117,12 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                         <Stack spacing={3}>
                             <FormField
                                 label={t('habits:title')}
-                                validationProps={register('title', validationRules.text(2))}
+                                validationProps={register(
+                                    'title',
+                                    validationRules.text({
+                                        minLength: 2,
+                                    }),
+                                )}
                                 validationError={errors.title}
                                 field={'title'}
                                 direction={'column'}
@@ -161,20 +166,23 @@ export const EditHabitDialog = createDialog(({ initialState, createMode }: Props
                                     </Select>
                                 </Tooltip>
 
-                                <Tooltip label={t('habits:periodicity')} hasArrow>
+                                <Tooltip label={t('habits:frequencyType')} hasArrow>
                                     <Select
-                                        value={form.periodicity}
+                                        value={form.frequencyType}
                                         onChange={(e) =>
-                                            setValue('periodicity', e.target.value as Periodicity)
+                                            setValue(
+                                                'frequencyType',
+                                                e.target.value as FrequencyType,
+                                            )
                                         }
                                         size={{
                                             base: 'md',
                                             sm: 'md',
                                         }}
                                     >
-                                        {Object.values(Periodicity).map((key) => (
+                                        {Object.values(FrequencyType).map((key) => (
                                             <option key={key} value={key}>
-                                                {t(`habits:periodicityOptions.${key}`)}
+                                                {t(`habits:frequencyTypeOptions.${key}`)}
                                             </option>
                                         ))}
                                     </Select>
