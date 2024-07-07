@@ -1,6 +1,6 @@
 import { Box, Icon, IconButton, Tooltip } from '@chakra-ui/react';
+import { Habit, TargetType } from '@entities/habit';
 import { useCreateTarget } from '@entities/habit/api/useCreateTarget';
-import { Habit, TargetType } from '@entities/habit/model/types';
 import { TargetAction, TargetActionContext } from '@features/target-calendar';
 import { Icons$, getCorrectDate } from '@shared/lib';
 import dayjs from 'dayjs';

@@ -10,7 +10,7 @@ import {
     ModalHeader,
     ModalOverlay,
 } from '@chakra-ui/react';
-import { Habit, Target } from '@entities/habit/model/types';
+import { Habit, Target } from '@entities/habit';
 import { createDialog, openDialog, useDialog } from '@shared/hooks';
 import { NumericInput } from '@shared/ui/Form/NumericInput';
 import { useCallback, useState } from 'react';

@@ -6,9 +6,7 @@ import {
     Popover,
     PopoverArrow,
     PopoverBody,
-    PopoverCloseButton,
     PopoverContent,
-    PopoverHeader,
     PopoverTrigger,
     Portal,
     Tooltip,
@@ -119,4 +117,5 @@ const PopoverPicklistItem = ({
 PopoverPicklist.Button = (
     props: Pick<PopoverPicklistItemProps, 'value' | 'color' | 'light' | 'children' | 'tooltipText'>,
 ) => <PopoverPicklistItem {...props} preview={true} />;
+PopoverPicklist.displayName = 'PopoverPicklist';
 PopoverPicklist.Item = PopoverPicklistItem;

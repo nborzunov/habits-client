@@ -11,13 +11,12 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
-    Tooltip,
 } from '@chakra-ui/react';
 import { FrequencyType, HabitData } from '@entities/habit';
 import { colors } from '@shared/const';
 import { Dialog } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
-import { ErrorWrapper, PopoverPicklist, validationRules } from '@shared/ui/Form';
+import { PopoverPicklist, validationRules } from '@shared/ui/Form';
 import { TextField } from '@shared/ui/Form/TextField';
 import { ImagePlus, PaintBucket } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -64,8 +63,6 @@ export const HabitForm = ({
     });
 
     const onFormSubmit = (data: HabitData) => {
-        console.log(data);
-        return;
         onSubmit(data);
     };
 
@@ -83,8 +80,8 @@ export const HabitForm = ({
         setValue('icon', initialState.icon);
         setValue('amount', initialState.amount);
         setValue('goal', initialState.goal);
-        setValue('frequencyType', initialState.frequencyType);
-        setValue('frequencyAmount', initialState.frequencyAmount);
+        setValue('frequency_type', initialState.frequency_type);
+        setValue('frequency_amount', initialState.frequency_amount);
     }, [initialState, setValue]);
 
     const dialogRef = useRef<any>(null);
@@ -216,35 +213,35 @@ export const HabitForm = ({
                         <AmountField value={form.amount} setValue={setValue} />
                     </Flex>
 
-                    <FrequencyTypeField value={form.frequencyType} setValue={setValue} />
+                    <FrequencyTypeField value={form.frequency_type} setValue={setValue} />
 
-                    {form.frequencyType === FrequencyType.Daily && (
+                    {form.frequency_type === FrequencyType.Daily && (
                         <DailyFrequencyAmountField
-                            value={form.frequencyAmount}
+                            value={form.frequency_amount}
                             setValue={setValue}
                             initialState={frequencyAmountInitialState[FrequencyType.Daily]}
                         />
                     )}
 
-                    {form.frequencyType === FrequencyType.Weekly && (
+                    {form.frequency_type === FrequencyType.Weekly && (
                         <FrequencyAmountField
-                            value={form.frequencyAmount}
+                            value={form.frequency_amount}
                             setValue={setValue}
                             frequencyTypeAmountPrefix='weeklyFrequencyType'
                         />
                     )}
 
-                    {form.frequencyType === FrequencyType.Monthly && (
+                    {form.frequency_type === FrequencyType.Monthly && (
                         <FrequencyAmountField
-                            value={form.frequencyAmount}
+                            value={form.frequency_amount}
                             setValue={setValue}
                             frequencyTypeAmountPrefix='monthlyFrequencyType'
                         />
                     )}
 
-                    {form.frequencyType === FrequencyType.Interval && (
+                    {form.frequency_type === FrequencyType.Interval && (
                         <IntervalFrequencyAmountField
-                            value={form.frequencyAmount}
+                            value={form.frequency_amount}
                             setValue={setValue}
                         />
                     )}

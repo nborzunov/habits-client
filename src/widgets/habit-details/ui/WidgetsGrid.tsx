@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
+import { Habit, TargetType } from '@entities/habit';
 import { useCreateTarget } from '@entities/habit/api/useCreateTarget';
 import { HabitsWidget, useWidgets } from '@entities/habit/hooks/useWidgets';
-import { Habit, TargetType } from '@entities/habit/model/types';
 import { TargetActionContext } from '@features/target-calendar';
 import { getCorrectDate } from '@shared/lib';
 import { useCallback } from 'react';

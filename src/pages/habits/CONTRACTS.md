@@ -6,7 +6,7 @@ color: string;
 icon: string;
 amount: number;
 goal: number;
-frequencyType: FrequencyType;
+frequency_type: FrequencyType;
 targets: Target[]
 }
 

@@ -6,6 +6,8 @@ import {
     Book,
     Bus,
     Car,
+    ChevronDown,
+    ChevronUp,
     Computer,
     CornerDownRight,
     CreditCard,
@@ -21,6 +23,7 @@ import {
     Hammer,
     Heart,
     Home,
+    Info,
     Mail,
     Monitor,
     PawPrint,
@@ -82,7 +85,7 @@ import {
     FiTrash,
     FiTrash2,
 } from 'react-icons/fi';
-import { GiBrain, GiLaurelsTrophy, GiRunningShoe } from 'react-icons/gi';
+import { GiBrain, GiRunningShoe } from 'react-icons/gi';
 import { HiFire } from 'react-icons/hi';
 import { IoIosNotificationsOutline, IoIosTimer, IoIosTrophy, IoMdFitness } from 'react-icons/io';
 import { IoCardOutline, IoCashOutline } from 'react-icons/io5';
@@ -122,7 +125,6 @@ export const Icons$ = {
     Settings: FiSettings,
     Logout: FiLogOut,
     Award: FiAward,
-    Trophy: GiLaurelsTrophy,
     Finance: FaMoneyCheckAlt,
     Search: FiSearch,
     DragHandle: GripVertical,
@@ -224,4 +226,7 @@ export const Icons$ = {
     },
     Star: Star,
     Trophy: Trophy,
+    Down: ChevronDown,
+    Up: ChevronUp,
+    Info: Info,
 } as const;

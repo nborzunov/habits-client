@@ -6,11 +6,9 @@ import {
     DrawerOverlay,
     Skeleton,
     useDisclosure,
-    useMediaQuery,
 } from '@chakra-ui/react';
 import { useAchievementsWS } from '@entities/achievement';
 import { useActiveUser } from '@entities/auth';
-import { MEDIA_QUERIES } from '@shared/const';
 import { setTitle, useMobile } from '@shared/hooks';
 import { Sidebar } from '@shared/ui/Layout';
 import { createContext, useEffect } from 'react';
@@ -35,8 +33,6 @@ export const Layout = () => {
     const { t } = useTranslation();
     const isMobile = useMobile();
     const location = useLocation();
-
-    const sizes = useMediaQuery(MEDIA_QUERIES);
     const minimizeSidebar = false;
 
     useAchievementsWS();

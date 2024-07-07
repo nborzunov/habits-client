@@ -19,7 +19,7 @@ import {
     Tooltip,
     useDisclosure,
 } from '@chakra-ui/react';
-import { CircleHelp, LucideIcon, PaintBucket } from 'lucide-react';
+import { PaintBucket } from 'lucide-react';
 import { UseFormSetValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -158,6 +158,7 @@ const ColorsGridItem = ({
                     cursor={'pointer'}
                     px={0}
                     boxSizing='border-box'
+                    as={as}
                 >
                     {customIcon ? (
                         customIcon

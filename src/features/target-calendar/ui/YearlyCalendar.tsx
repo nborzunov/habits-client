@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, GridItem, Text, useTheme } from '@chakra-ui/react';
-import { Target, TargetType } from '@entities/habit/model/types';
+import { Target, TargetType } from '@entities/habit';
 import { useMobile, useRelativeSize } from '@shared/hooks';
 import { getLoopCallback } from '@shared/lib';
 import dayjs from 'dayjs';

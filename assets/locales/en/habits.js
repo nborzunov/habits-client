@@ -137,4 +137,12 @@ export const habits = {
     goal_other: 'days',
     nameRequired: 'Please enter a name',
     iconRequired: 'Please select an icon',
+    currentStreak: 'Current Streak',
+    longestStreak: 'Longest Streak',
+    totalCount: 'Total Count',
+
+    complete: 'Complete',
+    updateAmount: 'Update Amount',
+    uncomplete: 'Uncomplete',
+    mandatoryDayMessage: 'This is a mandatory day. Skipping it will affect the streak.',
 };

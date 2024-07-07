@@ -71,7 +71,7 @@ export const AchievementProgressDialog = createDialog(({ achievement }: Props) =
                         >
                             <Flex justify={'space-between'}>
                                 <Heading size={'sm'} fontWeight={'semibold'}>
-                                    {p.habit_title}
+                                    {p.habit_name}
                                 </Heading>
                                 {achievement.goal && !achievement.completed && (
                                     <Text fontSize={'md'} color={'gray.500'} letterSpacing={'2px'}>

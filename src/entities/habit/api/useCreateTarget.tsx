@@ -1,21 +1,10 @@
 import api from '@shared/lib/api';
-import { useMutation } from '@tanstack/react-query';
-import { useSetRecoilState } from 'recoil';
+import { createMutation } from 'react-query-kit';
 
-import { CreateTargetData, Habit } from '../model/types';
-import { habitsState } from '../store/atoms';
+import { CreateTargetData } from '../model/types';
 
-export const useCreateTarget = () => {
-    const setHabits = useSetRecoilState(habitsState);
-
-    return useMutation({
-        mutationFn: (data: CreateTargetData) => {
-            return api
-                .post('targets/', { json: data })
-                .json<Habit>()
-                .then((newHabit) =>
-                    setHabits((prev) => prev.map((h) => (h.id !== newHabit.id ? h : newHabit))),
-                );
-        },
-    });
-};
+export const useCreateTarget = createMutation({
+    mutationFn: (data: CreateTargetData) => {
+        return api.post('targets/', { json: data }).text();
+    },
+});

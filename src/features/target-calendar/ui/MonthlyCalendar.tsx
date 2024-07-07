@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, GridItem, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
-import { Target, TargetType } from '@entities/habit/model/types';
+import { Target, TargetType } from '@entities/habit';
 import { useRelativeSize } from '@shared/hooks';
 import { Icons$, getLoopCallback } from '@shared/lib';
 import dayjs from 'dayjs';

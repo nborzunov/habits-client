@@ -1,5 +1,6 @@
 import { Flex, Grid, GridItem, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
 import { CheerChart } from '@features/cheer-chart';
+import { GridHabitsChart } from '@features/grid-habits-chart';
 import { openCreateHabitDialog } from '@features/manage-habit';
 import { TodaysHabits } from '@features/todays-habits';
 import { TorchChart } from '@features/torch-chart';
@@ -56,44 +57,42 @@ export const HabitsPage = () => {
                 </Tooltip>
             </Flex>
             <Grid
-                templateRows={'repeat(3, 1fr)'}
-                templateColumns={'repeat(4, 1fr)'}
+                templateRows={'repeat(9, 1fr)'}
+                templateColumns={'repeat(12, 1fr)'}
                 gap='4'
                 m='5'
                 mt='2.5'
                 h='calc(100vh - 100px)'
             >
-                <BentoItem colSpan={1} rowSpan={1}>
+                <BentoItem colSpan={3} rowSpan={3}>
                     <TodaysHabits />
                 </BentoItem>
 
-                <BentoItem colSpan={2} rowSpan={1}>
+                <BentoItem colSpan={6} rowSpan={3}>
                     <TorchChart />
                 </BentoItem>
 
-                <BentoItem colSpan={1} rowSpan={1}>
+                <BentoItem colSpan={3} rowSpan={3}>
                     <CheerChart />
                 </BentoItem>
 
-                <BentoItem colSpan={2} rowSpan={1}>
-                    <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
-                        Weekly habits calendar
-                    </Flex>
+                <BentoItem colSpan={9} rowSpan={3}>
+                    <GridHabitsChart />
                 </BentoItem>
 
-                <BentoItem colSpan={2} rowSpan={2}>
+                <BentoItem colSpan={3} rowSpan={3}>
                     <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
                         Pie chart
                     </Flex>
                 </BentoItem>
 
-                <BentoItem colSpan={1} rowSpan={1}>
+                <BentoItem colSpan={3} rowSpan={3}>
                     <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
                         Friends activity
                     </Flex>
                 </BentoItem>
 
-                <BentoItem colSpan={1} rowSpan={1}>
+                <BentoItem colSpan={3} rowSpan={3}>
                     <Flex align='center' justify='center' h='100%' fontWeight='semibold'>
                         Profile stats
                     </Flex>

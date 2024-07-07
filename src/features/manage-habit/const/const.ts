@@ -6,8 +6,8 @@ export const createHabitInitialState: HabitData = {
     icon: '',
     amount: 1,
     goal: 21,
-    frequencyType: FrequencyType.Daily,
-    frequencyAmount: [0, 1, 2, 3, 4, 5, 6],
+    frequency_type: FrequencyType.Daily,
+    frequency_amount: [0, 1, 2, 3, 4, 5, 6],
 };
 
 export const frequencyAmountInitialState = {

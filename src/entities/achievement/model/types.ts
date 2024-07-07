@@ -21,7 +21,7 @@ export interface AchievementData {
 
 export interface AchievementProgress {
     habit_id: string;
-    habit_title: string;
+    habit_name: string;
     progress: number;
 }
 

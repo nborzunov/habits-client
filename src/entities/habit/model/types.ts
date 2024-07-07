@@ -6,8 +6,8 @@ export interface Habit {
     icon: string;
     amount: number;
     goal: number;
-    frequencyType: 'daily' | 'weekly' | 'monthly' | 'interval';
-    frequencyAmount: number[];
+    frequency_type: 'daily' | 'weekly' | 'monthly' | 'interval';
+    frequency_amount: number[];
     targets: Target[];
 }
 
@@ -17,16 +17,17 @@ export interface HabitData {
     icon: string;
     amount: number;
     goal: number;
-    frequencyType: 'daily' | 'weekly' | 'monthly' | 'interval';
-    frequencyAmount: number[];
+    frequency_type: 'daily' | 'weekly' | 'monthly' | 'interval';
+    frequency_amount: number[];
 }
 
 export interface Target {
     id: string;
     habit_id: string;
     user_id: string;
-    date: Date;
+    date: string;
     amount: number;
+    current_streak: number;
 }
 
 export enum FrequencyType {
@@ -36,21 +37,21 @@ export enum FrequencyType {
     Interval = 'interval',
 }
 
-export enum GoalType {
-    Times = 'times',
-    Mins = 'mins',
-}
-
-export enum TargetType {
-    Done = 'done',
-    Skip = 'skip',
-    Empty = 'empty',
-}
-
 export interface CreateTargetData {
-    id: string | undefined;
     habit_id: string;
-    date: Date;
-    target_type: string;
-    value: number;
+    date: string;
+    amount: number;
 }
+
+export type TodaysHabit = {
+    id: string;
+    name: string;
+    icon: string;
+    color: string;
+    progress: number;
+};
+export type GridHabit = Habit & {
+    current_streak: number;
+    longest_streak: number;
+    total_count: number;
+};

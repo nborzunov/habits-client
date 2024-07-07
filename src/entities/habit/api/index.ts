@@ -7,3 +7,5 @@ export { useDeleteHabit } from './useDeleteHabit';
 export { useDeleteHabits } from './useDeleteHabits';
 export { useEditHabit } from './useEditHabit';
 export { useHabitsList } from './useHabitsList';
+export { useTodaysHabits } from './useTodaysHabits';
+export { useGridHabits } from './useGridHabits';

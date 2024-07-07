@@ -1,25 +1,14 @@
-import {
-    Avatar,
-    Flex,
-    Menu,
-    MenuButton,
-    MenuList,
-    Text,
-    Tooltip,
-    useMediaQuery,
-} from '@chakra-ui/react';
+import { Avatar, Flex, Menu, MenuButton, MenuList, Text, Tooltip } from '@chakra-ui/react';
 import { activeUserState } from '@entities/auth';
-import { MEDIA_QUERIES } from '@shared/const';
 import { OperationMenuItem } from '@shared/ui/OperationMenuItem';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useRecoilValue } from 'recoil';
 
-export const ProfileInfoToolbar = () => {
+export const ProfileInfoToolbar = ({ isOpenable }: { isOpenable: boolean }) => {
     const user = useRecoilValue(activeUserState);
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const sizes = useMediaQuery(MEDIA_QUERIES);
 
     const minimizeSidebar = false;
 
@@ -33,7 +22,12 @@ export const ProfileInfoToolbar = () => {
                     openDelay={500}
                 >
                     <MenuButton
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isOpenable) {
+                                e.preventDefault();
+                            }
+                        }}
                         width={!minimizeSidebar ? '100%' : '40px'}
                         px={!minimizeSidebar ? '4' : '2'}
                         py={!minimizeSidebar ? '3' : '2'}
@@ -42,10 +36,17 @@ export const ProfileInfoToolbar = () => {
                         role='group'
                         fontWeight='bold'
                         transition='.15s ease'
-                        _hover={{
-                            bg: 'purple.300',
-                            color: 'whiteAlpha.900',
-                        }}
+                        {...(isOpenable
+                            ? {
+                                  _hover: {
+                                      bg: 'purple.300',
+                                      color: 'whiteAlpha.900',
+                                  },
+                                  cursor: 'pointer',
+                              }
+                            : {
+                                  cursor: 'default',
+                              })}
                     >
                         <Flex align='center' columnGap={3}>
                             <Avatar

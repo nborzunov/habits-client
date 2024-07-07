@@ -9,33 +9,16 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
+import { useTodaysHabits } from '@entities/habit';
+import { TodaysHabit } from '@entities/habit';
 import { Icons$ } from '@shared/lib';
-import { Bed, Book, Footprints } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const TodaysHabits = () => {
     const { t } = useTranslation();
 
-    const todaysHabits = [
-        {
-            title: 'Sleep',
-            color: 'red',
-            icon: 'sleep',
-            progress: 80,
-        },
-        {
-            title: 'Reading',
-            color: 'blue',
-            icon: 'reading',
-            progress: 47,
-        },
-        {
-            title: 'Running',
-            color: 'green',
-            icon: 'walk',
-            progress: 13,
-        },
-    ];
+    const { data: todaysHabits = [] } = useTodaysHabits();
+
     return (
         <Flex direction='column' justify='space-between' height='100%'>
             <Stack spacing='1.5'>
@@ -45,7 +28,7 @@ export const TodaysHabits = () => {
 
                 {/* TODO: limit from backend */}
                 {todaysHabits.slice(0, 2).map((habit) => (
-                    <HabitCard key={habit.title} habit={habit} />
+                    <HabitCard key={habit.name} habit={habit} />
                 ))}
             </Stack>
 
@@ -59,8 +42,7 @@ export const TodaysHabits = () => {
     );
 };
 
-// TODO: fix any
-const HabitCard = ({ habit }: { habit: any }) => {
+const HabitCard = ({ habit }: { habit: TodaysHabit }) => {
     const LucideIcon = Icons$.habitIcons[habit.icon as keyof typeof Icons$.habitIcons];
     const color = theme.colors[habit.color][500];
 
@@ -78,7 +60,7 @@ const HabitCard = ({ habit }: { habit: any }) => {
             </Center>
 
             <Text fontWeight='500' fontSize='sm'>
-                {habit.title}
+                {habit.name}
             </Text>
 
             <Spacer />

@@ -9,7 +9,7 @@ import {
     Text,
     Tooltip,
 } from '@chakra-ui/react';
-import { Habit, Target, TargetType } from '@entities/habit/model/types';
+import { Habit, Target, TargetType } from '@entities/habit';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import dayjs, { Dayjs } from 'dayjs';

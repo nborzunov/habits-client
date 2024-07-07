@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import { Habit } from '@entities/habit';
 import { HabitsWidget, WIDGETS } from '@entities/habit/hooks/useWidgets';
-import { Habit } from '@entities/habit/model/types';
 import { useMobile } from '@shared/hooks';
 import { Icons$ } from '@shared/lib';
 import { useTranslation } from 'react-i18next';

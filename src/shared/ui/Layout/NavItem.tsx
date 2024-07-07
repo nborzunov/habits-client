@@ -1,5 +1,4 @@
-import { Flex, Icon, Tooltip, useMediaQuery } from '@chakra-ui/react';
-import { MEDIA_QUERIES } from '@shared/const';
+import { Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { LucideIcon } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { IconType } from 'react-icons/lib';
@@ -12,7 +11,6 @@ interface NavItemProps {
 export const NavItem = (props: PropsWithChildren<NavItemProps>) => {
     const { icon, children, ...rest } = props;
 
-    const sizes = useMediaQuery(MEDIA_QUERIES);
     const minimizeSidebar = false;
 
     return (

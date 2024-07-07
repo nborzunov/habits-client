@@ -81,9 +81,9 @@ export const FrequencyTypeField = ({
                             text={t(`habits:frequencyTypeOptions.${frequencyType}`)}
                             selected={value === frequencyType}
                             onClick={() => {
-                                setValue('frequencyType', frequencyType);
+                                setValue('frequency_type', frequencyType);
                                 setValue(
-                                    'frequencyAmount',
+                                    'frequency_amount',
                                     frequencyAmountInitialState[frequencyType],
                                 );
                             }}
@@ -110,13 +110,13 @@ export const DailyFrequencyAmountField = ({
     function handleDayChange(day: number) {
         if (value.includes(day)) {
             setValue(
-                'frequencyAmount',
+                'frequency_amount',
                 value.filter((option) => option !== day),
             );
             setRepeatEveryday(false);
         } else {
             const newOptions = [...value, day];
-            setValue('frequencyAmount', newOptions);
+            setValue('frequency_amount', newOptions);
             if (newOptions.length === 7) {
                 setRepeatEveryday(true);
             }
@@ -134,7 +134,7 @@ export const DailyFrequencyAmountField = ({
                         onChange={(e) => {
                             setRepeatEveryday(e.target.checked);
                             if (e.target.checked) {
-                                setValue('frequencyAmount', initialState);
+                                setValue('frequency_amount', initialState);
                             }
                         }}
                     />
@@ -175,9 +175,10 @@ export const FrequencyAmountField = ({
                 <Flex justify='space-between'>
                     {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                         <SelectButton
+                            key={day}
                             text={day.toString()}
                             selected={value[0] === day}
-                            onClick={() => setValue('frequencyAmount', [day])}
+                            onClick={() => setValue('frequency_amount', [day])}
                         />
                     ))}
                 </Flex>
@@ -207,7 +208,7 @@ export const IntervalFrequencyAmountField = ({
                         max={365}
                         width='80px'
                         value={value[0]}
-                        onChange={(val) => setValue('frequencyAmount', [Number(val) || 0])}
+                        onChange={(val) => setValue('frequency_amount', [Number(val) || 0])}
                     >
                         <NumberInputField />
                         <NumberInputStepper>
