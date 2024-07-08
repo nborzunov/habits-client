@@ -9,8 +9,7 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
-import { useTodaysHabits } from '@entities/habit';
-import { TodaysHabit } from '@entities/habit';
+import { TodaysHabit, useTodaysHabits } from '@entities/habit';
 import { Icons$ } from '@shared/lib';
 import { useTranslation } from 'react-i18next';
 
@@ -26,18 +25,17 @@ export const TodaysHabits = () => {
                     {t('habits:todaysHabits')}
                 </Text>
 
-                {/* TODO: limit from backend */}
-                {todaysHabits.slice(0, 2).map((habit) => (
+                {todaysHabits.slice(0, 3).map((habit) => (
                     <HabitCard key={habit.name} habit={habit} />
                 ))}
             </Stack>
 
-            {todaysHabits.length > 2 && (
+            {/* {todaysHabits.length > 2 && (
                 // TODO: open todays habits dialog
                 <Button variant='ghost' colorScheme='blue' size='sm' mt='1.5'>
                     {t('common:seeAllCount', { count: todaysHabits.length })}
                 </Button>
-            )}
+            )} */}
         </Flex>
     );
 };

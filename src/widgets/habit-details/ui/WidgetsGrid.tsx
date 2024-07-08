@@ -3,7 +3,7 @@ import { Habit, TargetType } from '@entities/habit';
 import { useCreateTarget } from '@entities/habit/api/useCreateTarget';
 import { HabitsWidget, useWidgets } from '@entities/habit/hooks/useWidgets';
 import { TargetActionContext } from '@features/target-calendar';
-import { getCorrectDate } from '@shared/lib';
+import dayjs from 'dayjs';
 import { useCallback } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 
@@ -21,9 +21,9 @@ export const WidgetsGrid = ({ habit, isEditMode }: { habit: Habit; isEditMode: b
             createTarget({
                 id: id,
                 habit_id: habit.id,
-                date: getCorrectDate(date),
+                date: dayjs(date).format('YYYY-MM-DD'),
                 target_type: target_type,
-                value: value || habit.goal,
+                value: value ?? habit.goal,
             });
         },
         [createTarget, habit.goal, habit.id],

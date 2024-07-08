@@ -31,8 +31,6 @@ export const Sidebar = (props: React.PropsWithChildren<BoxProps>) => {
     };
 
     const minimizeSidebar = false;
-
-    console.log(import.meta.env, FEATURE_FLAGS);
     return (
         <Box
             as='nav'

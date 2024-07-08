@@ -1,6 +1,10 @@
 import { Box, Button, Center, Heading, Icon, List, Spinner, Stack } from '@chakra-ui/react';
-import { completedHabitsState, uncompletedHabitsState, useCreateHabit } from '@entities/habit';
-import { Habit, HabitData } from '@entities/habit';
+import {
+    HabitData,
+    completedHabitsState,
+    uncompletedHabitsState,
+    useCreateHabit,
+} from '@entities/habit';
 import { useHabitsList } from '@entities/habit/api/useHabitsList';
 import { useEditHabitDialog } from '@features/manage-habit';
 import { useMobile } from '@shared/hooks';
@@ -21,7 +25,7 @@ export const HabitsList = () => {
 
     const noHabits = uncompletedHabits.length === 0 && completedHabits.length === 0;
 
-    const getProgress = (habit: Habit) => {
+    const getProgress = (habit: any) => {
         return {
             count: (habit.statistics.completed_count / habit.total_goal) * 100,
             start: habit.statistics.completed_count,

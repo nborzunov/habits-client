@@ -49,7 +49,9 @@ export type TodaysHabit = {
     icon: string;
     color: string;
     progress: number;
+    today_completed: boolean;
 };
+
 export type GridHabit = Habit & {
     current_streak: number;
     longest_streak: number;

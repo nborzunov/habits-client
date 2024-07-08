@@ -5,7 +5,7 @@ import { createQuery } from 'react-query-kit';
 import { GridHabit, Target } from '../model/types';
 
 export const useGridHabits = createQuery({
-    queryKey: ['habits'],
+    queryKey: ['grid-habits'],
     fetcher: () =>
         api
             .get('habits/grid')

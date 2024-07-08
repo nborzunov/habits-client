@@ -64,7 +64,6 @@ export const habits = {
     goal_type: 'Goal Type',
     timesTitle: 'Times',
     minutesTitle: 'Minutes',
-    frequencyType: 'FrequencyType',
     frequencyTypeOptions: {
         [FrequencyType.Daily]: 'Daily',
         [FrequencyType.Weekly]: 'Weekly',
@@ -145,4 +144,5 @@ export const habits = {
     updateAmount: 'Update Amount',
     uncomplete: 'Uncomplete',
     mandatoryDayMessage: 'This is a mandatory day. Skipping it will affect the streak.',
+    habits: 'Habits',
 };

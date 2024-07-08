@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 export const GridHabitsChart = () => {
     const { t } = useTranslation();
-    const { data: habits = [], refetch: refetchHabits } = useGridHabits();
+    const { data: habits = [] } = useGridHabits();
 
     const [page, setPage] = useState(0);
     const [horizontalPage, setHorizontalPage] = useState(0);
@@ -42,17 +42,9 @@ export const GridHabitsChart = () => {
 
     const paginatedHabits = useMemo(() => habits.slice(page * 4, (page + 1) * 4), [habits, page]);
 
-    const { mutate: createTarget } = useCreateTarget({
-        onSuccess: () => {
-            refetchHabits();
-        },
-    });
+    const { mutate: createTarget } = useCreateTarget();
 
-    const { mutate: deleteTarget } = useDeleteTarget({
-        onSuccess: () => {
-            refetchHabits();
-        },
-    });
+    const { mutate: deleteTarget } = useDeleteTarget();
 
     const onComplete = (habit: GridHabit, date: string, amount: number) => {
         createTarget({
@@ -114,7 +106,7 @@ export const GridHabitsChart = () => {
                             if (habit.amount > 1) {
                                 return (
                                     <HabitActionWrapper
-                                        key={habit.id}
+                                        key={`habit-action-wrapper-${habit.id}-${target.date}`}
                                         onComplete={() =>
                                             onComplete(
                                                 habit,
@@ -138,7 +130,7 @@ export const GridHabitsChart = () => {
                             }
                             return (
                                 <HabitCell
-                                    key={habit.id}
+                                    key={`habit-cell-${habit.id}-${target.date}`}
                                     habit={habit}
                                     target={target}
                                     streak={target.current_streak}

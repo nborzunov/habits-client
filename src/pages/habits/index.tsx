@@ -1,4 +1,14 @@
-import { Flex, Grid, GridItem, Heading, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react';
+import {
+    BoxProps,
+    Flex,
+    Grid,
+    GridItem,
+    Heading,
+    Icon,
+    IconButton,
+    Text,
+    Tooltip,
+} from '@chakra-ui/react';
 import { CheerChart } from '@features/cheer-chart';
 import { GridHabitsChart } from '@features/grid-habits-chart';
 import { openCreateHabitDialog } from '@features/manage-habit';
@@ -11,11 +21,12 @@ const BentoItem = ({
     children,
     colSpan,
     rowSpan,
+    ...props
 }: {
     children: React.ReactNode;
     colSpan: number;
     rowSpan: number;
-}) => {
+} & BoxProps) => {
     return (
         <GridItem
             colSpan={colSpan}
@@ -26,6 +37,7 @@ const BentoItem = ({
             borderRadius='2xl'
             p='4'
             boxShadow='lg'
+            {...props}
         >
             {children}
         </GridItem>
@@ -52,7 +64,7 @@ export const HabitsPage = () => {
                         icon={<Icon as={Icons$.Add} />}
                         aria-label={'create-new-habit'}
                         borderRadius={'lg'}
-                        onClick={() => openCreateHabitDialog({})} // TODO
+                        onClick={() => openCreateHabitDialog({})}
                     />
                 </Tooltip>
             </Flex>
@@ -72,7 +84,7 @@ export const HabitsPage = () => {
                     <TorchChart />
                 </BentoItem>
 
-                <BentoItem colSpan={3} rowSpan={3}>
+                <BentoItem colSpan={3} rowSpan={3} p={0}>
                     <CheerChart />
                 </BentoItem>
 

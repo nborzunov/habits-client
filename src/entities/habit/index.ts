@@ -4,6 +4,7 @@ export {
     type Target,
     FrequencyType,
     type GridHabit,
+    type TodaysHabit,
 } from './model/types';
 export { useWidgets } from './hooks/useWidgets';
 export * from './api';
