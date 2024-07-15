@@ -10,7 +10,7 @@ const states = {
     },
     1: {
         color: 'orange',
-        text: 'Keep going, you can do it!',
+        text: 'Keep going, \nyou can do it!',
     },
     2: {
         color: 'yellow',
@@ -58,11 +58,18 @@ export const CheerChart = () => {
             align='center'
             transition='background-color 0.2s ease-in-out'
         >
-            <Flex direction='column' align='center' rowGap='2'>
-                <Heading fontSize='md' fontWeight='semibold' mb='3' textAlign='center'>
+            <Flex direction='column' align='center' rowGap='2' width='50%'>
+                <Heading
+                    fontSize='md'
+                    fontWeight='semibold'
+                    mb='1'
+                    textAlign='center'
+                    whiteSpace='pre-wrap'
+                    height='38px'
+                >
                     {state.text}
                 </Heading>
-                <Heading fontSize='xl' fontWeight='bold'>
+                <Heading fontSize='xl' fontWeight='bold' mb='1'>
                     <Text color={`${state.color}.400`} as='span'>
                         {habitsCompleted}
                     </Text>

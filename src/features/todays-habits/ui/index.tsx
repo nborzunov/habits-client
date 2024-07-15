@@ -5,37 +5,62 @@ import {
     CircularProgress,
     CircularProgressLabel,
     Flex,
+    Icon,
     Spacer,
     Stack,
     Text,
 } from '@chakra-ui/react';
 import { TodaysHabit, useTodaysHabits } from '@entities/habit';
 import { Icons$ } from '@shared/lib';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const TodaysHabits = () => {
     const { t } = useTranslation();
 
     const { data: todaysHabits = [] } = useTodaysHabits();
+    const [page, setPage] = useState(0);
+    const slicedHabits = useMemo(
+        () => todaysHabits.slice(page * 3, (page + 1) * 3),
+        [todaysHabits, page],
+    );
 
     return (
         <Flex direction='column' justify='space-between' height='100%'>
-            <Stack spacing='1.5'>
+            <Flex justify='space-between' align='center' width='100%' pb='1.5'>
                 <Text fontWeight={'700'} fontSize='md' mb='1'>
                     {t('habits:todaysHabits')}
                 </Text>
+                <Flex gap='2' visibility={todaysHabits.length > 3 ? 'visible' : 'hidden'}>
+                    <Button
+                        size='xs'
+                        p={0}
+                        h='20px'
+                        cursor='pointer'
+                        onClick={() => setPage(page - 1)}
+                        isDisabled={page === 0}
+                    >
+                        <Icon size='xs' h='10px' as={Icons$.Up} />
+                    </Button>
 
-                {todaysHabits.slice(0, 3).map((habit) => (
+                    <Button
+                        size='xs'
+                        p={0}
+                        h='20px'
+                        cursor='pointer'
+                        onClick={() => setPage(page + 1)}
+                        isDisabled={(page + 1) * 3 >= todaysHabits.length}
+                    >
+                        <Icon size='xs' h='10px' as={Icons$.Down} />
+                    </Button>
+                </Flex>
+            </Flex>
+
+            <Stack spacing='1.5' h='100%'>
+                {slicedHabits.map((habit) => (
                     <HabitCard key={habit.name} habit={habit} />
                 ))}
             </Stack>
-
-            {/* {todaysHabits.length > 2 && (
-                // TODO: open todays habits dialog
-                <Button variant='ghost' colorScheme='blue' size='sm' mt='1.5'>
-                    {t('common:seeAllCount', { count: todaysHabits.length })}
-                </Button>
-            )} */}
         </Flex>
     );
 };

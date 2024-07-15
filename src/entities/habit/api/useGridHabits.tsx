@@ -20,7 +20,6 @@ export const useGridHabits = createQuery({
                 );
 
                 return habits.map((habit) => {
-                    habit.targets.reverse();
                     const targets = [];
                     const targetsMap = habit.targets.reduce<Record<string, Target>>(
                         (acc, target) => {

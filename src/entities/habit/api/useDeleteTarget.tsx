@@ -8,6 +8,7 @@ export const useDeleteTarget = createMutation({
         await Promise.all([
             queryClient.invalidateQueries(['todays-habits']),
             queryClient.invalidateQueries(['grid-habits']),
+            queryClient.invalidateQueries(['weekly-habits']),
         ]);
     },
 });

@@ -9,3 +9,4 @@ export { useEditHabit } from './useEditHabit';
 export { useHabitsList } from './useHabitsList';
 export { useTodaysHabits } from './useTodaysHabits';
 export { useGridHabits } from './useGridHabits';
+export { useWeeklyHabits } from './useWeeklyHabits';

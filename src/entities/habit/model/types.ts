@@ -57,3 +57,13 @@ export type GridHabit = Habit & {
     longest_streak: number;
     total_count: number;
 };
+
+export type WeeklyHabitsData = {
+    date: string;
+    habits: WeeklyHabit[];
+}[];
+
+export type WeeklyHabit = Habit & {
+    streak: number;
+    progress: number;
+};
